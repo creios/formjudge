@@ -24,14 +24,19 @@ $formContact->addField("firstname", new Text(true));
 $formContact->addField("lastname", new Text(true));
 $formContact->addField('email', new Email(true));
 
-$post['message'] = "Hello World!";
-$post['gender'] = "M";
-$post['userId'] = "1";
-$post['firstname'] = "john";
-$post['lastname'] = "doe";
-$post['email'] = "john@doe.tld";
+var_dump($_POST);
+/*
+array(6) {
+    'message' => string(12) "Hello World!"
+    'gender' => string(1) "M"
+    'userId' => string(1) "1"
+    'firstname' => string(4) "john"
+    'lastname' => string(3) "doe"
+    'email' => string(12) "john@doe.tld"
+}
+*/
 
-$judgement = $formContact->judge($post);
+$judgement = $formContact->judge($_POST);
 
 if($judgement->isPassed()){
     echo "Formular has passed validation.";
