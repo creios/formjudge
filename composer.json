@@ -2,6 +2,7 @@
     "name": "creios/formjudge",
     "type": "library",
     "description": "Server-side validation of form input data",
+    "license": "MIT",
     "authors": [
         {
             "name": "Tim Tegeler",
