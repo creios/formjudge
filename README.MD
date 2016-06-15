@@ -15,6 +15,7 @@ use Creios\FormJudge\Fields\Text;
 use Creios\FormJudge\Fields\Email;
 
 $formContact = new Formular();
+//establish your constraints
 $formContact->addField("message", new Text(true));
 $formContact->addField("gender", new Text(true));
 $formContact->getField("gender")->addOption("M");
@@ -36,8 +37,10 @@ array(6) {
 }
 */
 
+//judge on basis of your constraints
 $judgement = $formContact->judge($_POST);
 
+//evaluate the judgement
 if($judgement->isPassed()){
     echo "Formular has passed validation.";
 }else{
