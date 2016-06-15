@@ -31,7 +31,7 @@ $post['firstname'] = "john";
 $post['lastname'] = "doe";
 $post['email'] = "john@doe.tld";
 
-$judgement= $formContact->judge($post);
+$judgement = $formContact->judge($post);
 
 if($judgement->isPassed()){
     echo "Formular has passed validation.";
