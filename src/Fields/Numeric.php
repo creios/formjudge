@@ -1,9 +1,9 @@
 <?php
-namespace Creios\Formjudge\Fields;
+namespace Creios\FormJudge\Fields;
 
 /**
  * Class Numeric
- * @package Formjudge\Fields
+ * @package FormJudge\Fields
  */
 class Numeric extends Field
 {

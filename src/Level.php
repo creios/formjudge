@@ -1,12 +1,12 @@
 <?php
 
-namespace Creios\Formjudge;
+namespace Creios\FormJudge;
 
-use Creios\Formjudge\Fields\Field;
+use Creios\FormJudge\Fields\Field;
 
 /**
  * Class Level
- * @package Formjudge
+ * @package FormJudge
  */
 class Level extends FieldList
 {

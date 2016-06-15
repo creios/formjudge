@@ -1,9 +1,9 @@
 <?php
-namespace Creios\Formjudge\Fields;
+namespace Creios\FormJudge\Fields;
 
 /**
  * Class Boolean
- * @package Formjudge\Fields
+ * @package FormJudge\Fields
  */
 class Boolean extends Field
 {

@@ -1,20 +1,20 @@
 <?php
-namespace Creios\Formjudge;
+namespace Creios\FormJudge;
 
-use Creios\Formjudge\Fields\Boolean;
-use Creios\Formjudge\Fields\Date;
-use Creios\Formjudge\Fields\DatetimeLocal;
-use Creios\Formjudge\Fields\Email;
-use Creios\Formjudge\Fields\Fax;
-use Creios\Formjudge\Fields\Mobile;
-use Creios\Formjudge\Fields\Numeric;
-use Creios\Formjudge\Fields\Password;
-use Creios\Formjudge\Fields\Tel;
-use Creios\Formjudge\Fields\Text;
-use Creios\Formjudge\Fields\Time;
-use Creios\Formjudge\Fields\Url;
+use Creios\FormJudge\Fields\Boolean;
+use Creios\FormJudge\Fields\Date;
+use Creios\FormJudge\Fields\DatetimeLocal;
+use Creios\FormJudge\Fields\Email;
+use Creios\FormJudge\Fields\Fax;
+use Creios\FormJudge\Fields\Mobile;
+use Creios\FormJudge\Fields\Numeric;
+use Creios\FormJudge\Fields\Password;
+use Creios\FormJudge\Fields\Tel;
+use Creios\FormJudge\Fields\Text;
+use Creios\FormJudge\Fields\Time;
+use Creios\FormJudge\Fields\Url;
 
-class TestFormjudge extends \PHPUnit_Framework_TestCase
+class TestFormJudge extends \PHPUnit_Framework_TestCase
 {
 
     public function testNotValidFormular()

@@ -1,13 +1,13 @@
 <?php
-namespace Creios\Formjudge;
+namespace Creios\FormJudge;
 
-use Creios\Formjudge\Fields\Field;
-use Creios\Formjudge\Judgement\FieldListJudgement;
-use Creios\Formjudge\Judgement\FieldListJudgementBuilder;
+use Creios\FormJudge\Fields\Field;
+use Creios\FormJudge\Judgement\FieldListJudgement;
+use Creios\FormJudge\Judgement\FieldListJudgementBuilder;
 
 /**
  * Class FieldList
- * @package Formjudge
+ * @package FormJudge
  */
 abstract class FieldList
 {

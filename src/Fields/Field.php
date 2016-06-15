@@ -1,12 +1,12 @@
 <?php
-namespace Creios\Formjudge\Fields;
+namespace Creios\FormJudge\Fields;
 
-use Creios\Formjudge\FieldList;
-use Creios\Formjudge\Judgement\FieldJudgementBuilder;
+use Creios\FormJudge\FieldList;
+use Creios\FormJudge\Judgement\FieldJudgementBuilder;
 
 /**
  * Class Field
- * @package Formjudge\Fields
+ * @package FormJudge\Fields
  */
 abstract class Field
 {
@@ -42,7 +42,7 @@ abstract class Field
     }
 
     /**
-     * @return \Creios\Formjudge\Judgement\FieldJudgement
+     * @return \Creios\FormJudge\Judgement\FieldJudgement
      */
     public function judge()
     {

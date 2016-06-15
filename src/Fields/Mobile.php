@@ -1,9 +1,9 @@
 <?php
-namespace Creios\Formjudge\Fields;
+namespace Creios\FormJudge\Fields;
 
 /**
  * Class Mobile
- * @package Formjudge\Fields
+ * @package FormJudge\Fields
  */
 class Mobile extends Field
 {

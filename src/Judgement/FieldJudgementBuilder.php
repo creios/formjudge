@@ -1,10 +1,10 @@
 <?php
 
-namespace Creios\Formjudge\Judgement;
+namespace Creios\FormJudge\Judgement;
 
 /**
  * Class FieldJudgementBuilder
- * @package Creios\Formjudge\Judgement
+ * @package Creios\FormJudge\Judgement
  */
 class FieldJudgementBuilder
 {
