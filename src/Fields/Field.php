@@ -47,7 +47,7 @@ abstract class Field
     public function judge()
     {
 
-        $fieldJudgemenBuilder = (new FieldJudgementBuilder())
+        $fieldJudgementBuilder = (new FieldJudgementBuilder())
             ->setMandatory($this->mandatory)
             ->setEmpty($this->empty)
             ->setLengthMax($this->lengthMax)
@@ -59,22 +59,22 @@ abstract class Field
 
         if ($this->isValueEmpty()) {
             if ($this->mandatory) {
-                $fieldJudgemenBuilder->setEmpty(true);
-                $fieldJudgemenBuilder->setPassed(false);
+                $fieldJudgementBuilder->setEmpty(true);
+                $fieldJudgementBuilder->setPassed(false);
             }
         } else {
             if ($this->checkSyntax()) {
-                if (!$this->checkOptions()) $fieldJudgemenBuilder->setNotInOptions(true)->setPassed(false);
-                if (!$this->checkRange()) $fieldJudgemenBuilder->setOutOfRange(true)->setPassed(false);
-                if (!$this->checkEqualTo()) $fieldJudgemenBuilder->setNotEqual(true)->setPassed(false);
-                if (!$this->checkLength()) $fieldJudgemenBuilder->setNotPassedLength(true)->setPassed(false);
+                if (!$this->checkOptions()) $fieldJudgementBuilder->setNotInOptions(true)->setPassed(false);
+                if (!$this->checkRange()) $fieldJudgementBuilder->setOutOfRange(true)->setPassed(false);
+                if (!$this->checkEqualTo()) $fieldJudgementBuilder->setNotEqual(true)->setPassed(false);
+                if (!$this->checkLength()) $fieldJudgementBuilder->setNotPassedLength(true)->setPassed(false);
             } else {
 
-                $fieldJudgemenBuilder->setSyntaxError(true)->setPassed(false);
+                $fieldJudgementBuilder->setSyntaxError(true)->setPassed(false);
 
             }
         }
-        return $fieldJudgemenBuilder->build();
+        return $fieldJudgementBuilder->build();
     }
 
     /**
