@@ -48,6 +48,7 @@ abstract class Field
     {
 
         $fieldJudgementBuilder = (new FieldJudgementBuilder())
+            ->setValue($this->value)
             ->setMandatory($this->mandatory)
             ->setEmpty($this->empty)
             ->setLengthMax($this->lengthMax)
@@ -59,8 +60,7 @@ abstract class Field
 
         if ($this->isValueEmpty()) {
             if ($this->mandatory) {
-                $fieldJudgementBuilder->setEmpty(true);
-                $fieldJudgementBuilder->setPassed(false);
+                $fieldJudgementBuilder->setEmpty(true)->setPassed(false);
             }
         } else {
             if ($this->checkSyntax()) {
