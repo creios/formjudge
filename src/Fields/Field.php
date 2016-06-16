@@ -56,6 +56,7 @@ abstract class Field
             ->setMax($this->max)
             ->setMin($this->min)
             ->setPattern($this->pattern)
+            ->setOptions($this->options)
             ->setPassed(true);
 
         if ($this->isValueEmpty()) {
