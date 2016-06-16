@@ -72,8 +72,12 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $post['lastname'] = "Limper";
         $post['email'] = "teeees@dsdsd.tld";
         $post['company'] = "1";
-        $this->assertTrue($formContact->judge($post)->hasPassed());
 
+        $judgement = $formContact->judge($post);
+        $this->assertTrue($judgement->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('supportarea')->isNotInOptions());
+        $this->assertEquals(["0", "1"], $judgement->getFieldJudgement('supportarea')->getOptions());
+        $this->assertFalse($judgement->getFieldJudgement('supportarea')->isNotInPost());
     }
 
     public function testField()
@@ -94,6 +98,9 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $this->assertTrue($judgement->hasPassed());
         $this->assertEquals('0', $judgement->getFieldJudgement("fromTo")->getMin());
         $this->assertEquals('10', $judgement->getFieldJudgement("fromTo")->getMax());
+        $this->assertEquals('0', $judgement->getFieldJudgement("length")->getLengthMin());
+        $this->assertEquals('5', $judgement->getFieldJudgement("length")->getLengthMax());
+        $this->assertFalse($judgement->getFieldJudgement("length")->isNotPassedLength());
     }
 
     public function testGenerateFieldName()
@@ -185,7 +192,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addLevel('user', new Level());
         $formular->getLevel('user')->addField('email', new Email(TRUE));
-        $judgement=$formular->judge($post);
+        $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
         $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $judgement->getFieldListJudgement('user')->getFieldJudgement('email')->getPattern());
     }
@@ -217,6 +224,19 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular->addField('tel', new Tel());
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
+    }
+
+    public function testTelFailed()
+    {
+        $post['tel'] = "not a number";
+        $formular = new Formular();
+        $formular->addField('tel', new Tel(true));
+        $judgement = $formular->judge($post);
+        $this->assertFalse($judgement->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement("tel")->isSyntaxError());
+        $this->assertTrue($judgement->getFieldJudgement("tel")->isMandatory());
+        $this->assertEquals("not a number",$judgement->getFieldJudgement("tel")->getValue());
+        $this->assertFalse($judgement->getFieldJudgement("tel")->isEmpty());
     }
 
     public function testText()
@@ -277,7 +297,9 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact->getField("lowerUpperBound")->setMin(0);
         $formContact->getField("lowerUpperBound")->setMax(2);
         $post['lowerUpperBound'] = 1;
-        $this->assertTrue($formContact->judge($post)->hasPassed());
+        $judgement = $formContact->judge($post);
+        $this->assertTrue($judgement->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement("lowerBound")->isOutOfRange());
     }
 
     public function testLengthMinLengthMaxField()
