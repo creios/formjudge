@@ -41,7 +41,7 @@ array(6) {
 $judgement = $formContact->judge($_POST);
 
 //evaluate the judgement
-if($judgement->isPassed()){
+if($judgement->hasPassed()){
     echo "Formular has passed validation.";
 }else{
     echo "Formular didn't pass validation.";

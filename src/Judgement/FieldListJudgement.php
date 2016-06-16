@@ -63,7 +63,7 @@ class FieldListJudgement
     /**
      * @return boolean
      */
-    public function isPassed()
+    public function hasPassed()
     {
         return $this->passed;
     }

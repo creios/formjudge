@@ -22,7 +22,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact = new Formular();
         $formContact->addField("supportarea", new Numeric(TRUE));
         $judgement = $formContact->judge(array());
-        $this->assertFalse($judgement->isPassed());
+        $this->assertFalse($judgement->hasPassed());
 
     }
 
@@ -34,7 +34,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $form->addLevel("EMPTY", new Level());
         $form->getLevel("EMPTY")->addField("empty", new Text(TRUE));
         $judgement = $form->judge(array("USER" => array("id" => "nichtNumerisch")));
-        $this->assertFalse($judgement->isPassed());
+        $this->assertFalse($judgement->hasPassed());
     }
 
     public function testPasswordConfirmation()
@@ -47,7 +47,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $post['password']['new'] = "test";
         $post['password']['confirm'] = "test";
         $judgement = $oFieldsForm1->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
     }
 
     public function testContactData()
@@ -72,7 +72,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $post['lastname'] = "Limper";
         $post['email'] = "teeees@dsdsd.tld";
         $post['company'] = "1";
-        $this->assertTrue($formContact->judge($post)->isPassed());
+        $this->assertTrue($formContact->judge($post)->hasPassed());
 
     }
 
@@ -91,7 +91,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $post['fromTo'] = 10;
         $post['length'] = 2;
         $judgement = $formContact->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
         $this->assertEquals('0', $judgement->getFieldJudgement("fromTo")->getMin());
         $this->assertEquals('10', $judgement->getFieldJudgement("fromTo")->getMax());
     }
@@ -132,7 +132,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addField('true', new Boolean(TRUE));
         $formular->addField('false', new Boolean(TRUE));
-        $this->assertTrue($formular->judge($post)->isPassed());
+        $this->assertTrue($formular->judge($post)->hasPassed());
     }
 
     public function testDate()
@@ -141,10 +141,10 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addField('date', new Date(TRUE));
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
         $post['date'] = "425.544.1987";
         $judgement = $formular->judge($post);
-        $this->assertFalse($judgement->isPassed());
+        $this->assertFalse($judgement->hasPassed());
         $this->assertEquals('Date', $formular->getField('date')->getType());
     }
 
@@ -154,13 +154,13 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addField('password', new Password(TRUE));
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
         $post['password'] = 'test12345678910112';
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
         $post['password'] = '1';
         $judgement = $formular->judge($post);
-        $this->assertFalse($judgement->isPassed());
+        $this->assertFalse($judgement->hasPassed());
     }
 
     public function testDatetimeLocal()
@@ -169,13 +169,13 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular->addField('date', new DatetimeLocal(TRUE));
         $post['date'] = "2015-10-15T15:15:15";
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
         $post['date'] = "2015-10-15Tb5:15:15";
         $judgement = $formular->judge($post);
-        $this->assertFalse($judgement->isPassed());
+        $this->assertFalse($judgement->hasPassed());
         $post['date'] = "2015-10-63T15:15:15";
         $judgement = $formular->judge($post);
-        $this->assertFalse($judgement->isPassed());
+        $this->assertFalse($judgement->hasPassed());
     }
 
     public function testEmail()
@@ -186,7 +186,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular->addLevel('user', new Level());
         $formular->getLevel('user')->addField('email', new Email(TRUE));
         $judgement=$formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
         $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $judgement->getFieldListJudgement('user')->getFieldJudgement('email')->getPattern());
     }
 
@@ -196,7 +196,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addField('fax', new Fax(true));
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
         $this->assertEquals('tel', $formular->getField('fax')->getType());
     }
 
@@ -206,7 +206,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addField('mobile', new Mobile(true));
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
         $this->assertEquals('tel', $formular->getField('mobile')->getType());
     }
 
@@ -216,7 +216,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addField('tel', new Tel());
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
     }
 
     public function testText()
@@ -225,7 +225,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addField('text', new Text());
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
     }
 
     public function testTime()
@@ -234,7 +234,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addField('time', new Time());
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
     }
 
     public function testUrl()
@@ -243,7 +243,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addField('url', new Url());
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
     }
 
     public function testNumeric()
@@ -252,7 +252,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Formular();
         $formular->addField('numeric', new Numeric(TRUE));
         $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->isPassed());
+        $this->assertTrue($judgement->hasPassed());
     }
 
     public function testField2()
@@ -277,7 +277,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact->getField("lowerUpperBound")->setMin(0);
         $formContact->getField("lowerUpperBound")->setMax(2);
         $post['lowerUpperBound'] = 1;
-        $this->assertTrue($formContact->judge($post)->isPassed());
+        $this->assertTrue($formContact->judge($post)->hasPassed());
     }
 
     public function testLengthMinLengthMaxField()
@@ -294,6 +294,6 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact->getField("lowerUpperBound")->setLengthMin(0);
         $formContact->getField("lowerUpperBound")->setLengthMax(3);
         $post['lowerUpperBound'] = "Max";
-        $this->assertTrue($formContact->judge($post)->isPassed());
+        $this->assertTrue($formContact->judge($post)->hasPassed());
     }
 }

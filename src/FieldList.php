@@ -36,7 +36,7 @@ abstract class FieldList
             }
             $fieldJudgement = $field->judge();
             $fieldListJudgementBuilder->addFieldJudgements($fieldName, $fieldJudgement);
-            if ($fieldJudgement->isPassed() == false) {
+            if ($fieldJudgement->hasPassed() == false) {
                 $fieldListJudgementBuilder->failed();
             }
         }
@@ -48,7 +48,7 @@ abstract class FieldList
             } else {
                 $fieldListJudgement = $level->judge(array());
             }
-            if ($fieldListJudgement->isPassed() == false) {
+            if ($fieldListJudgement->hasPassed() == false) {
                 $fieldListJudgementBuilder->failed();
             }
             $fieldListJudgementBuilder->addFieldListJudgements($levelName, $fieldListJudgement);
