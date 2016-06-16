@@ -1,6 +1,3 @@
-### Composer template
-composer.phar
 vendor/
 .idea
-phpunit/report
-phpunit/phpunit.phar
+phpunit/logs
