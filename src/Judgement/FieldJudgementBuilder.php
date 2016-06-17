@@ -2,6 +2,8 @@
 
 namespace Creios\FormJudge\Judgement;
 
+use Creios\FormJudge\Fields\FieldTrait;
+
 /**
  * Class FieldJudgementBuilder
  * @package Creios\FormJudge\Judgement
@@ -9,6 +11,7 @@ namespace Creios\FormJudge\Judgement;
 class FieldJudgementBuilder
 {
 
+    use FieldTrait;
     use FieldJudgementTrait;
 
     /**

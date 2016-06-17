@@ -11,27 +11,12 @@ use Creios\FormJudge\Judgement\FieldJudgementBuilder;
 abstract class Field
 {
 
-    /** @var boolean */
-    protected $mandatory;
-    /** @var string */
-    protected $value;
-    /** @var string */
-    protected $pattern;
-    /** @var string */
-    protected $min;
-    /** @var string */
-    protected $max;
-    /** @var integer */
-    protected $lengthMin;
-    /** @var integer */
-    protected $lengthMax;
+    use FieldTrait;
+
     /** @var FieldList */
     protected $parent;
     /** @var Field */
     protected $equalTo;
-    protected $options = array();
-    /** @var bool */
-    protected $empty = false;
 
     /**
      * @param bool $mandatory
@@ -50,7 +35,6 @@ abstract class Field
         $fieldJudgementBuilder = (new FieldJudgementBuilder())
             ->setValue($this->value)
             ->setMandatory($this->mandatory)
-            ->setEmpty($this->empty)
             ->setLengthMax($this->lengthMax)
             ->setLengthMin($this->lengthMin)
             ->setMax($this->max)
@@ -208,66 +192,6 @@ abstract class Field
     public function getName()
     {
         return $this->parent->generateFieldName($this);
-    }
-
-    /**
-     * @param $mandatory
-     * @return $this
-     */
-    public function setMandatory($mandatory)
-    {
-        $this->mandatory = $mandatory;
-        return $this;
-    }
-
-    /**
-     * @param Field $equalTo
-     * @return $this
-     */
-    public function setEqualTo(Field $equalTo)
-    {
-        $this->equalTo = $equalTo;
-        return $this;
-    }
-
-    /**
-     * @param mixed $min
-     * @return $this
-     */
-    public function setMin($min)
-    {
-        $this->min = $min;
-        return $this;
-    }
-
-    /**
-     * @param mixed $max
-     * @return $this
-     */
-    public function setMax($max)
-    {
-        $this->max = $max;
-        return $this;
-    }
-
-    /**
-     * @param int $lengthMin
-     * @return $this
-     */
-    public function setLengthMin($lengthMin)
-    {
-        $this->lengthMin = $lengthMin;
-        return $this;
-    }
-
-    /**
-     * @param int $lengthMax
-     * @return $this
-     */
-    public function setLengthMax($lengthMax)
-    {
-        $this->lengthMax = $lengthMax;
-        return $this;
     }
 
     /**
