@@ -5,10 +5,10 @@ namespace Creios\FormJudge;
 use Creios\FormJudge\Fields\Field;
 
 /**
- * Class Formular
+ * Class Form
  * @package FormJudge
  */
-class Formular extends FieldList
+class Form extends FieldList
 {
 
     /**

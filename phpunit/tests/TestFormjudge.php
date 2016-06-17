@@ -20,7 +20,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testNotValidFormular()
     {
-        $formContact = new Formular();
+        $formContact = new Form();
         $formContact->addField("supportarea", new Numeric(TRUE));
         $judgement = $formContact->judge(array());
         $this->assertFalse($judgement->hasPassed());
@@ -29,7 +29,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testNotValidFormular2()
     {
-        $form = new Formular();
+        $form = new Form();
         $form->addLevel("USER", new Level());
         $form->getLevel("USER")->addField("id", new Numeric(TRUE));
         $form->addLevel("EMPTY", new Level());
@@ -40,7 +40,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testPasswordConfirmation()
     {
-        $oFieldsForm1 = new Formular();
+        $oFieldsForm1 = new Form();
         $oFieldsForm1->addLevel('password', new Level());
         $oFieldsForm1->getLevel('password')->addField('new', new Text(TRUE));
         $oFieldsForm1->getLevel('password')->addField('confirm', new Text(TRUE));
@@ -53,7 +53,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testContactData()
     {
-        $formContact = new Formular();
+        $formContact = new Form();
         $formContact->addField("supportarea", new Numeric(TRUE));
         $formContact->getField("supportarea")->addOptionConstraint("0");
         $formContact->getField("supportarea")->addOptionConstraint("1");
@@ -83,7 +83,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testField()
     {
-        $formContact = new Formular();
+        $formContact = new Form();
         //range
         $formContact->addField("fromTo", new Numeric(TRUE));
         $formContact->getField("fromTo")->setMinConstraint(0);
@@ -106,7 +106,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testGenerateFieldName()
     {
-        $formContact = new Formular();
+        $formContact = new Form();
         $formContact->addField("supportArea", new Numeric(TRUE));
         $formContact->addLevel("newLevel");
         $formContact->getLevel("newLevel")->addField("test", new Email())->setMandatoryConstraint(TRUE);
@@ -118,7 +118,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testJson()
     {
-        $formContact = new Formular();
+        $formContact = new Form();
         $formContact->addField("supportArea", new Numeric(TRUE));
         $formContact->addLevel("newLevel");
         $formContact->getLevel("newLevel")->addField("test", new Email())->setMandatoryConstraint(TRUE);
@@ -127,7 +127,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testOptionPattern()
     {
-        $formContact = new Formular();
+        $formContact = new Form();
         $formContact->addField("supportarea", new Numeric(TRUE));
         $this->setExpectedException("Exception", "Option does not match Pattern!");
         $formContact->getField("supportarea")->addOptionConstraint("falsch");
@@ -137,7 +137,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     {
         $post['true'] = "true";
         $post['false'] = "false";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('true', new Boolean(TRUE));
         $formular->addField('false', new Boolean(TRUE));
         $this->assertTrue($formular->judge($post)->hasPassed());
@@ -146,7 +146,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     public function testDate()
     {
         $post['date'] = "12.05.1987";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('date', new Date(TRUE));
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
@@ -159,7 +159,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     public function testPassword()
     {
         $post['password'] = 'test123';
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('password', new Password(TRUE));
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
@@ -173,7 +173,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testDatetimeLocal()
     {
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('date', new DatetimeLocal(TRUE));
         $post['date'] = "2015-10-15T15:15:15";
         $judgement = $formular->judge($post);
@@ -190,7 +190,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     {
         $post = ['user'];
         $post['user']['email'] = "tegeler@creios.net";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addLevel('user', new Level());
         $formular->getLevel('user')->addField('email', new Email(TRUE));
         $judgement = $formular->judge($post);
@@ -201,7 +201,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     public function testFax()
     {
         $post['fax'] = "+49 123 12-123";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('fax', new Fax(true));
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
@@ -211,7 +211,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     public function testMobile()
     {
         $post['mobile'] = "+49 923 1212";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('mobile', new Mobile(true));
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
@@ -221,7 +221,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     public function testTel()
     {
         $post['tel'] = "+49 923 12423-344";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('tel', new Tel());
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
@@ -230,7 +230,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     public function testTelFailed()
     {
         $post['tel'] = "not a number";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('tel', new Tel(true));
         $judgement = $formular->judge($post);
         $this->assertFalse($judgement->hasPassed());
@@ -243,7 +243,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     public function testText()
     {
         $post['text'] = "abcdef";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('text', new Text());
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
@@ -252,7 +252,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     public function testTime()
     {
         $post['time'] = "11:45";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('time', new Time());
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
@@ -261,7 +261,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     public function testUrl()
     {
         $post['url'] = "remondis.de";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('url', new Url());
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
@@ -270,7 +270,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     public function testNumeric()
     {
         $post['numeric'] = "2";
-        $formular = new Formular();
+        $formular = new Form();
         $formular->addField('numeric', new Numeric(TRUE));
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
@@ -278,7 +278,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testField2()
     {
-        $formContact = new Formular();
+        $formContact = new Form();
         $formContact->addField("length", new Numeric(TRUE));
         $formContact->getField("length")->setLengthMinConstraint(0);
         $formContact->getField("length")->setLengthMaxConstraint(5);
@@ -286,7 +286,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testMinMaxField()
     {
-        $formContact = new Formular();
+        $formContact = new Form();
         //range
         $formContact->addField("lowerBound", new Numeric(TRUE));
         $formContact->getField("lowerBound")->setMinConstraint(0);
@@ -305,7 +305,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
 
     public function testLengthMinLengthMaxField()
     {
-        $formContact = new Formular();
+        $formContact = new Form();
         //range
         $formContact->addField("lowerBound", new Text(TRUE));
         $formContact->getField("lowerBound")->setLengthMinConstraint(0);
