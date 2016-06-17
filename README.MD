@@ -1,7 +1,7 @@
 # FormJudge - I am the law
 
 [![Build Status](https://travis-ci.org/creios/formjudge.svg?branch=master)](https://travis-ci.org/creios/formjudge)
-[![Coverage Status](https://coveralls.io/repos/creios/formjudge/badge.svg?branch=master&service=github)](https://coveralls.io/github/creios/formjudge?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/creios/formjudge/badge.svg?branch=master)](https://coveralls.io/github/creios/formjudge?branch=master)
 [![GitHub license](https://img.shields.io/github/license/creios/formjudge.svg)]()
 
 **FormJudge** is a validation library for form input data.
