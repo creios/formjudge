@@ -249,6 +249,15 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $this->assertTrue($judgement->hasPassed());
     }
 
+    public function testTextEmptyString()
+    {
+        $post['text'] = "";
+        $formular = new Form();
+        $formular->addField('text', new Text(TRUE));
+        $judgement = $formular->judge($post);
+        $this->assertTrue($judgement->hasPassed());
+    }
+
     public function testTime()
     {
         $post['time'] = "11:45";

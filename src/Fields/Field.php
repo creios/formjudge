@@ -43,7 +43,7 @@ abstract class Field
             ->setOptionsConstraint($this->optionsConstraint)
             ->setPassed(true);
 
-        if ($this->isValueEmpty()) {
+        if ($this->isValueNull()) {
             if ($this->mandatoryConstraint) {
                 $fieldJudgementBuilder->setEmpty(true)->setPassed(false);
             }
@@ -65,12 +65,9 @@ abstract class Field
     /**
      * @return bool
      */
-    private function isValueEmpty()
+    private function isValueNull()
     {
-        if (is_numeric($this->value) && $this->value == 0):
-            return false;
-        endif;
-        return empty($this->value);
+        return is_null($this->value);
     }
 
     /**
