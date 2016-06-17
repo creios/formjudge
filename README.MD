@@ -9,17 +9,17 @@
 ```php
 <?php
 
-use Creios\FormJudge\Formular;
+use Creios\FormJudge\Form;
 use Creios\FormJudge\Fields\Numeric;
 use Creios\FormJudge\Fields\Text;
 use Creios\FormJudge\Fields\Email;
 
-$formContact = new Formular();
+$formContact = new Form();
 //establish your constraints
 $formContact->addField("message", new Text(true));
 $formContact->addField("gender", new Text(true));
-$formContact->getField("gender")->addOption("M");
-$formContact->getField("gender")->addOption("F");
+$formContact->getField("gender")->addOptionConstraint("M");
+$formContact->getField("gender")->addOptionConstraint("F");
 $formContact->addField('userId', new Numeric(true));
 $formContact->addField("firstname", new Text(true));
 $formContact->addField("lastname", new Text(true));
@@ -42,9 +42,9 @@ $judgement = $formContact->judge($_POST);
 
 //evaluate the judgement
 if($judgement->hasPassed()){
-    echo "Formular has passed validation.";
+    echo "Form has passed validation.";
 }else{
-    echo "Formular didn't pass validation.";
+    echo "Form didn't pass validation.";
 }
 ```
 
