@@ -5,81 +5,21 @@ namespace Creios\FormJudge\Fields;
 trait FieldTrait
 {
 
-    /** @var boolean */
-    protected $mandatory;
     /** @var string */
     protected $value;
+    /** @var boolean */
+    protected $mandatoryConstraint;
     /** @var string */
-    protected $pattern;
+    protected $patternConstraint;
     /** @var array */
-    protected $options = array();
+    protected $optionsConstraint = array();
     /** @var string */
-    protected $min;
+    protected $minConstraint;
     /** @var string */
-    protected $max;
+    protected $maxConstraint;
     /** @var integer */
-    protected $lengthMin;
+    protected $lengthMinConstraint;
     /** @var integer */
-    protected $lengthMax;
-    
-    /**
-     * @param $mandatory
-     * @return $this
-     */
-    public function setMandatory($mandatory)
-    {
-        $this->mandatory = $mandatory;
-        return $this;
-    }
-
-    /**
-     * @param Field $equalTo
-     * @return $this
-     */
-    public function setEqualTo(Field $equalTo)
-    {
-        $this->equalTo = $equalTo;
-        return $this;
-    }
-
-    /**
-     * @param mixed $min
-     * @return $this
-     */
-    public function setMin($min)
-    {
-        $this->min = $min;
-        return $this;
-    }
-
-    /**
-     * @param mixed $max
-     * @return $this
-     */
-    public function setMax($max)
-    {
-        $this->max = $max;
-        return $this;
-    }
-
-    /**
-     * @param int $lengthMin
-     * @return $this
-     */
-    public function setLengthMin($lengthMin)
-    {
-        $this->lengthMin = $lengthMin;
-        return $this;
-    }
-
-    /**
-     * @param int $lengthMax
-     * @return $this
-     */
-    public function setLengthMax($lengthMax)
-    {
-        $this->lengthMax = $lengthMax;
-        return $this;
-    }
+    protected $lengthMaxConstraint;
 
 }

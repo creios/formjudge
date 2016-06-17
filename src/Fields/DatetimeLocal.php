@@ -11,14 +11,14 @@ class DatetimeLocal extends Field
     /**
      * @var string
      */
-    protected $pattern = '^(\d\d\d\d)-(\d\d)-(\d\d)T([01]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)$';
+    protected $patternConstraint = '^(\d\d\d\d)-(\d\d)-(\d\d)T([01]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)$';
 
     /**
      * @return bool
      */
     public function checkSyntax()
     {
-        if (!preg_match('/' . $this->pattern . '/', $this->value)):
+        if (!preg_match('/' . $this->patternConstraint . '/', $this->value)):
             return FALSE;
         endif;
         $dateTime = explode('T', $this->value);

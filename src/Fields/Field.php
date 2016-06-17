@@ -16,14 +16,14 @@ abstract class Field
     /** @var FieldList */
     protected $parent;
     /** @var Field */
-    protected $equalTo;
+    protected $equalToConstraint;
 
     /**
-     * @param bool $mandatory
+     * @param bool $mandatoryConstraint
      */
-    public function __construct($mandatory = false)
+    public function __construct($mandatoryConstraint = false)
     {
-        $this->mandatory = $mandatory;
+        $this->mandatoryConstraint = $mandatoryConstraint;
     }
 
     /**
@@ -34,17 +34,17 @@ abstract class Field
 
         $fieldJudgementBuilder = (new FieldJudgementBuilder())
             ->setValue($this->value)
-            ->setMandatory($this->mandatory)
-            ->setLengthMax($this->lengthMax)
-            ->setLengthMin($this->lengthMin)
-            ->setMax($this->max)
-            ->setMin($this->min)
-            ->setPattern($this->pattern)
-            ->setOptions($this->options)
+            ->setMandatoryConstraint($this->mandatoryConstraint)
+            ->setLengthMaxConstraint($this->lengthMaxConstraint)
+            ->setLengthMinConstraint($this->lengthMinConstraint)
+            ->setMaxConstraint($this->maxConstraint)
+            ->setMinConstraint($this->minConstraint)
+            ->setPatternConstraint($this->patternConstraint)
+            ->setOptionsConstraint($this->optionsConstraint)
             ->setPassed(true);
 
         if ($this->isValueEmpty()) {
-            if ($this->mandatory) {
+            if ($this->mandatoryConstraint) {
                 $fieldJudgementBuilder->setEmpty(true)->setPassed(false);
             }
         } else {
@@ -78,7 +78,7 @@ abstract class Field
      */
     protected function checkSyntax()
     {
-        return $this->pattern == null || preg_match('/' . $this->pattern . '/', $this->value);
+        return $this->patternConstraint == null || preg_match('/' . $this->patternConstraint . '/', $this->value);
     }
 
     /**
@@ -86,8 +86,8 @@ abstract class Field
      */
     protected function checkOptions()
     {
-        if (count($this->options) > 0) {
-            return in_array($this->value, $this->options);
+        if (count($this->optionsConstraint) > 0) {
+            return in_array($this->value, $this->optionsConstraint);
         } else {
             return true;
         }
@@ -98,7 +98,7 @@ abstract class Field
      */
     protected function checkRange()
     {
-        return self::checkBoundaries($this->value, $this->min, $this->max);
+        return self::checkBoundaries($this->value, $this->minConstraint, $this->maxConstraint);
     }
 
     /**
@@ -129,19 +129,11 @@ abstract class Field
      */
     protected function checkEqualTo()
     {
-        if ($this->equalTo instanceof Field):
-            return ($this->value === $this->equalTo->getValue());
+        if ($this->equalToConstraint instanceof Field):
+            return ($this->value === $this->equalToConstraint->getValue());
         else:
             return true;
         endif;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function checkLength()
-    {
-        return self::checkBoundaries($this->value, $this->lengthMin, $this->lengthMax);
     }
 
     /**
@@ -150,6 +142,14 @@ abstract class Field
     protected function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function checkLength()
+    {
+        return self::checkBoundaries($this->value, $this->lengthMinConstraint, $this->lengthMaxConstraint);
     }
 
     /**
@@ -169,13 +169,13 @@ abstract class Field
     }
 
     /**
-     * @param $option
+     * @param $optionConstraint
      * @throws \InvalidArgumentException
      */
-    public function addOption($option)
+    public function addOptionConstraint($optionConstraint)
     {
         //Setting temporarily value for checking Syntax
-        $this->value = $option;
+        $this->value = $optionConstraint;
         if (!$this->checkSyntax()):
             //Removing value
             $this->value = null;
@@ -183,7 +183,7 @@ abstract class Field
         endif;
         //Removing value
         $this->value = null;
-        $this->options[] = $option;
+        $this->optionsConstraint[] = $optionConstraint;
     }
 
     /**
@@ -204,4 +204,83 @@ abstract class Field
         return $this;
     }
 
+    /**
+     * @param Field $equalToConstraint
+     * @return $this
+     */
+    public function setEqualToConstraint(Field $equalToConstraint)
+    {
+        $this->equalToConstraint = $equalToConstraint;
+        return $this;
+    }
+
+    /**
+     * @param string $patternConstraint
+     * @return $this
+     */
+    public function setPatternConstraint($patternConstraint)
+    {
+        $this->patternConstraint = $patternConstraint;
+        return $this;
+    }
+
+    /**
+     * @param array $optionsConstraint
+     * @return $this
+     */
+    public function setOptionsConstraint($optionsConstraint)
+    {
+        $this->optionsConstraint = $optionsConstraint;
+        return $this;
+    }
+
+    /**
+     * @param bool $mandatoryConstraint
+     * @return $this
+     */
+    public function setMandatoryConstraint($mandatoryConstraint)
+    {
+        $this->mandatoryConstraint = $mandatoryConstraint;
+        return $this;
+    }
+
+    /**
+     * @param mixed $minConstraint
+     * @return $this
+     */
+    public function setMinConstraint($minConstraint)
+    {
+        $this->minConstraint = $minConstraint;
+        return $this;
+    }
+
+    /**
+     * @param mixed $maxConstraint
+     * @return $this
+     */
+    public function setMaxConstraint($maxConstraint)
+    {
+        $this->maxConstraint = $maxConstraint;
+        return $this;
+    }
+
+    /**
+     * @param int $lengthMinConstraint
+     * @return $this
+     */
+    public function setLengthMinConstraint($lengthMinConstraint)
+    {
+        $this->lengthMinConstraint = $lengthMinConstraint;
+        return $this;
+    }
+
+    /**
+     * @param int $lengthMaxConstraint
+     * @return $this
+     */
+    public function setLengthMaxConstraint($lengthMaxConstraint)
+    {
+        $this->lengthMaxConstraint = $lengthMaxConstraint;
+        return $this;
+    }
 }

@@ -19,42 +19,22 @@ class FieldJudgementBuilder
      */
     public function build()
     {
-        return new FieldJudgement($this->mandatory,
+        return new FieldJudgement($this->mandatoryConstraint,
             $this->value,
             $this->empty,
             $this->syntaxError,
-            $this->pattern,
+            $this->patternConstraint,
             $this->outOfRange,
             $this->notEqual,
             $this->notPassedLength,
-            $this->options,
+            $this->optionsConstraint,
             $this->notInOptions,
             $this->notInPost,
-            $this->min,
-            $this->max,
-            $this->lengthMin,
-            $this->lengthMax,
+            $this->minConstraint,
+            $this->maxConstraint,
+            $this->lengthMinConstraint,
+            $this->lengthMaxConstraint,
             $this->passed);
-    }
-
-    /**
-     * @param boolean $mandatory
-     * @return $this
-     */
-    public function setMandatory($mandatory)
-    {
-        $this->mandatory = $mandatory;
-        return $this;
-    }
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-        return $this;
     }
 
     /**
@@ -64,26 +44,6 @@ class FieldJudgementBuilder
     public function setEmpty($empty)
     {
         $this->empty = $empty;
-        return $this;
-    }
-
-    /**
-     * @param boolean $syntaxError
-     * @return $this
-     */
-    public function setSyntaxError($syntaxError)
-    {
-        $this->syntaxError = $syntaxError;
-        return $this;
-    }
-
-    /**
-     * @param string $pattern
-     * @return $this
-     */
-    public function setPattern($pattern)
-    {
-        $this->pattern = $pattern;
         return $this;
     }
 
@@ -118,16 +78,6 @@ class FieldJudgementBuilder
     }
 
     /**
-     * @param array $options
-     * @return $this
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-        return $this;
-    }
-
-    /**
      * @param boolean $notInOptions
      * @return $this
      */
@@ -148,42 +98,92 @@ class FieldJudgementBuilder
     }
 
     /**
-     * @param string $min
+     * @param boolean $syntaxError
      * @return $this
      */
-    public function setMin($min)
+    public function setSyntaxError($syntaxError)
     {
-        $this->min = $min;
+        $this->syntaxError = $syntaxError;
         return $this;
     }
 
     /**
-     * @param string $max
+     * @param string $patternConstraint
      * @return $this
      */
-    public function setMax($max)
+    public function setPatternConstraint($patternConstraint)
     {
-        $this->max = $max;
+        $this->patternConstraint = $patternConstraint;
         return $this;
     }
 
     /**
-     * @param int $lengthMin
+     * @param array $optionsConstraint
      * @return $this
      */
-    public function setLengthMin($lengthMin)
+    public function setOptionsConstraint($optionsConstraint)
     {
-        $this->lengthMin = $lengthMin;
+        $this->optionsConstraint = $optionsConstraint;
         return $this;
     }
 
     /**
-     * @param int $lengthMax
+     * @param mixed $value
      * @return $this
      */
-    public function setLengthMax($lengthMax)
+    public function setValue($value)
     {
-        $this->lengthMax = $lengthMax;
+        $this->value = $value;
+        return $this;
+    }
+
+    /**
+     * @param bool $mandatoryConstraint
+     * @return $this
+     */
+    public function setMandatoryConstraint($mandatoryConstraint)
+    {
+        $this->mandatoryConstraint = $mandatoryConstraint;
+        return $this;
+    }
+
+    /**
+     * @param mixed $minConstraint
+     * @return $this
+     */
+    public function setMinConstraint($minConstraint)
+    {
+        $this->minConstraint = $minConstraint;
+        return $this;
+    }
+
+    /**
+     * @param mixed $maxConstraint
+     * @return $this
+     */
+    public function setMaxConstraint($maxConstraint)
+    {
+        $this->maxConstraint = $maxConstraint;
+        return $this;
+    }
+
+    /**
+     * @param int $lengthMinConstraint
+     * @return $this
+     */
+    public function setLengthMinConstraint($lengthMinConstraint)
+    {
+        $this->lengthMinConstraint = $lengthMinConstraint;
+        return $this;
+    }
+
+    /**
+     * @param int $lengthMaxConstraint
+     * @return $this
+     */
+    public function setLengthMaxConstraint($lengthMaxConstraint)
+    {
+        $this->lengthMaxConstraint = $lengthMaxConstraint;
         return $this;
     }
 

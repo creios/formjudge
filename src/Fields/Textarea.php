@@ -11,6 +11,6 @@ class Textarea extends Field
     /**
      * @var string
      */
-    protected $pattern;
+    protected $patternConstraint;
 
 }

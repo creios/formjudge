@@ -11,6 +11,6 @@ class Text extends Field
     /**
      * @var string
      */
-    protected $pattern = '^(.+)$';
+    protected $patternConstraint = '^(.+)$';
 
 }

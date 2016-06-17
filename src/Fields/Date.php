@@ -11,14 +11,14 @@ class Date extends Field
     /**
      * @var string
      */
-    protected $pattern = '^(\d\d).(\d\d).(\d\d\d\d)$';
+    protected $patternConstraint = '^(\d\d).(\d\d).(\d\d\d\d)$';
 
     /**
      * @return bool
      */
     public function checkSyntax()
     {
-        if (!preg_match('/' . $this->pattern . '/', $this->value)):
+        if (!preg_match('/' . $this->patternConstraint . '/', $this->value)):
             return false;
         endif;
         $date = explode('.', $this->value);

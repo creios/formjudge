@@ -1,4 +1,5 @@
 <?php
+
 namespace Creios\FormJudge;
 
 use Creios\FormJudge\Fields\Boolean;
@@ -43,7 +44,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $oFieldsForm1->addLevel('password', new Level());
         $oFieldsForm1->getLevel('password')->addField('new', new Text(TRUE));
         $oFieldsForm1->getLevel('password')->addField('confirm', new Text(TRUE));
-        $oFieldsForm1->getLevel('password')->getField('confirm')->setEqualTo($oFieldsForm1->getLevel('password')->getField('new'));
+        $oFieldsForm1->getLevel('password')->getField('confirm')->setEqualToConstraint($oFieldsForm1->getLevel('password')->getField('new'));
         $post['password']['new'] = "test";
         $post['password']['confirm'] = "test";
         $judgement = $oFieldsForm1->judge($post);
@@ -54,12 +55,12 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     {
         $formContact = new Formular();
         $formContact->addField("supportarea", new Numeric(TRUE));
-        $formContact->getField("supportarea")->addOption("0");
-        $formContact->getField("supportarea")->addOption("1");
+        $formContact->getField("supportarea")->addOptionConstraint("0");
+        $formContact->getField("supportarea")->addOptionConstraint("1");
         $formContact->addField("message", new Text(TRUE));
         $formContact->addField("gender", new Text(TRUE));
-        $formContact->getField("gender")->addOption("M");
-        $formContact->getField("gender")->addOption("F");
+        $formContact->getField("gender")->addOptionConstraint("M");
+        $formContact->getField("gender")->addOptionConstraint("F");
         $formContact->addField("firstname", new Text(TRUE));
         $formContact->addField("lastname", new Text(TRUE));
         $formContact->addField('email', new Email(TRUE));
@@ -76,7 +77,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $judgement = $formContact->judge($post);
         $this->assertTrue($judgement->hasPassed());
         $this->assertFalse($judgement->getFieldJudgement('supportarea')->isNotInOptions());
-        $this->assertEquals(["0", "1"], $judgement->getFieldJudgement('supportarea')->getOptions());
+        $this->assertEquals(["0", "1"], $judgement->getFieldJudgement('supportarea')->getOptionsConstraint());
         $this->assertFalse($judgement->getFieldJudgement('supportarea')->isNotInPost());
     }
 
@@ -85,21 +86,21 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact = new Formular();
         //range
         $formContact->addField("fromTo", new Numeric(TRUE));
-        $formContact->getField("fromTo")->setMin(0);
-        $formContact->getField("fromTo")->setMax(10);
+        $formContact->getField("fromTo")->setMinConstraint(0);
+        $formContact->getField("fromTo")->setMaxConstraint(10);
         //length
         $formContact->addField("length", new Numeric(TRUE));
-        $formContact->getField("length")->setLengthMin(0);
-        $formContact->getField("length")->setLengthMax(5);
+        $formContact->getField("length")->setLengthMinConstraint(0);
+        $formContact->getField("length")->setLengthMaxConstraint(5);
         //options
         $post['fromTo'] = 10;
         $post['length'] = 2;
         $judgement = $formContact->judge($post);
         $this->assertTrue($judgement->hasPassed());
-        $this->assertEquals('0', $judgement->getFieldJudgement("fromTo")->getMin());
-        $this->assertEquals('10', $judgement->getFieldJudgement("fromTo")->getMax());
-        $this->assertEquals('0', $judgement->getFieldJudgement("length")->getLengthMin());
-        $this->assertEquals('5', $judgement->getFieldJudgement("length")->getLengthMax());
+        $this->assertEquals('0', $judgement->getFieldJudgement("fromTo")->getMinConstraint());
+        $this->assertEquals('10', $judgement->getFieldJudgement("fromTo")->getMaxConstraint());
+        $this->assertEquals('0', $judgement->getFieldJudgement("length")->getLengthMinConstraint());
+        $this->assertEquals('5', $judgement->getFieldJudgement("length")->getLengthMaxConstraint());
         $this->assertFalse($judgement->getFieldJudgement("length")->isNotPassedLength());
     }
 
@@ -108,7 +109,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact = new Formular();
         $formContact->addField("supportArea", new Numeric(TRUE));
         $formContact->addLevel("newLevel");
-        $formContact->getLevel("newLevel")->addField("test", new Email())->setMandatory(TRUE);
+        $formContact->getLevel("newLevel")->addField("test", new Email())->setMandatoryConstraint(TRUE);
         $formContact->getLevel("newLevel")->addLevel("secondLevel")->addField("test", new Email());
         $this->assertEquals("supportArea", $formContact->getField("supportArea")->getName());
         $this->assertEquals("newLevel[test]", $formContact->getLevel("newLevel")->getField("test")->getName());
@@ -120,7 +121,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact = new Formular();
         $formContact->addField("supportArea", new Numeric(TRUE));
         $formContact->addLevel("newLevel");
-        $formContact->getLevel("newLevel")->addField("test", new Email())->setMandatory(TRUE);
+        $formContact->getLevel("newLevel")->addField("test", new Email())->setMandatoryConstraint(TRUE);
         $formContact->getLevel("newLevel")->addLevel("secondLevel")->addField("test", new Email());
     }
 
@@ -129,7 +130,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact = new Formular();
         $formContact->addField("supportarea", new Numeric(TRUE));
         $this->setExpectedException("Exception", "Option does not match Pattern!");
-        $formContact->getField("supportarea")->addOption("falsch");
+        $formContact->getField("supportarea")->addOptionConstraint("falsch");
     }
 
     public function testBoolean()
@@ -194,7 +195,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular->getLevel('user')->addField('email', new Email(TRUE));
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
-        $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $judgement->getFieldListJudgement('user')->getFieldJudgement('email')->getPattern());
+        $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $judgement->getFieldListJudgement('user')->getFieldJudgement('email')->getPatternConstraint());
     }
 
     public function testFax()
@@ -234,8 +235,8 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $judgement = $formular->judge($post);
         $this->assertFalse($judgement->hasPassed());
         $this->assertTrue($judgement->getFieldJudgement("tel")->isSyntaxError());
-        $this->assertTrue($judgement->getFieldJudgement("tel")->isMandatory());
-        $this->assertEquals("not a number",$judgement->getFieldJudgement("tel")->getValue());
+        $this->assertTrue($judgement->getFieldJudgement("tel")->hasMandatoryConstraint());
+        $this->assertEquals("not a number", $judgement->getFieldJudgement("tel")->getValue());
         $this->assertFalse($judgement->getFieldJudgement("tel")->isEmpty());
     }
 
@@ -279,8 +280,8 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     {
         $formContact = new Formular();
         $formContact->addField("length", new Numeric(TRUE));
-        $formContact->getField("length")->setLengthMin(0);
-        $formContact->getField("length")->setLengthMax(5);
+        $formContact->getField("length")->setLengthMinConstraint(0);
+        $formContact->getField("length")->setLengthMaxConstraint(5);
     }
 
     public function testMinMaxField()
@@ -288,14 +289,14 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact = new Formular();
         //range
         $formContact->addField("lowerBound", new Numeric(TRUE));
-        $formContact->getField("lowerBound")->setMin(0);
+        $formContact->getField("lowerBound")->setMinConstraint(0);
         $post['lowerBound'] = 0;
         $formContact->addField("upperBound", new Numeric(TRUE));
-        $formContact->getField("upperBound")->setMax(2);
+        $formContact->getField("upperBound")->setMaxConstraint(2);
         $post['upperBound'] = 1;
         $formContact->addField("lowerUpperBound", new Numeric(TRUE));
-        $formContact->getField("lowerUpperBound")->setMin(0);
-        $formContact->getField("lowerUpperBound")->setMax(2);
+        $formContact->getField("lowerUpperBound")->setMinConstraint(0);
+        $formContact->getField("lowerUpperBound")->setMaxConstraint(2);
         $post['lowerUpperBound'] = 1;
         $judgement = $formContact->judge($post);
         $this->assertTrue($judgement->hasPassed());
@@ -307,14 +308,14 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact = new Formular();
         //range
         $formContact->addField("lowerBound", new Text(TRUE));
-        $formContact->getField("lowerBound")->setLengthMin(0);
+        $formContact->getField("lowerBound")->setLengthMinConstraint(0);
         $post['lowerBound'] = "Max";
         $formContact->addField("upperBound", new Text(TRUE));
-        $formContact->getField("upperBound")->setLengthMax(3);
+        $formContact->getField("upperBound")->setLengthMaxConstraint(3);
         $post['upperBound'] = "Max";
         $formContact->addField("lowerUpperBound", new Text(TRUE));
-        $formContact->getField("lowerUpperBound")->setLengthMin(0);
-        $formContact->getField("lowerUpperBound")->setLengthMax(3);
+        $formContact->getField("lowerUpperBound")->setLengthMinConstraint(0);
+        $formContact->getField("lowerUpperBound")->setLengthMaxConstraint(3);
         $post['lowerUpperBound'] = "Max";
         $this->assertTrue($formContact->judge($post)->hasPassed());
     }

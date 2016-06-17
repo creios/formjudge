@@ -2,6 +2,8 @@
 
 namespace Creios\FormJudge\Judgement;
 
+use Creios\FormJudge\Fields\FieldTrait;
+
 /**
  * Class FieldJudgement
  * @package Creios\FormJudge\Judgement
@@ -9,68 +11,69 @@ namespace Creios\FormJudge\Judgement;
 class FieldJudgement
 {
 
+    use FieldTrait;
     use FieldJudgementTrait;
 
     /**
      * FieldJudgement constructor.
-     * @param bool $mandatory
+     * @param bool $mandatoryConstraint
      * @param string $value
      * @param bool $empty
      * @param bool $syntaxError
-     * @param string $pattern
+     * @param string $patternConstraint
      * @param bool $outOfRange
      * @param bool $notEqual
      * @param bool $notPassedLength
-     * @param array $options
+     * @param array $optionsConstraint
      * @param bool $notInOptions
      * @param bool $notInPost
-     * @param string $min
-     * @param string $max
-     * @param int $lengthMin
-     * @param int $lengthMax
+     * @param string $minConstraint
+     * @param string $maxConstraint
+     * @param int $lengthMinConstraint
+     * @param int $lengthMaxConstraint
      * @param bool $passed
      */
-    public function __construct($mandatory,
+    public function __construct($mandatoryConstraint,
                                 $value,
                                 $empty,
                                 $syntaxError,
-                                $pattern,
+                                $patternConstraint,
                                 $outOfRange,
                                 $notEqual,
                                 $notPassedLength,
-                                array $options,
+                                array $optionsConstraint,
                                 $notInOptions,
                                 $notInPost,
-                                $min,
-                                $max,
-                                $lengthMin,
-                                $lengthMax,
+                                $minConstraint,
+                                $maxConstraint,
+                                $lengthMinConstraint,
+                                $lengthMaxConstraint,
                                 $passed)
     {
-        $this->mandatory = $mandatory;
+        $this->mandatoryConstraint = $mandatoryConstraint;
         $this->value = $value;
         $this->empty = $empty;
         $this->syntaxError = $syntaxError;
-        $this->pattern = $pattern;
+        $this->patternConstraint = $patternConstraint;
         $this->outOfRange = $outOfRange;
         $this->notEqual = $notEqual;
         $this->notPassedLength = $notPassedLength;
-        $this->options = $options;
+        $this->optionsConstraint = $optionsConstraint;
         $this->notInOptions = $notInOptions;
         $this->notInPost = $notInPost;
-        $this->min = $min;
-        $this->max = $max;
-        $this->lengthMin = $lengthMin;
-        $this->lengthMax = $lengthMax;
+        $this->minConstraint = $minConstraint;
+        $this->maxConstraint = $maxConstraint;
+        $this->lengthMinConstraint = $lengthMinConstraint;
+        $this->lengthMaxConstraint = $lengthMaxConstraint;
         $this->passed = $passed;
     }
 
     /**
      * @return boolean
      */
-    public function isMandatory()
+    public function hasMandatoryConstraint()
     {
-        return $this->mandatory;
+        return $this->mandatoryConstraint;
     }
 
     /**
@@ -124,9 +127,9 @@ class FieldJudgement
     /**
      * @return array
      */
-    public function getOptions()
+    public function getOptionsConstraint()
     {
-        return $this->options;
+        return $this->optionsConstraint;
     }
 
     /**
@@ -148,41 +151,41 @@ class FieldJudgement
     /**
      * @return string
      */
-    public function getMin()
+    public function getMinConstraint()
     {
-        return $this->min;
+        return $this->minConstraint;
     }
 
     /**
      * @return string
      */
-    public function getMax()
+    public function getMaxConstraint()
     {
-        return $this->max;
+        return $this->maxConstraint;
     }
 
     /**
      * @return int
      */
-    public function getLengthMin()
+    public function getLengthMinConstraint()
     {
-        return $this->lengthMin;
+        return $this->lengthMinConstraint;
     }
 
     /**
      * @return int
      */
-    public function getLengthMax()
+    public function getLengthMaxConstraint()
     {
-        return $this->lengthMax;
+        return $this->lengthMaxConstraint;
     }
 
     /**
      * @return string
      */
-    public function getPattern()
+    public function getPatternConstraint()
     {
-        return $this->pattern;
+        return $this->patternConstraint;
     }
 
     /**
