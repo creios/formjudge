@@ -3,8 +3,7 @@ namespace Creios\FormJudge;
 
 use Creios\FormJudge\Fields\Field;
 use Creios\FormJudge\Generator\FieldGenerator;
-use Creios\FormJudge\Generator\FieldListGenerator;
-use Creios\FormJudge\Generator\LevelGenerator;
+use Creios\FormJudge\Generator\FormGenerator;
 use Creios\FormJudge\Judgement\FieldListJudgement;
 use Creios\FormJudge\Judgement\FieldListJudgementBuilder;
 
@@ -61,7 +60,7 @@ abstract class FieldList
 
     }
 
-    /** @return FieldListGenerator */
+    /** @return FormGenerator */
     public function getGenerator()
     {
         $fieldGenerators = [];
@@ -74,7 +73,7 @@ abstract class FieldList
             $levelGenerators[$levelName] = $level->getGenerator();
         }
 
-        return new FieldListGenerator($fieldGenerators, $levelGenerators);
+        return new FormGenerator($fieldGenerators, $levelGenerators);
     }
 
     /**

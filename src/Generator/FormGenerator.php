@@ -2,11 +2,11 @@
 
 namespace Creios\FormJudge\Generator;
 
-class FieldListGenerator
+class FormGenerator
 {
 
     /**
-     * @var FieldListGenerator[] $levels
+     * @var FormGenerator[] $levels
      */
     public $levelGenerators = array();
     /**
@@ -16,7 +16,7 @@ class FieldListGenerator
 
     /**
      * @param FieldGenerator[] $fieldGenerators
-     * @param FieldListGenerator[] $levelGenerators
+     * @param FormGenerator[] $levelGenerators
      */
     public function __construct(array $fieldGenerators, array $levelGenerators)
     {
@@ -35,7 +35,7 @@ class FieldListGenerator
 
     /**
      * @param $name
-     * @return FieldListGenerator
+     * @return FormGenerator
      */
     public function getLevel($name)
     {
