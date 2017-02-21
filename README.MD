@@ -48,9 +48,33 @@ if($judgement->hasPassed()){
 }
 ```
 
+## Client-side validation
+
+The focus of FormJudge is on server-side validation of form input data, but it can help you by client-side validation as well. You can use the constraints that you added to the fields to fill HTML5 attributes like `max`, `min`, `pattern` etc. which will be respected by modern brothers.
+
+```php
+<?php
+
+use Creios\FormJudge\Form;
+use Creios\FormJudge\Fields\Numeric;
+
+$form = new Form();
+$dayOfWeek = (new Numeric(true))->setMinConstraint(1)->setMaxConstraint(7);
+$form->addField('dayOfWeek', $dayOfWeek);
+?>
+
+
+<input type="number" min="<?= $form->getField('dayOfWeek')->getMinConstraint() ?>" max="<?= $form->getField('dayOfWeek')->getMaxConstraint() ?>" name="daysOfWeek">
+```
+
+Renders to:
+```html
+<input type="number" min="1" max="7" name="daysOfWeek">
+```
+
 ## Install
 
-You can use [composer](https://getcomposer.org/) to download and install formjudge. Visit formjudge on [packagist](https://packagist.org/packages/creios/formjudge).
+You can use [composer](https://getcomposer.org/) to download and install FormJudge. Visit FormJudge on [packagist](https://packagist.org/packages/creios/formjudge).
 
 ### composer.json
 ```json
