@@ -64,12 +64,18 @@ $form->addField('dayOfWeek', $dayOfWeek);
 ?>
 
 
-<input type="number" min="<?= $form->getField('dayOfWeek')->getMinConstraint() ?>" max="<?= $form->getField('dayOfWeek')->getMaxConstraint() ?>" name="daysOfWeek">
+<input type="number" 
+    min="<?= $form->getField('dayOfWeek')->getMinConstraint() ?>"
+    max="<?= $form->getField('dayOfWeek')->getMaxConstraint() ?>"
+    name="daysOfWeek">
 ```
 
 Renders to:
 ```html
-<input type="number" min="1" max="7" name="daysOfWeek">
+<input type="number"
+    min="1"
+    max="7"
+    name="daysOfWeek">
 ```
 
 ## Install
