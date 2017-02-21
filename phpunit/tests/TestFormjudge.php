@@ -22,6 +22,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     {
         $formContact = new Form();
         $formContact->addField("supportarea", new Numeric(TRUE));
+        $this->assertTrue($formContact->getField("supportarea")->hasMandatoryConstraint());
         $judgement = $formContact->judge(array());
         $this->assertFalse($judgement->hasPassed());
 
@@ -66,6 +67,9 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact->addField('email', new Email(TRUE));
         $formContact->addField('company', new Numeric(TRUE));
 
+        $this->assertEquals([0, 1], $formContact->getField("supportarea")->getOptionsConstraint());
+        $this->assertEquals(["M", "F"], $formContact->getField("gender")->getOptionsConstraint());
+
         $post['supportarea'] = "1";
         $post['message'] = "test";
         $post['gender'] = "M";
@@ -92,6 +96,12 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact->addField("length", new Numeric(TRUE));
         $formContact->getField("length")->setLengthMinConstraint(0);
         $formContact->getField("length")->setLengthMaxConstraint(5);
+
+        $this->assertEquals(0, $formContact->getField('fromTo')->getMinConstraint());
+        $this->assertEquals(10, $formContact->getField('fromTo')->getMaxConstraint());
+        $this->assertEquals(0, $formContact->getField('length')->getLengthMinConstraint());
+        $this->assertEquals(5, $formContact->getField('length')->getLengthMaxConstraint());
+
         //options
         $post['fromTo'] = 10;
         $post['length'] = 2;
@@ -131,6 +141,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formContact->addField("supportarea", new Numeric(TRUE));
         $this->setExpectedException("Exception", "Option does not match Pattern!");
         $formContact->getField("supportarea")->addOptionConstraint("falsch");
+        $this->assertEquals(["falsch"], $formContact->getField("supportarea")->getOptionsConstraint());
     }
 
     public function testBoolean()
@@ -193,6 +204,8 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $formular = new Form();
         $formular->addLevel('user', new Level());
         $formular->getLevel('user')->addField('email', new Email(TRUE));
+
+        $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $formular->getLevel('user')->getField('email')->getPatternConstraint());
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
         $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $judgement->getFieldListJudgement('user')->getFieldJudgement('email')->getPatternConstraint());

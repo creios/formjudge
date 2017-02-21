@@ -280,4 +280,61 @@ abstract class Field
         $this->lengthMaxConstraint = $lengthMaxConstraint;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getMinConstraint()
+    {
+        return $this->minConstraint;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMaxConstraint()
+    {
+        return $this->maxConstraint;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLengthMinConstraint()
+    {
+        return $this->lengthMinConstraint;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLengthMaxConstraint()
+    {
+        return $this->lengthMaxConstraint;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPatternConstraint()
+    {
+        return $this->patternConstraint;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMandatoryConstraint()
+    {
+        return $this->mandatoryConstraint;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptionsConstraint()
+    {
+        return $this->optionsConstraint;
+    }
+
 }

@@ -69,14 +69,6 @@ class FieldJudgement
     }
 
     /**
-     * @return boolean
-     */
-    public function hasMandatoryConstraint()
-    {
-        return $this->mandatoryConstraint;
-    }
-
-    /**
      * @return string
      */
     public function getValue()
@@ -125,14 +117,6 @@ class FieldJudgement
     }
 
     /**
-     * @return array
-     */
-    public function getOptionsConstraint()
-    {
-        return $this->optionsConstraint;
-    }
-
-    /**
      * @return boolean
      */
     public function isNotInOptions()
@@ -146,6 +130,22 @@ class FieldJudgement
     public function isNotInPost()
     {
         return $this->notInPost;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasMandatoryConstraint()
+    {
+        return $this->mandatoryConstraint;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptionsConstraint()
+    {
+        return $this->optionsConstraint;
     }
 
     /**
