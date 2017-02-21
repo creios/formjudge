@@ -12,6 +12,10 @@ class Date extends Field
      * @var string
      */
     protected $patternConstraint = '^(\d\d).(\d\d).(\d\d\d\d)$';
+    /**
+     * @var string
+     */
+    protected $type = "date";
 
     /**
      * @return bool

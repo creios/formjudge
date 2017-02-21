@@ -17,6 +17,10 @@ abstract class Field
     protected $parent;
     /** @var Field */
     protected $equalToConstraint;
+    /**
+     * @var string
+     */
+    protected $type = "text";
 
     /**
      * @param bool $mandatoryConstraint
@@ -158,11 +162,11 @@ abstract class Field
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getType()
     {
-        return str_replace(["_", __NAMESPACE__ . "\\"], ["-", ""], get_class($this));
+        return $this->type;
     }
 
     /**

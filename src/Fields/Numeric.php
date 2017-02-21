@@ -9,6 +9,11 @@ class Numeric extends Field
 {
 
     /**
+     * @var string
+     */
+    protected $type = "number";
+
+    /**
      * @return bool
      */
     protected function checkSyntax()
