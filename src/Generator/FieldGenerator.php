@@ -3,6 +3,7 @@
 namespace Creios\FormJudge\Generator;
 
 use Creios\FormJudge\Fields\Field;
+use Creios\FormJudge\Fields\Textarea;
 
 class FieldGenerator
 {
@@ -39,6 +40,9 @@ class FieldGenerator
      */
     private function generateType()
     {
+        if ($this->field instanceof Textarea) {
+            return "";
+        }
         return sprintf('type="%s" ', $this->field->getType());
     }
 
