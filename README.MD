@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/creios/formjudge/badge.svg?branch=master)](https://coveralls.io/github/creios/formjudge?branch=master)
 [![GitHub license](https://img.shields.io/github/license/creios/formjudge.svg)]()
 
-**FormJudge** is a validation library for form input data.
+**FormJudge** is a validation library for submitted form data.
 
 ```php
 <?php
