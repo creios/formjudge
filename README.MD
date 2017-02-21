@@ -63,7 +63,6 @@ $dayOfWeek = (new Numeric(true))->setMinConstraint(1)->setMaxConstraint(7);
 $form->addField('dayOfWeek', $dayOfWeek);
 ?>
 
-
 <input type="number" 
     min="<?= $form->getField('dayOfWeek')->getMinConstraint() ?>"
     max="<?= $form->getField('dayOfWeek')->getMaxConstraint() ?>"
