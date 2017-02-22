@@ -32,7 +32,7 @@ class FieldGenerator
         $fieldAttributes .= $this->generateLengthMaxConstraint();
         $fieldAttributes .= $this->generateLengthMinConstraint();
         $fieldAttributes .= $this->generatePatternConstraint();
-        $fieldAttributes .= $this->generateMandatoryConstraint();
+        $fieldAttributes .= $this->generateRequiredConstraint();
         return trim($fieldAttributes);
     }
 
@@ -107,9 +107,9 @@ class FieldGenerator
     /**
      * @return string
      */
-    private function generateMandatoryConstraint()
+    private function generateRequiredConstraint()
     {
-        if ($this->field->hasMandatoryConstraint() === false) {
+        if ($this->field->getRequiredConstraint() === false) {
             return "";
         }
         return "required ";

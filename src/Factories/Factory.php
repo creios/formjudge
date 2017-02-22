@@ -6,6 +6,7 @@ use Creios\FormJudge\Fields\Text;
 
 class Factory
 {
+
     const BOOLEAN_PATTERN_CONSTRAINT = '^(0|1|TRUE|FALSE|true|false|ON|OFF|on|off)$';
 
     /**
@@ -14,7 +15,7 @@ class Factory
      */
     public static function createBooleanText($requiredConstraint = false)
     {
-        return (new Text($requiredConstraint))->setPatternConstraint(self::BOOLEAN_PATTERN_CONSTRAINT);
+        return Text::createInstance($requiredConstraint)->setPatternConstraint(self::BOOLEAN_PATTERN_CONSTRAINT);
     }
 
 }

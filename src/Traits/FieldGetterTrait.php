@@ -64,14 +64,6 @@ trait FieldGetterTrait
     /**
      * @return bool
      */
-    public function hasMandatoryConstraint()
-    {
-        return $this->requiredConstraint;
-    }
-
-    /**
-     * @return bool
-     */
     public function getRequiredConstraint()
     {
         return $this->requiredConstraint;

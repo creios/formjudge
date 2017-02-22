@@ -32,8 +32,8 @@ class FieldJudgement
      * @param bool $outOfRange
      * @param bool $passed
      * @param string $patternConstraint
+     * @param $patternError
      * @param bool $requiredConstraint
-     * @param bool $syntaxError
      * @param bool $typeError
      * @param string $value
      */
@@ -51,8 +51,8 @@ class FieldJudgement
         $outOfRange,
         $passed,
         $patternConstraint,
+        $patternError,
         $requiredConstraint,
-        $syntaxError,
         $typeError,
         $value
     )
@@ -70,7 +70,7 @@ class FieldJudgement
         $this->outOfRange = $outOfRange;
         $this->passed = $passed;
         $this->patternConstraint = $patternConstraint;
-        $this->patternError = $syntaxError;
+        $this->patternError = $patternError;
         $this->requiredConstraint = $requiredConstraint;
         $this->typeError = $typeError;
         $this->value = $value;
@@ -95,7 +95,7 @@ class FieldJudgement
     /**
      * @return boolean
      */
-    public function isSyntaxError()
+    public function isPatternError()
     {
         return $this->patternError;
     }
@@ -146,14 +146,6 @@ class FieldJudgement
     public function hasPassed()
     {
         return $this->passed;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPatternError()
-    {
-        return $this->patternError;
     }
 
     /**

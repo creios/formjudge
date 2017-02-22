@@ -13,6 +13,7 @@ use Creios\FormJudge\Fields\TextArea;
  */
 class MySqlFieldFactory
 {
+
     const TINYINT_SIGNED_MIN_CONSTRAINT = -128;
     const TINYINT_SIGNED_MAX_CONSTRAINT = 127;
     const TINYINT_UNSIGNED_MIN_CONSTRAINT = 0;
@@ -44,7 +45,7 @@ class MySqlFieldFactory
      */
     public static function createSignedTinyInt($mandatoryConstraint = false)
     {
-        return (new Number($mandatoryConstraint))
+        return Number::createInstance($mandatoryConstraint)
             ->setMinConstraint(self::TINYINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::TINYINT_SIGNED_MAX_CONSTRAINT);
     }
@@ -55,7 +56,7 @@ class MySqlFieldFactory
      */
     public static function createUnsignedTinyInt($mandatoryConstraint = false)
     {
-        return (new Number($mandatoryConstraint))
+        return Number::createInstance($mandatoryConstraint)
             ->setMinConstraint(self::TINYINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::TINYINT_UNSIGNED_MAX_CONSTRAINT);
     }
@@ -66,7 +67,7 @@ class MySqlFieldFactory
      */
     public static function createSignedMediumInt($mandatoryConstraint = false)
     {
-        return (new Number($mandatoryConstraint))
+        return Number::createInstance($mandatoryConstraint)
             ->setMinConstraint(self::MEDIUMINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::MEDIUMINT_SIGNED_MAX_CONSTRAINT);
     }
@@ -77,7 +78,7 @@ class MySqlFieldFactory
      */
     public static function createUnsignedMediumInt($mandatoryConstraint = false)
     {
-        return (new Number($mandatoryConstraint))
+        return Number::createInstance($mandatoryConstraint)
             ->setMinConstraint(self::MEDIUMINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::MEDIUMINT_UNSIGNED_MAX_CONSTRAINT);
     }
@@ -88,7 +89,7 @@ class MySqlFieldFactory
      */
     public static function createSignedInt($mandatoryConstraint = false)
     {
-        return (new Number($mandatoryConstraint))
+        return Number::createInstance($mandatoryConstraint)
             ->setMinConstraint(self::INT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::INT_SIGNED_MAX_CONSTRAINT);
     }
@@ -99,7 +100,7 @@ class MySqlFieldFactory
      */
     public static function createUnsignedInt($mandatoryConstraint = false)
     {
-        return (new Number($mandatoryConstraint))
+        return Number::createInstance($mandatoryConstraint)
             ->setMinConstraint(self::INT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::INT_UNSIGNED_MAX_CONSTRAINT);
     }
@@ -110,7 +111,7 @@ class MySqlFieldFactory
      */
     public static function createSignedBigInt($mandatoryConstraint = false)
     {
-        return (new Number($mandatoryConstraint))
+        return Number::createInstance($mandatoryConstraint)
             ->setMinConstraint(self::BIGINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::BIGINT_SIGNED_MAX_CONSTRAINT);
     }
@@ -121,7 +122,7 @@ class MySqlFieldFactory
      */
     public static function createUnsignedBigInt($mandatoryConstraint = false)
     {
-        return (new Number($mandatoryConstraint))
+        return Number::createInstance($mandatoryConstraint)
             ->setMinConstraint(self::BIGINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::BIGINT_UNSIGNED_MAX_CONSTRAINT);
     }
@@ -132,7 +133,7 @@ class MySqlFieldFactory
      */
     public static function createTextInput($mandatoryConstraint = false)
     {
-        return (new Text($mandatoryConstraint))
+        return Text::createInstance($mandatoryConstraint)
             ->setLengthMaxConstraint(self::TEXT_LENGTH_MAX_CONSTRAINT);
     }
 
@@ -142,7 +143,7 @@ class MySqlFieldFactory
      */
     public static function createTextTextArea($mandatoryConstraint = false)
     {
-        return (new TextArea($mandatoryConstraint))
+        return TextArea::createInstance($mandatoryConstraint)
             ->setLengthMaxConstraint(self::TEXT_LENGTH_MAX_CONSTRAINT);
     }
 
@@ -152,7 +153,7 @@ class MySqlFieldFactory
      */
     public static function createDate($mandatoryConstraint = false)
     {
-        return (new Date($mandatoryConstraint))
+        return Date::createInstance($mandatoryConstraint)
             ->setPatternConstraint(self::DATE_PATTERN_CONSTRAINT)
             ->setMinConstraint(self::DATE_MIN_CONSTRAINT)
             ->setMaxConstraint(self::DATE_MAX_CONSTRAINT);

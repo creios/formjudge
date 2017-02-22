@@ -25,9 +25,18 @@ abstract class Field
     /**
      * @param bool $requiredConstraint
      */
-    public function __construct($requiredConstraint = false)
+    protected function __construct($requiredConstraint = false)
     {
         $this->requiredConstraint = $requiredConstraint;
+    }
+
+    /**
+     * @param bool $requiredConstraint
+     * @return static
+     */
+    public static function createInstance($requiredConstraint = false)
+    {
+        return new static($requiredConstraint);
     }
 
     /**

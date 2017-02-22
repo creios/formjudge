@@ -4,21 +4,9 @@ namespace Creios\FormJudge\Fields;
 /**
  * Class TextArea
  * @package FormJudge\Fields
+ * @see http://w3c.github.io/html-reference/input.text.html
  */
 class TextArea extends Field
 {
-
-    /**
-     * @var string
-     */
-    protected $patternConstraint = '^(.*)$';
-
-    /**
-     * @return bool
-     */
-    protected function equalsEmpty()
-    {
-        return empty($this->value);
-    }
 
 }

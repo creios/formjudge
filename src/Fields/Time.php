@@ -4,6 +4,7 @@ namespace Creios\FormJudge\Fields;
 /**
  * Class Time
  * @package FormJudge\Fields
+ * @see http://w3c.github.io/html-reference/input.time.html
  */
 class Time extends Field
 {
@@ -11,14 +12,15 @@ class Time extends Field
     /**
      * @var string
      */
-    protected $patternConstraint = '^([01]?\d|2[0-3]):([0-5]?\d)$';
+    const TIME_STRING_PATTERN = '^([01]?\d|2[0-3])(:([0-5]?\d))+$';
 
     /**
-     * @return int
+     * @param bool $requiredConstraint
+     * @return Time
      */
-    public function checkSyntax()
+    public static function createInstance($requiredConstraint = false)
     {
-        return preg_match('/' . $this->patternConstraint . '/', $this->value);
+        return (new self($requiredConstraint))->setPatternConstraint(self::TIME_STRING_PATTERN);
     }
 
 }

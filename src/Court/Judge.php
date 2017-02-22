@@ -6,7 +6,6 @@ use Creios\FormJudge\FieldList;
 use Creios\FormJudge\Fields\Checkbox;
 use Creios\FormJudge\Fields\Color;
 use Creios\FormJudge\Fields\Date;
-use Creios\FormJudge\Fields\DateTime;
 use Creios\FormJudge\Fields\DateTimeLocal;
 use Creios\FormJudge\Fields\Email;
 use Creios\FormJudge\Fields\Field;
@@ -15,7 +14,6 @@ use Creios\FormJudge\Fields\Number;
 use Creios\FormJudge\Fields\Password;
 use Creios\FormJudge\Fields\Radio;
 use Creios\FormJudge\Fields\Range;
-use Creios\FormJudge\Fields\Reset;
 use Creios\FormJudge\Fields\Search;
 use Creios\FormJudge\Fields\Tel;
 use Creios\FormJudge\Fields\Text;
@@ -28,6 +26,7 @@ use Creios\FormJudge\Level;
 
 class Judge
 {
+
     /**
      * @param Form $form
      * @param array $formData
@@ -117,12 +116,10 @@ class Judge
             case $field instanceof Checkbox:
             case $field instanceof Color:
             case $field instanceof Date:
-            case $field instanceof DateTime:
             case $field instanceof DateTimeLocal:
             case $field instanceof Email:
             case $field instanceof Password:
             case $field instanceof Radio:
-            case $field instanceof Reset:
             case $field instanceof Search:
             case $field instanceof Tel:
             case $field instanceof Text:
@@ -256,12 +253,10 @@ class Judge
             case $field instanceof Checkbox:
             case $field instanceof Color:
             case $field instanceof Date:
-            case $field instanceof DateTime:
             case $field instanceof DateTimeLocal:
             case $field instanceof Email:
             case $field instanceof Password:
             case $field instanceof Radio:
-            case $field instanceof Reset:
             case $field instanceof Search:
             case $field instanceof Tel:
             case $field instanceof Text:
