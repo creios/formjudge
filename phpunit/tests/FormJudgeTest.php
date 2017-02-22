@@ -135,12 +135,12 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
 
     public function testDate()
     {
-        $post['date'] = "12.05.1987";
+        $post['date'] = "1987-05-12";
         $form = new Form();
         $form->addField('date', new Date(TRUE));
         $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
-        $post['date'] = "425.544.1987";
+        $post['date'] = "1987-425-544";
         $judgement = $form->judge($post);
         $this->assertFalse($judgement->hasPassed());
     }
@@ -261,11 +261,20 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
 
     public function testNumber()
     {
-        $post['numeric'] = "2";
         $form = new Form();
         $form->addField('numeric', new Number(TRUE));
+
+        $post['numeric'] = "2";
         $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
+
+        $post['numeric'] = "-2";
+        $judgement = $form->judge($post);
+        $this->assertTrue($judgement->hasPassed());
+
+        $post['numeric'] = "notANumber";
+        $judgement = $form->judge($post);
+        $this->assertFalse($judgement->hasPassed());
     }
 
     public function testField2()

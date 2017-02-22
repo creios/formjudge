@@ -19,7 +19,7 @@ class FieldJudgement
 
     /**
      * FieldJudgement constructor.
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @param string $value
      * @param bool $empty
      * @param bool $syntaxError
@@ -36,7 +36,7 @@ class FieldJudgement
      * @param int $lengthMaxConstraint
      * @param bool $passed
      */
-    public function __construct($mandatoryConstraint,
+    public function __construct($requiredConstraint,
                                 $value,
                                 $empty,
                                 $syntaxError,
@@ -53,10 +53,10 @@ class FieldJudgement
                                 $lengthMaxConstraint,
                                 $passed)
     {
-        $this->requiredConstraint = $mandatoryConstraint;
+        $this->requiredConstraint = $requiredConstraint;
         $this->value = $value;
         $this->empty = $empty;
-        $this->syntaxError = $syntaxError;
+        $this->patternError = $syntaxError;
         $this->patternConstraint = $patternConstraint;
         $this->outOfRange = $outOfRange;
         $this->notEqual = $notEqual;
@@ -92,7 +92,7 @@ class FieldJudgement
      */
     public function isSyntaxError()
     {
-        return $this->syntaxError;
+        return $this->patternError;
     }
 
     /**
@@ -141,6 +141,22 @@ class FieldJudgement
     public function hasPassed()
     {
         return $this->passed;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPatternError()
+    {
+        return $this->patternError;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTypeError()
+    {
+        return $this->typeError;
     }
 
 }

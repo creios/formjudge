@@ -8,25 +8,6 @@ namespace Creios\FormJudge\Fields;
 class Date extends Field
 {
 
-    /**
-     * @var string
-     */
-    protected $patternConstraint = '^(\d\d).(\d\d).(\d\d\d\d)$';
-    /**
-     * @var string
-     */
-    protected $type = "date";
-
-    /**
-     * @return bool
-     */
-    public function checkSyntax()
-    {
-        if (!preg_match('/' . $this->patternConstraint . '/', $this->value)):
-            return false;
-        endif;
-        $date = explode('.', $this->value);
-        return checkdate($date[1], $date[0], $date[2]);
-    }
+    protected $patternConstraint = '^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$';
 
 }

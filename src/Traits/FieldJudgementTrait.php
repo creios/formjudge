@@ -22,7 +22,9 @@ trait FieldJudgementTrait
     /** @var boolean */
     protected $empty = false;
     /** @var boolean */
-    protected $syntaxError = false;
+    protected $patternError = false;
+    /** @var boolean */
+    protected $typeError = false;
     /** @var boolean */
     protected $passed;
 

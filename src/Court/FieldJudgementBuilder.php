@@ -24,10 +24,11 @@ class FieldJudgementBuilder
      */
     public function build()
     {
-        return new FieldJudgement($this->requiredConstraint,
+        return new FieldJudgement(
+            $this->requiredConstraint,
             $this->value,
             $this->empty,
-            $this->syntaxError,
+            $this->patternError,
             $this->patternConstraint,
             $this->outOfRange,
             $this->notEqual,
@@ -39,7 +40,8 @@ class FieldJudgementBuilder
             $this->maxConstraint,
             $this->lengthMinConstraint,
             $this->lengthMaxConstraint,
-            $this->passed);
+            $this->passed
+        );
     }
 
     /**
@@ -108,7 +110,7 @@ class FieldJudgementBuilder
      */
     public function setSyntaxError($syntaxError)
     {
-        $this->syntaxError = $syntaxError;
+        $this->patternError = $syntaxError;
         return $this;
     }
 
@@ -119,6 +121,26 @@ class FieldJudgementBuilder
     public function setPassed($passed)
     {
         $this->passed = $passed;
+        return $this;
+    }
+
+    /**
+     * @param bool $patternError
+     * @return $this
+     */
+    public function setPatternError($patternError)
+    {
+        $this->patternError = $patternError;
+        return $this;
+    }
+
+    /**
+     * @param bool $typeError
+     * @return $this
+     */
+    public function setTypeError($typeError)
+    {
+        $this->typeError = $typeError;
         return $this;
     }
 

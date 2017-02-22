@@ -193,22 +193,33 @@ class Judge
             ->setPassed(true);
 
         if (self::valueEqualsNull($field)) {
+
             $fieldJudgementBuilder->setEmpty(true);
+
             if (self::checkRequired($field)) {
                 $fieldJudgementBuilder->setPassed(false);
             }
+
         } else {
-            if (self::checkSyntax($field)) {
-                if (!self::checkOptions($field)) $fieldJudgementBuilder->setNotInOptions(true)->setPassed(false);
-                if (!self::checkRange($field)) $fieldJudgementBuilder->setOutOfRange(true)->setPassed(false);
-                if (!self::checkEqualTo($field)) $fieldJudgementBuilder->setNotEqual(true)->setPassed(false);
-                if (!self::checkLength($field)) $fieldJudgementBuilder->setNotPassedLength(true)->setPassed(false);
+
+            if (self::checkType($field)) {
+
+                if (self::checkPattern($field)) {
+
+                    if (!self::checkOptions($field)) $fieldJudgementBuilder->setNotInOptions(true)->setPassed(false);
+                    if (!self::checkRange($field)) $fieldJudgementBuilder->setOutOfRange(true)->setPassed(false);
+                    if (!self::checkEqualTo($field)) $fieldJudgementBuilder->setNotEqual(true)->setPassed(false);
+                    if (!self::checkLength($field)) $fieldJudgementBuilder->setNotPassedLength(true)->setPassed(false);
+
+                } else {
+                    $fieldJudgementBuilder->setPatternError(true)->setPassed(false);
+                }
+
             } else {
-
-                $fieldJudgementBuilder->setSyntaxError(true)->setPassed(false);
-
+                $fieldJudgementBuilder->setTypeError(true)->setPassed(false);
             }
         }
+
         return $fieldJudgementBuilder->build();
     }
 
@@ -232,11 +243,50 @@ class Judge
 
     /**
      * @param Field $field
+     * @return bool
+     */
+    protected static function checkType(Field $field)
+    {
+        switch (true) {
+            //string
+            case $field instanceof Checkbox:
+            case $field instanceof Color:
+            case $field instanceof Date:
+            case $field instanceof DateTime:
+            case $field instanceof DateTimeLocal:
+            case $field instanceof Email:
+            case $field instanceof Password:
+            case $field instanceof Radio:
+            case $field instanceof Reset:
+            case $field instanceof Search:
+            case $field instanceof Tel:
+            case $field instanceof Text:
+            case $field instanceof TextArea:
+            case $field instanceof Time:
+            case $field instanceof Url:
+                return is_string($field->getValue());
+            //float
+            case $field instanceof Range:
+            case $field instanceof Number:
+                return is_float($field->getValue());
+                break;
+            //integer
+            case $field instanceof Month:
+            case $field instanceof Week:
+                return is_int($field->getValue());
+                break;
+            default:
+                throw new \LogicException();
+        }
+    }
+
+    /**
+     * @param Field $field
      * @return bool|int
      */
-    protected static function checkSyntax(Field $field)
+    protected static function checkPattern(Field $field)
     {
-        return $field->getPatternConstraint() == null || preg_match('/' . $field->getPatternConstraint() . '/', $field->getValue());
+        return $field->getPatternConstraint() === null || preg_match('/' . $field->getPatternConstraint() . '/', $field->getValue());
     }
 
     /**
