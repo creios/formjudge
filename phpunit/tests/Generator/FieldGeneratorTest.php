@@ -23,7 +23,7 @@ class FieldGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->field->method('getLengthMinConstraint')->willReturn(null);
         $this->field->method('getMaxConstraint')->willReturn(null);
         $this->field->method('getMinConstraint')->willReturn(null);
-        $this->field->method('hasMandatoryConstraint')->willReturn(null);
+        $this->field->method('hasMandatoryConstraint')->willReturn(false);
         $this->field->method('getPatternConstraint')->willReturn(null);
         $fieldGenerator = new FieldGenerator($this->field);
         $expectedFieldAttributes = 'type="email" ';
