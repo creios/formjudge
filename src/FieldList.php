@@ -4,8 +4,6 @@ namespace Creios\FormJudge;
 use Creios\FormJudge\Fields\Field;
 use Creios\FormJudge\Generator\FieldGenerator;
 use Creios\FormJudge\Generator\FormGenerator;
-use Creios\FormJudge\Judgement\FieldListJudgement;
-use Creios\FormJudge\Judgement\FieldListJudgementBuilder;
 
 /**
  * Class FieldList
@@ -15,50 +13,13 @@ abstract class FieldList
 {
 
     /**
-     * @var Field[] $fields
-     */
-    protected $fields = array();
-    /**
      * @var Level[] $levels
      */
     public $levels = array();
-
     /**
-     * @param array $post
-     * @return FieldListJudgement
+     * @var Field[] $fields
      */
-    public function judge(array $post)
-    {
-
-        $fieldListJudgementBuilder = (new FieldListJudgementBuilder())->passed();
-        foreach ($this->fields as $fieldName => $field) {
-            /** @var Field $field */
-            if (isset($post[$fieldName])) {
-                $field->setValue($post[$fieldName]);
-            }
-            $fieldJudgement = $field->judge();
-            $fieldListJudgementBuilder->addFieldJudgements($fieldName, $fieldJudgement);
-            if ($fieldJudgement->hasPassed() == false) {
-                $fieldListJudgementBuilder->failed();
-            }
-        }
-
-        foreach ($this->levels as $levelName => $level) {
-            /** @var Level $level */
-            if (isset($post[$levelName])) {
-                $fieldListJudgement = $level->judge($post[$levelName]);
-            } else {
-                $fieldListJudgement = $level->judge(array());
-            }
-            if ($fieldListJudgement->hasPassed() == false) {
-                $fieldListJudgementBuilder->failed();
-            }
-            $fieldListJudgementBuilder->addFieldListJudgements($levelName, $fieldListJudgement);
-        }
-
-        return $fieldListJudgementBuilder->build();
-
-    }
+    protected $fields = array();
 
     /** @return FormGenerator */
     public function getGenerator()
@@ -75,18 +36,6 @@ abstract class FieldList
 
         return new FormGenerator($fieldGenerators, $levelGenerators);
     }
-
-    /**
-     * @param Field $field
-     * @return mixed
-     */
-    abstract public function generateFieldName(Field $field);
-
-    /**
-     * @param Level $level
-     * @return mixed
-     */
-    abstract public function generateLevelName(Level $level);
 
     /**
      * @param $name
@@ -129,6 +78,22 @@ abstract class FieldList
     public function getLevel($name)
     {
         return $this->levels[$name];
+    }
+
+    /**
+     * @return Field[]
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * @return Level[]
+     */
+    public function getLevels()
+    {
+        return $this->levels;
     }
 
 }

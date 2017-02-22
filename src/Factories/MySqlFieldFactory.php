@@ -3,9 +3,9 @@
 namespace Creios\FormJudge\Factories;
 
 use Creios\FormJudge\Fields\Date;
-use Creios\FormJudge\Fields\Numeric;
+use Creios\FormJudge\Fields\Number;
 use Creios\FormJudge\Fields\Text;
-use Creios\FormJudge\Fields\Textarea;
+use Creios\FormJudge\Fields\TextArea;
 
 /**
  * Class MySqlFieldFactory
@@ -40,88 +40,88 @@ class MySqlFieldFactory
 
     /**
      * @param bool $mandatoryConstraint
-     * @return Numeric
+     * @return \Creios\FormJudge\Fields\Number
      */
     public static function createSignedTinyInt($mandatoryConstraint = false)
     {
-        return (new Numeric($mandatoryConstraint))
+        return (new Number($mandatoryConstraint))
             ->setMinConstraint(self::TINYINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::TINYINT_SIGNED_MAX_CONSTRAINT);
     }
 
     /**
      * @param bool $mandatoryConstraint
-     * @return Numeric
+     * @return \Creios\FormJudge\Fields\Number
      */
     public static function createUnsignedTinyInt($mandatoryConstraint = false)
     {
-        return (new Numeric($mandatoryConstraint))
+        return (new Number($mandatoryConstraint))
             ->setMinConstraint(self::TINYINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::TINYINT_UNSIGNED_MAX_CONSTRAINT);
     }
 
     /**
      * @param bool $mandatoryConstraint
-     * @return Numeric
+     * @return \Creios\FormJudge\Fields\Number
      */
     public static function createSignedMediumInt($mandatoryConstraint = false)
     {
-        return (new Numeric($mandatoryConstraint))
+        return (new Number($mandatoryConstraint))
             ->setMinConstraint(self::MEDIUMINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::MEDIUMINT_SIGNED_MAX_CONSTRAINT);
     }
 
     /**
      * @param bool $mandatoryConstraint
-     * @return Numeric
+     * @return \Creios\FormJudge\Fields\Number
      */
     public static function createUnsignedMediumInt($mandatoryConstraint = false)
     {
-        return (new Numeric($mandatoryConstraint))
+        return (new Number($mandatoryConstraint))
             ->setMinConstraint(self::MEDIUMINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::MEDIUMINT_UNSIGNED_MAX_CONSTRAINT);
     }
 
     /**
      * @param bool $mandatoryConstraint
-     * @return Numeric
+     * @return \Creios\FormJudge\Fields\Number
      */
     public static function createSignedInt($mandatoryConstraint = false)
     {
-        return (new Numeric($mandatoryConstraint))
+        return (new Number($mandatoryConstraint))
             ->setMinConstraint(self::INT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::INT_SIGNED_MAX_CONSTRAINT);
     }
 
     /**
      * @param bool $mandatoryConstraint
-     * @return Numeric
+     * @return \Creios\FormJudge\Fields\Number
      */
     public static function createUnsignedInt($mandatoryConstraint = false)
     {
-        return (new Numeric($mandatoryConstraint))
+        return (new Number($mandatoryConstraint))
             ->setMinConstraint(self::INT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::INT_UNSIGNED_MAX_CONSTRAINT);
     }
 
     /**
      * @param bool $mandatoryConstraint
-     * @return Numeric
+     * @return \Creios\FormJudge\Fields\Number
      */
     public static function createSignedBigInt($mandatoryConstraint = false)
     {
-        return (new Numeric($mandatoryConstraint))
+        return (new Number($mandatoryConstraint))
             ->setMinConstraint(self::BIGINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::BIGINT_SIGNED_MAX_CONSTRAINT);
     }
 
     /**
      * @param bool $mandatoryConstraint
-     * @return Numeric
+     * @return \Creios\FormJudge\Fields\Number
      */
     public static function createUnsignedBigInt($mandatoryConstraint = false)
     {
-        return (new Numeric($mandatoryConstraint))
+        return (new Number($mandatoryConstraint))
             ->setMinConstraint(self::BIGINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::BIGINT_UNSIGNED_MAX_CONSTRAINT);
     }
@@ -138,11 +138,11 @@ class MySqlFieldFactory
 
     /**
      * @param bool $mandatoryConstraint
-     * @return Textarea
+     * @return TextArea
      */
-    public static function createTextTextarea($mandatoryConstraint = false)
+    public static function createTextTextArea($mandatoryConstraint = false)
     {
-        return (new Textarea($mandatoryConstraint))
+        return (new TextArea($mandatoryConstraint))
             ->setLengthMaxConstraint(self::TEXT_LENGTH_MAX_CONSTRAINT);
     }
 

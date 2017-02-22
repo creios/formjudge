@@ -1,17 +1,20 @@
 <?php
 
-namespace Creios\FormJudge\Judgement;
+namespace Creios\FormJudge\Court;
 
-use Creios\FormJudge\Fields\FieldTrait;
+use Creios\FormJudge\Traits\FieldGetterTrait;
+use Creios\FormJudge\Traits\FieldJudgementTrait;
+use Creios\FormJudge\Traits\FieldTrait;
 
 /**
  * Class FieldJudgement
- * @package Creios\FormJudge\Judgement
+ * @package Creios\FormJudge\Court
  */
 class FieldJudgement
 {
 
     use FieldTrait;
+    use FieldGetterTrait;
     use FieldJudgementTrait;
 
     /**
@@ -50,7 +53,7 @@ class FieldJudgement
                                 $lengthMaxConstraint,
                                 $passed)
     {
-        $this->mandatoryConstraint = $mandatoryConstraint;
+        $this->requiredConstraint = $mandatoryConstraint;
         $this->value = $value;
         $this->empty = $empty;
         $this->syntaxError = $syntaxError;
@@ -130,62 +133,6 @@ class FieldJudgement
     public function isNotInPost()
     {
         return $this->notInPost;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function hasMandatoryConstraint()
-    {
-        return $this->mandatoryConstraint;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptionsConstraint()
-    {
-        return $this->optionsConstraint;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMinConstraint()
-    {
-        return $this->minConstraint;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMaxConstraint()
-    {
-        return $this->maxConstraint;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLengthMinConstraint()
-    {
-        return $this->lengthMinConstraint;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLengthMaxConstraint()
-    {
-        return $this->lengthMaxConstraint;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPatternConstraint()
-    {
-        return $this->patternConstraint;
     }
 
     /**

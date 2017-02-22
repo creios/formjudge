@@ -1,10 +1,12 @@
 <?php
 
-namespace Creios\FormJudge\Judgement;
+namespace Creios\FormJudge\Court;
+
+use Creios\FormJudge\Traits\FieldListJudgementTrait;
 
 /**
  * Class FieldListJudgementBuilder
- * @package Creios\FormJudge\Judgement
+ * @package Creios\FormJudge\Court
  */
 class FieldListJudgementBuilder
 {
@@ -38,20 +40,12 @@ class FieldListJudgementBuilder
     }
 
     /**
-     * @return $this
+     * @param bool $passed
+     * @return FieldListJudgementBuilder
      */
-    public function passed()
+    public function setPassed($passed)
     {
-        $this->passed = true;
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function failed()
-    {
-        $this->passed = false;
+        $this->passed = $passed;
         return $this;
     }
 

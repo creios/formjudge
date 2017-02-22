@@ -3,7 +3,8 @@
 namespace Creios\FormJudge\Generator;
 
 use Creios\FormJudge\Fields\Field;
-use Creios\FormJudge\Fields\Textarea;
+use Creios\FormJudge\Fields\TextArea;
+use ReflectionClass;
 
 class FieldGenerator
 {
@@ -32,7 +33,7 @@ class FieldGenerator
         $fieldAttributes .= $this->generateLengthMinConstraint();
         $fieldAttributes .= $this->generatePatternConstraint();
         $fieldAttributes .= $this->generateMandatoryConstraint();
-        return $fieldAttributes;
+        return trim($fieldAttributes);
     }
 
     /**
@@ -40,10 +41,12 @@ class FieldGenerator
      */
     private function generateType()
     {
-        if ($this->field instanceof Textarea) {
+        if ($this->field instanceof TextArea) {
             return "";
         }
-        return sprintf('type="%s" ', $this->field->getType());
+        $reflect = new ReflectionClass($this->field);
+        $type = str_replace(['datetimelocal'], ['datetime-local'], strtolower($reflect->getShortName()));
+        return sprintf('type="%s" ', $type);
     }
 
     /**

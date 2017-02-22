@@ -1,6 +1,6 @@
 <?php
 
-namespace Creios\FormJudge\Fields;
+namespace Creios\FormJudge\Traits;
 
 trait FieldTrait
 {
@@ -8,7 +8,7 @@ trait FieldTrait
     /** @var string */
     protected $value;
     /** @var boolean */
-    protected $mandatoryConstraint;
+    protected $requiredConstraint;
     /** @var string */
     protected $patternConstraint;
     /** @var array */

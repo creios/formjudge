@@ -2,10 +2,10 @@
 namespace Creios\FormJudge\Fields;
 
 /**
- * Class Textarea
+ * Class TextArea
  * @package FormJudge\Fields
  */
-class Textarea extends Field
+class TextArea extends Field
 {
 
     /**

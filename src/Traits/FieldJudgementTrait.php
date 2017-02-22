@@ -1,10 +1,10 @@
 <?php
 
-namespace Creios\FormJudge\Judgement;
+namespace Creios\FormJudge\Traits;
 
 /**
  * Class FieldJudgementTrait
- * @package Creios\FormJudge\Judgement
+ * @package Creios\FormJudge\Court
  */
 trait FieldJudgementTrait
 {

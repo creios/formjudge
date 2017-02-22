@@ -1,10 +1,12 @@
 <?php
 
-namespace Creios\FormJudge\Judgement;
+namespace Creios\FormJudge\Court;
+
+use Creios\FormJudge\Traits\FieldListJudgementTrait;
 
 /**
  * Class FieldListJudgement
- * @package Creios\FormJudge\Judgement
+ * @package Creios\FormJudge\Court
  */
 class FieldListJudgement
 {

@@ -2,7 +2,7 @@
 
 namespace Creios\FormJudge\Fields;
 
-class Password extends Field
+class Reset extends Field
 {
 
 }

@@ -2,14 +2,11 @@
 
 namespace Creios\FormJudge;
 
-use Creios\FormJudge\Fields\Boolean;
+use Creios\FormJudge\Factories\Factory;
 use Creios\FormJudge\Fields\Date;
-use Creios\FormJudge\Fields\DatetimeLocal;
+use Creios\FormJudge\Fields\DateTimeLocal;
 use Creios\FormJudge\Fields\Email;
-use Creios\FormJudge\Fields\Fax;
-use Creios\FormJudge\Fields\Mobile;
-use Creios\FormJudge\Fields\Numeric;
-use Creios\FormJudge\Fields\Password;
+use Creios\FormJudge\Fields\Number;
 use Creios\FormJudge\Fields\Tel;
 use Creios\FormJudge\Fields\Text;
 use Creios\FormJudge\Fields\Time;
@@ -18,24 +15,24 @@ use Creios\FormJudge\Fields\Url;
 class FormJudgeTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testNotValidFormular()
+    public function testNotValidForm()
     {
         $formContact = new Form();
-        $formContact->addField("supportarea", new Numeric(TRUE));
-        $this->assertTrue($formContact->getField("supportarea")->hasMandatoryConstraint());
+        $formContact->addField("supportArea", new Number(TRUE));
+        $this->assertTrue($formContact->getField("supportArea")->hasMandatoryConstraint());
         $judgement = $formContact->judge(array());
         $this->assertFalse($judgement->hasPassed());
 
     }
 
-    public function testNotValidFormular2()
+    public function testNotValidForm2()
     {
         $form = new Form();
         $form->addLevel("USER", new Level());
-        $form->getLevel("USER")->addField("id", new Numeric(TRUE));
+        $form->getLevel("USER")->addField("id", new Number(TRUE));
         $form->addLevel("EMPTY", new Level());
         $form->getLevel("EMPTY")->addField("empty", new Text(TRUE));
-        $judgement = $form->judge(array("USER" => array("id" => "nichtNumerisch")));
+        $judgement = $form->judge(array("USER" => array("id" => "not a number")));
         $this->assertFalse($judgement->hasPassed());
     }
 
@@ -55,48 +52,48 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
     public function testContactData()
     {
         $formContact = new Form();
-        $formContact->addField("supportarea", new Numeric(TRUE));
-        $formContact->getField("supportarea")->addOptionConstraint("0");
-        $formContact->getField("supportarea")->addOptionConstraint("1");
+        $formContact->addField("supportArea", new Number(TRUE));
+        $formContact->getField("supportArea")->addOptionConstraint("0");
+        $formContact->getField("supportArea")->addOptionConstraint("1");
         $formContact->addField("message", new Text(TRUE));
         $formContact->addField("gender", new Text(TRUE));
         $formContact->getField("gender")->addOptionConstraint("M");
         $formContact->getField("gender")->addOptionConstraint("F");
         $formContact->addField("firstname", new Text(TRUE));
-        $formContact->addField("lastname", new Text(TRUE));
+        $formContact->addField("lastName", new Text(TRUE));
         $formContact->addField('email', new Email(TRUE));
-        $formContact->addField('company', new Numeric(TRUE));
+        $formContact->addField('company', new Number(TRUE));
 
-        $this->assertEquals([0, 1], $formContact->getField("supportarea")->getOptionsConstraint());
+        $this->assertEquals([0, 1], $formContact->getField("supportArea")->getOptionsConstraint());
         $this->assertEquals(["M", "F"], $formContact->getField("gender")->getOptionsConstraint());
 
-        $post['supportarea'] = "1";
+        $post['supportArea'] = "1";
         $post['message'] = "test";
         $post['gender'] = "M";
-        $post['firstname'] = "sdasada";
-        $post['lastname'] = "Limper";
-        $post['email'] = "teeees@dsdsd.tld";
+        $post['firstname'] = "Ben";
+        $post['lastName'] = "Limper";
+        $post['email'] = "ben@limper.tld";
         $post['company'] = "1";
 
         $judgement = $formContact->judge($post);
         $this->assertTrue($judgement->hasPassed());
-        $this->assertFalse($judgement->getFieldJudgement('supportarea')->isNotInOptions());
-        $this->assertEquals(["0", "1"], $judgement->getFieldJudgement('supportarea')->getOptionsConstraint());
-        $this->assertFalse($judgement->getFieldJudgement('supportarea')->isNotInPost());
+        $this->assertFalse($judgement->getFieldJudgement('supportArea')->isNotInOptions());
+        $this->assertEquals(["0", "1"], $judgement->getFieldJudgement('supportArea')->getOptionsConstraint());
+        $this->assertFalse($judgement->getFieldJudgement('supportArea')->isNotInPost());
 
         $generator = $formContact->getGenerator();
-        $this->assertEquals('type="number" required ', $generator->getField("supportarea")->generate());
+        $this->assertEquals('type="number" required', $generator->getField("supportArea")->generate());
     }
 
     public function testField()
     {
         $formContact = new Form();
         //range
-        $formContact->addField("fromTo", new Numeric(TRUE));
+        $formContact->addField("fromTo", new Number(TRUE));
         $formContact->getField("fromTo")->setMinConstraint(0);
         $formContact->getField("fromTo")->setMaxConstraint(10);
         //length
-        $formContact->addField("length", new Numeric(TRUE));
+        $formContact->addField("length", new Number(TRUE));
         $formContact->getField("length")->setLengthMinConstraint(0);
         $formContact->getField("length")->setLengthMaxConstraint(5);
 
@@ -117,89 +114,52 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($judgement->getFieldJudgement("length")->isNotPassedLength());
     }
 
-    public function testGenerateFieldName()
-    {
-        $formContact = new Form();
-        $formContact->addField("supportArea", new Numeric(TRUE));
-        $formContact->addLevel("newLevel");
-        $formContact->getLevel("newLevel")->addField("test", new Email())->setMandatoryConstraint(TRUE);
-        $formContact->getLevel("newLevel")->addLevel("secondLevel")->addField("test", new Email());
-        $this->assertEquals("supportArea", $formContact->getField("supportArea")->getName());
-        $this->assertEquals("newLevel[test]", $formContact->getLevel("newLevel")->getField("test")->getName());
-        $this->assertEquals("newLevel[secondLevel][test]", $formContact->getLevel("newLevel")->getLevel("secondLevel")->getField("test")->getName());
-
-        $generator = $formContact->getGenerator();
-        $this->assertEquals('type="email" pattern="^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$" required ', $generator->getLevel("newLevel")->getField("test")->generate());
-    }
-
     public function testJson()
     {
         $formContact = new Form();
-        $formContact->addField("supportArea", new Numeric(TRUE));
+        $formContact->addField("supportArea", new Number(TRUE));
         $formContact->addLevel("newLevel");
-        $formContact->getLevel("newLevel")->addField("test", new Email())->setMandatoryConstraint(TRUE);
+        $formContact->getLevel("newLevel")->addField("test", new Email())->setRequiredConstraint(TRUE);
         $formContact->getLevel("newLevel")->addLevel("secondLevel")->addField("test", new Email());
-    }
-
-    public function testOptionPattern()
-    {
-        $formContact = new Form();
-        $formContact->addField("supportarea", new Numeric(TRUE));
-        $this->setExpectedException("Exception", "Option does not match Pattern!");
-        $formContact->getField("supportarea")->addOptionConstraint("falsch");
-        $this->assertEquals(["falsch"], $formContact->getField("supportarea")->getOptionsConstraint());
     }
 
     public function testBoolean()
     {
         $post['true'] = "true";
         $post['false'] = "false";
-        $formular = new Form();
-        $formular->addField('true', new Boolean(TRUE));
-        $formular->addField('false', new Boolean(TRUE));
-        $this->assertTrue($formular->judge($post)->hasPassed());
+        $form = new Form();
+        $form->addField('true', Factory::createBooleanText(True));
+        $form->addField('false', Factory::createBooleanText(True));
+        $this->assertTrue($form->judge($post)->hasPassed());
     }
 
     public function testDate()
     {
         $post['date'] = "12.05.1987";
-        $formular = new Form();
-        $formular->addField('date', new Date(TRUE));
-        $judgement = $formular->judge($post);
+        $form = new Form();
+        $form->addField('date', new Date(TRUE));
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
         $post['date'] = "425.544.1987";
-        $judgement = $formular->judge($post);
-        $this->assertFalse($judgement->hasPassed());
-        $this->assertEquals('date', $formular->getField('date')->getType());
-    }
-
-    public function testPassword()
-    {
-        $post['password'] = 'test123';
-        $formular = new Form();
-        $formular->addField('password', new Password(TRUE));
-        $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-        $post['password'] = 'test12345678910112';
-        $judgement = $formular->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-        $post['password'] = '1';
-        $judgement = $formular->judge($post);
+        $judgement = $form->judge($post);
         $this->assertFalse($judgement->hasPassed());
     }
 
     public function testDatetimeLocal()
     {
-        $formular = new Form();
-        $formular->addField('date', new DatetimeLocal(TRUE));
+        $form = new Form();
+        $form->addField('date', new DateTimeLocal(TRUE));
+
         $post['date'] = "2015-10-15T15:15:15";
-        $judgement = $formular->judge($post);
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
+
         $post['date'] = "2015-10-15Tb5:15:15";
-        $judgement = $formular->judge($post);
+        $judgement = $form->judge($post);
         $this->assertFalse($judgement->hasPassed());
+
         $post['date'] = "2015-10-63T15:15:15";
-        $judgement = $formular->judge($post);
+        $judgement = $form->judge($post);
         $this->assertFalse($judgement->hasPassed());
     }
 
@@ -207,12 +167,12 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
     {
         $post = ['user'];
         $post['user']['email'] = "tegeler@creios.net";
-        $formular = new Form();
-        $formular->addLevel('user', new Level());
-        $formular->getLevel('user')->addField('email', new Email(TRUE));
+        $form = new Form();
+        $form->addLevel('user', new Level());
+        $form->getLevel('user')->addField('email', new Email(TRUE));
 
-        $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $formular->getLevel('user')->getField('email')->getPatternConstraint());
-        $judgement = $formular->judge($post);
+        $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $form->getLevel('user')->getField('email')->getPatternConstraint());
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
         $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $judgement->getFieldListJudgement('user')->getFieldJudgement('email')->getPatternConstraint());
     }
@@ -220,38 +180,36 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
     public function testFax()
     {
         $post['fax'] = "+49 123 12-123";
-        $formular = new Form();
-        $formular->addField('fax', new Fax(true));
-        $judgement = $formular->judge($post);
+        $form = new Form();
+        $form->addField('fax', new Tel(true));
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
-        $this->assertEquals('tel', $formular->getField('fax')->getType());
     }
 
     public function testMobile()
     {
         $post['mobile'] = "+49 923 1212";
-        $formular = new Form();
-        $formular->addField('mobile', new Mobile(true));
-        $judgement = $formular->judge($post);
+        $form = new Form();
+        $form->addField('mobile', new Tel(true));
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
-        $this->assertEquals('tel', $formular->getField('mobile')->getType());
     }
 
     public function testTel()
     {
         $post['tel'] = "+49 923 12423-344";
-        $formular = new Form();
-        $formular->addField('tel', new Tel());
-        $judgement = $formular->judge($post);
+        $form = new Form();
+        $form->addField('tel', new Tel());
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
     }
 
     public function testTelFailed()
     {
         $post['tel'] = "not a number";
-        $formular = new Form();
-        $formular->addField('tel', new Tel(true));
-        $judgement = $formular->judge($post);
+        $form = new Form();
+        $form->addField('tel', new Tel(true));
+        $judgement = $form->judge($post);
         $this->assertFalse($judgement->hasPassed());
         $this->assertTrue($judgement->getFieldJudgement("tel")->isSyntaxError());
         $this->assertTrue($judgement->getFieldJudgement("tel")->hasMandatoryConstraint());
@@ -261,59 +219,59 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
 
     public function testText()
     {
-        $post['text'] = "abcdef";
-        $formular = new Form();
-        $formular->addField('text', new Text());
-        $judgement = $formular->judge($post);
+        $post['text'] = "text";
+        $form = new Form();
+        $form->addField('text', new Text());
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
     }
 
     public function testTextEmptyString()
     {
         $post['text'] = "";
-        $formular = new Form();
-        $formular->addField('text', new Text());
-        $judgement = $formular->judge($post);
+        $form = new Form();
+        $form->addField('text', new Text());
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
 
         $post['text'] = "";
-        $formular = new Form();
-        $formular->addField('text', new Text(true));
-        $judgement = $formular->judge($post);
+        $form = new Form();
+        $form->addField('text', new Text(true));
+        $judgement = $form->judge($post);
         $this->assertFalse($judgement->hasPassed());
     }
 
     public function testTime()
     {
         $post['time'] = "11:45";
-        $formular = new Form();
-        $formular->addField('time', new Time());
-        $judgement = $formular->judge($post);
+        $form = new Form();
+        $form->addField('time', new Time());
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
     }
 
     public function testUrl()
     {
-        $post['url'] = "remondis.de";
-        $formular = new Form();
-        $formular->addField('url', new Url());
-        $judgement = $formular->judge($post);
+        $post['url'] = "example.de";
+        $form = new Form();
+        $form->addField('url', new Url());
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
     }
 
-    public function testNumeric()
+    public function testNumber()
     {
         $post['numeric'] = "2";
-        $formular = new Form();
-        $formular->addField('numeric', new Numeric(TRUE));
-        $judgement = $formular->judge($post);
+        $form = new Form();
+        $form->addField('numeric', new Number(TRUE));
+        $judgement = $form->judge($post);
         $this->assertTrue($judgement->hasPassed());
     }
 
     public function testField2()
     {
         $formContact = new Form();
-        $formContact->addField("length", new Numeric(TRUE));
+        $formContact->addField("length", new Number(TRUE));
         $formContact->getField("length")->setLengthMinConstraint(0);
         $formContact->getField("length")->setLengthMaxConstraint(5);
     }
@@ -322,13 +280,13 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
     {
         $formContact = new Form();
         //range
-        $formContact->addField("lowerBound", new Numeric(TRUE));
+        $formContact->addField("lowerBound", new Number(TRUE));
         $formContact->getField("lowerBound")->setMinConstraint(0);
         $post['lowerBound'] = 0;
-        $formContact->addField("upperBound", new Numeric(TRUE));
+        $formContact->addField("upperBound", new Number(TRUE));
         $formContact->getField("upperBound")->setMaxConstraint(2);
         $post['upperBound'] = 1;
-        $formContact->addField("lowerUpperBound", new Numeric(TRUE));
+        $formContact->addField("lowerUpperBound", new Number(TRUE));
         $formContact->getField("lowerUpperBound")->setMinConstraint(0);
         $formContact->getField("lowerUpperBound")->setMaxConstraint(2);
         $post['lowerUpperBound'] = 1;

@@ -1,17 +1,22 @@
 <?php
 
-namespace Creios\FormJudge\Judgement;
+namespace Creios\FormJudge\Court;
 
-use Creios\FormJudge\Fields\FieldTrait;
+use Creios\FormJudge\Traits\FieldGetterTrait;
+use Creios\FormJudge\Traits\FieldJudgementTrait;
+use Creios\FormJudge\Traits\FieldSetterTrait;
+use Creios\FormJudge\Traits\FieldTrait;
 
 /**
  * Class FieldJudgementBuilder
- * @package Creios\FormJudge\Judgement
+ * @package Creios\FormJudge\Court
  */
 class FieldJudgementBuilder
 {
 
     use FieldTrait;
+    use FieldGetterTrait;
+    use FieldSetterTrait;
     use FieldJudgementTrait;
 
     /**
@@ -19,7 +24,7 @@ class FieldJudgementBuilder
      */
     public function build()
     {
-        return new FieldJudgement($this->mandatoryConstraint,
+        return new FieldJudgement($this->requiredConstraint,
             $this->value,
             $this->empty,
             $this->syntaxError,
@@ -104,86 +109,6 @@ class FieldJudgementBuilder
     public function setSyntaxError($syntaxError)
     {
         $this->syntaxError = $syntaxError;
-        return $this;
-    }
-
-    /**
-     * @param string $patternConstraint
-     * @return $this
-     */
-    public function setPatternConstraint($patternConstraint)
-    {
-        $this->patternConstraint = $patternConstraint;
-        return $this;
-    }
-
-    /**
-     * @param array $optionsConstraint
-     * @return $this
-     */
-    public function setOptionsConstraint($optionsConstraint)
-    {
-        $this->optionsConstraint = $optionsConstraint;
-        return $this;
-    }
-
-    /**
-     * @param mixed $value
-     * @return $this
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-        return $this;
-    }
-
-    /**
-     * @param bool $mandatoryConstraint
-     * @return $this
-     */
-    public function setMandatoryConstraint($mandatoryConstraint)
-    {
-        $this->mandatoryConstraint = $mandatoryConstraint;
-        return $this;
-    }
-
-    /**
-     * @param mixed $minConstraint
-     * @return $this
-     */
-    public function setMinConstraint($minConstraint)
-    {
-        $this->minConstraint = $minConstraint;
-        return $this;
-    }
-
-    /**
-     * @param mixed $maxConstraint
-     * @return $this
-     */
-    public function setMaxConstraint($maxConstraint)
-    {
-        $this->maxConstraint = $maxConstraint;
-        return $this;
-    }
-
-    /**
-     * @param int $lengthMinConstraint
-     * @return $this
-     */
-    public function setLengthMinConstraint($lengthMinConstraint)
-    {
-        $this->lengthMinConstraint = $lengthMinConstraint;
-        return $this;
-    }
-
-    /**
-     * @param int $lengthMaxConstraint
-     * @return $this
-     */
-    public function setLengthMaxConstraint($lengthMaxConstraint)
-    {
-        $this->lengthMaxConstraint = $lengthMaxConstraint;
         return $this;
     }
 
