@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/creios/formjudge/badge.svg?branch=master)](https://coveralls.io/github/creios/formjudge?branch=master)
 [![GitHub license](https://img.shields.io/github/license/creios/formjudge.svg)]()
 
-**FormJudge** is a validation library for form input data.
+**FormJudge** is a validation library for submitted form data.
 
 ```php
 <?php
@@ -50,7 +50,7 @@ if($judgement->hasPassed()){
 
 ## Client-side validation
 
-The focus of FormJudge is on server-side validation of form input data, but it can help you by client-side validation as well. You can use the constraints that you added to the fields to fill HTML5 attributes like `max`, `min`, `pattern` etc. which will be respected by modern brothers.
+The focus of FormJudge is on server-side validation of submitted form data, but it can also help you with client-side validation. You can use the constraints, that you added to the input elements, to use HTML5 form attributes like `max`, `min`, `pattern` etc. which will be respected by modern browsers.
 
 ```php
 <?php
