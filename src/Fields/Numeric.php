@@ -21,4 +21,12 @@ class Numeric extends Field
         return is_numeric($this->value);
     }
 
+    /**
+     * @return bool
+     */
+    protected function equalsEmpty()
+    {
+        return $this->value === "";
+    }
+
 }
