@@ -106,7 +106,7 @@ class FieldGenerator
      */
     private function generateMandatoryConstraint()
     {
-        if ($this->field->hasMandatoryConstraint() === null) {
+        if ($this->field->hasMandatoryConstraint() === false) {
             return "";
         }
         return "required ";
