@@ -11,6 +11,14 @@ class Textarea extends Field
     /**
      * @var string
      */
-    protected $patternConstraint;
+    protected $patternConstraint = '^(.*)$';
+
+    /**
+     * @return bool
+     */
+    protected function equalsEmpty()
+    {
+        return empty($this->value);
+    }
 
 }

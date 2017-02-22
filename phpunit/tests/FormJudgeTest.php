@@ -272,9 +272,15 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
     {
         $post['text'] = "";
         $formular = new Form();
-        $formular->addField('text', new Text(TRUE));
+        $formular->addField('text', new Text());
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
+
+        $post['text'] = "";
+        $formular = new Form();
+        $formular->addField('text', new Text(true));
+        $judgement = $formular->judge($post);
+        $this->assertFalse($judgement->hasPassed());
     }
 
     public function testTime()
