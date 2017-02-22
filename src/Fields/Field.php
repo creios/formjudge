@@ -41,10 +41,12 @@ abstract class Field
 
     /**
      * @param $optionConstraint
+     * @return $this
      */
     public function addOptionConstraint($optionConstraint)
     {
         $this->optionsConstraint[] = $optionConstraint;
+        return $this;
     }
 
     /**

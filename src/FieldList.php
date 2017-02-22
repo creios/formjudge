@@ -15,7 +15,7 @@ abstract class FieldList
     /**
      * @var Level[] $levels
      */
-    public $levels = array();
+    protected $levels = array();
     /**
      * @var Field[] $fields
      */
