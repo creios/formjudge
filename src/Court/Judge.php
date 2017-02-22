@@ -57,7 +57,9 @@ class Judge
             }
             $fieldJudgement = self::judgeField($field);
             $fieldListJudgementBuilder->addFieldJudgements($fieldName, $fieldJudgement);
-            $fieldListJudgementBuilder->setPassed($fieldJudgement->hasPassed());
+            if ($fieldJudgement->hasPassed() == false) {
+                $fieldListJudgementBuilder->setPassed(false);
+            }
         }
 
         foreach ($fieldList->getLevels() as $levelName => $level) {
@@ -69,7 +71,9 @@ class Judge
             }
             $fieldListJudgement = self::judgeFieldList($level, $nextLevelFormData);
             $fieldListJudgementBuilder->addFieldListJudgements($levelName, $fieldListJudgement);
-            $fieldListJudgementBuilder->setPassed($fieldListJudgement->hasPassed());
+            if ($fieldListJudgement->hasPassed() == false) {
+                $fieldListJudgementBuilder->setPassed($fieldListJudgement->hasPassed());
+            }
         }
 
         return $fieldListJudgementBuilder->build();

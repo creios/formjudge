@@ -25,22 +25,23 @@ class FieldJudgementBuilder
     public function build()
     {
         return new FieldJudgement(
-            $this->requiredConstraint,
-            $this->value,
             $this->empty,
-            $this->patternError,
-            $this->patternConstraint,
-            $this->outOfRange,
+            $this->lengthMaxConstraint,
+            $this->lengthMinConstraint,
+            $this->maxConstraint,
+            $this->minConstraint,
             $this->notEqual,
-            $this->notPassedLength,
-            $this->optionsConstraint,
             $this->notInOptions,
             $this->notInPost,
-            $this->minConstraint,
-            $this->maxConstraint,
-            $this->lengthMinConstraint,
-            $this->lengthMaxConstraint,
-            $this->passed
+            $this->notPassedLength,
+            $this->optionsConstraint,
+            $this->outOfRange,
+            $this->passed,
+            $this->patternConstraint,
+            $this->patternError,
+            $this->requiredConstraint,
+            $this->typeError,
+            $this->value
         );
     }
 

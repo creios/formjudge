@@ -19,56 +19,61 @@ class FieldJudgement
 
     /**
      * FieldJudgement constructor.
-     * @param bool $requiredConstraint
-     * @param string $value
      * @param bool $empty
-     * @param bool $syntaxError
-     * @param string $patternConstraint
-     * @param bool $outOfRange
+     * @param int $lengthMaxConstraint
+     * @param int $lengthMinConstraint
+     * @param string $maxConstraint
+     * @param string $minConstraint
      * @param bool $notEqual
-     * @param bool $notPassedLength
-     * @param array $optionsConstraint
      * @param bool $notInOptions
      * @param bool $notInPost
-     * @param string $minConstraint
-     * @param string $maxConstraint
-     * @param int $lengthMinConstraint
-     * @param int $lengthMaxConstraint
+     * @param bool $notPassedLength
+     * @param array $optionsConstraint
+     * @param bool $outOfRange
      * @param bool $passed
+     * @param string $patternConstraint
+     * @param bool $requiredConstraint
+     * @param bool $syntaxError
+     * @param bool $typeError
+     * @param string $value
      */
-    public function __construct($requiredConstraint,
-                                $value,
-                                $empty,
-                                $syntaxError,
-                                $patternConstraint,
-                                $outOfRange,
-                                $notEqual,
-                                $notPassedLength,
-                                array $optionsConstraint,
-                                $notInOptions,
-                                $notInPost,
-                                $minConstraint,
-                                $maxConstraint,
-                                $lengthMinConstraint,
-                                $lengthMaxConstraint,
-                                $passed)
+    public function __construct(
+        $empty,
+        $lengthMaxConstraint,
+        $lengthMinConstraint,
+        $maxConstraint,
+        $minConstraint,
+        $notEqual,
+        $notInOptions,
+        $notInPost,
+        $notPassedLength,
+        $optionsConstraint,
+        $outOfRange,
+        $passed,
+        $patternConstraint,
+        $requiredConstraint,
+        $syntaxError,
+        $typeError,
+        $value
+    )
     {
-        $this->requiredConstraint = $requiredConstraint;
-        $this->value = $value;
         $this->empty = $empty;
-        $this->patternError = $syntaxError;
-        $this->patternConstraint = $patternConstraint;
-        $this->outOfRange = $outOfRange;
+        $this->lengthMaxConstraint = $lengthMaxConstraint;
+        $this->lengthMinConstraint = $lengthMinConstraint;
+        $this->maxConstraint = $maxConstraint;
+        $this->minConstraint = $minConstraint;
         $this->notEqual = $notEqual;
-        $this->notPassedLength = $notPassedLength;
-        $this->optionsConstraint = $optionsConstraint;
         $this->notInOptions = $notInOptions;
         $this->notInPost = $notInPost;
-        $this->minConstraint = $minConstraint;
-        $this->maxConstraint = $maxConstraint;
-        $this->lengthMinConstraint = $lengthMinConstraint;
-        $this->lengthMaxConstraint = $lengthMaxConstraint;
+        $this->notPassedLength = $notPassedLength;
+        $this->optionsConstraint = $optionsConstraint;
+        $this->outOfRange = $outOfRange;
         $this->passed = $passed;
+        $this->patternConstraint = $patternConstraint;
+        $this->patternError = $syntaxError;
+        $this->requiredConstraint = $requiredConstraint;
+        $this->typeError = $typeError;
+        $this->value = $value;
     }
 
     /**
