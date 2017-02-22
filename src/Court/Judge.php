@@ -52,7 +52,7 @@ class Judge
             /** @var Field $field */
             if (self::fieldExistsInFormData($fieldName, $formData)) {
                 $value = self::getValueForFieldFromFormData($fieldName, $formData);
-                $castedValue = self::castValueBasedOnField($value, $field);
+                $castedValue = self::parseValueBasedOnField($value, $field);
                 $field->setValue($castedValue);
             }
             $fieldJudgement = self::judgeField($field);
@@ -100,9 +100,11 @@ class Judge
      * @param Field $field
      * @return float|int|string|null
      */
-    private static function castValueBasedOnField($value, Field $field)
+    private static function parseValueBasedOnField($value, Field $field)
     {
-        if ($value === "") {
+        // an empty string will be treated as null
+        // browser send values of empty input fields as an empty string
+        if (self::valueIsAnEmptyString($value)) {
             return null;
         }
 
@@ -123,22 +125,53 @@ class Judge
             case $field instanceof TextArea:
             case $field instanceof Time:
             case $field instanceof Url:
+                // despite that $value should be already a string we cast $value
                 $castedValue = (string)$value;
                 break;
             //float
             case $field instanceof Range:
             case $field instanceof Number:
+                // if $value is not numeric we return $value immediately
+                // the validation will take care to detect violation
+                if (self::valueIsNotNumeric($value)) {
+                    return $value;
+                }
+                // cast $value to provide accurate typing
                 $castedValue = (float)$value;
                 break;
             //integer
             case $field instanceof Month:
             case $field instanceof Week:
+                // if $value is not numeric we return $value immediately
+                // the validation will take care to detect violation
+                if (self::valueIsNotNumeric($value)) {
+                    return $value;
+                }
+                // cast $value to provide accurate typing
                 $castedValue = (int)$value;
                 break;
             default:
                 throw new \LogicException();
         }
         return $castedValue;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    private static function valueIsAnEmptyString($value)
+    {
+        return $value === "";
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    private static function valueIsNotNumeric($value)
+    {
+        return is_numeric($value) === false;
     }
 
     /**
