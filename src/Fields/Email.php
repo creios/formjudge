@@ -7,7 +7,10 @@ namespace Creios\FormJudge\Fields;
  */
 class Email extends Field
 {
-
+    /**
+     * @var string
+     */
+    protected $type = 'email';
     /**
      * @var string
      */

@@ -13,4 +13,12 @@ class Text extends Field
      */
     protected $patternConstraint = '^(.*)$';
 
+    /**
+     * @return bool
+     */
+    protected function equalsEmpty()
+    {
+        return empty($this->value);
+    }
+
 }

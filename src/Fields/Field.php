@@ -17,6 +17,10 @@ abstract class Field
     protected $parent;
     /** @var Field */
     protected $equalToConstraint;
+    /**
+     * @var string
+     */
+    protected $type = "text";
 
     /**
      * @param bool $mandatoryConstraint
@@ -43,9 +47,10 @@ abstract class Field
             ->setOptionsConstraint($this->optionsConstraint)
             ->setPassed(true);
 
-        if ($this->isValueNull()) {
+        if ($this->equalsEmpty()) {
+            $fieldJudgementBuilder->setEmpty(true);
             if ($this->mandatoryConstraint) {
-                $fieldJudgementBuilder->setEmpty(true)->setPassed(false);
+                $fieldJudgementBuilder->setPassed(false);
             }
         } else {
             if ($this->checkSyntax()) {
@@ -65,7 +70,7 @@ abstract class Field
     /**
      * @return bool
      */
-    private function isValueNull()
+    protected function equalsEmpty()
     {
         return is_null($this->value);
     }
@@ -158,11 +163,11 @@ abstract class Field
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getType()
     {
-        return str_replace(["_", __NAMESPACE__ . "\\"], ["-", ""], get_class($this));
+        return $this->type;
     }
 
     /**

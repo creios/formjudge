@@ -15,7 +15,7 @@ use Creios\FormJudge\Fields\Text;
 use Creios\FormJudge\Fields\Time;
 use Creios\FormJudge\Fields\Url;
 
-class TestFormJudge extends \PHPUnit_Framework_TestCase
+class FormJudgeTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testNotValidFormular()
@@ -83,6 +83,9 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $this->assertFalse($judgement->getFieldJudgement('supportarea')->isNotInOptions());
         $this->assertEquals(["0", "1"], $judgement->getFieldJudgement('supportarea')->getOptionsConstraint());
         $this->assertFalse($judgement->getFieldJudgement('supportarea')->isNotInPost());
+
+        $generator = $formContact->getGenerator();
+        $this->assertEquals('type="number" required ', $generator->getField("supportarea")->generate());
     }
 
     public function testField()
@@ -124,6 +127,9 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $this->assertEquals("supportArea", $formContact->getField("supportArea")->getName());
         $this->assertEquals("newLevel[test]", $formContact->getLevel("newLevel")->getField("test")->getName());
         $this->assertEquals("newLevel[secondLevel][test]", $formContact->getLevel("newLevel")->getLevel("secondLevel")->getField("test")->getName());
+
+        $generator = $formContact->getGenerator();
+        $this->assertEquals('type="email" pattern="^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$" required ', $generator->getLevel("newLevel")->getField("test")->generate());
     }
 
     public function testJson()
@@ -164,7 +170,7 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
         $post['date'] = "425.544.1987";
         $judgement = $formular->judge($post);
         $this->assertFalse($judgement->hasPassed());
-        $this->assertEquals('Date', $formular->getField('date')->getType());
+        $this->assertEquals('date', $formular->getField('date')->getType());
     }
 
     public function testPassword()
@@ -266,9 +272,15 @@ class TestFormJudge extends \PHPUnit_Framework_TestCase
     {
         $post['text'] = "";
         $formular = new Form();
-        $formular->addField('text', new Text(TRUE));
+        $formular->addField('text', new Text());
         $judgement = $formular->judge($post);
         $this->assertTrue($judgement->hasPassed());
+
+        $post['text'] = "";
+        $formular = new Form();
+        $formular->addField('text', new Text(true));
+        $judgement = $formular->judge($post);
+        $this->assertFalse($judgement->hasPassed());
     }
 
     public function testTime()

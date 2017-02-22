@@ -9,7 +9,7 @@
     </logging>
     <filter>
         <whitelist>
-            <directory suffix=".php">lib</directory>
+            <directory suffix=".php">src</directory>
             <exclude>
                 <directory suffix=".php">vendor</directory>
             </exclude>
@@ -17,7 +17,7 @@
     </filter>
     <testsuites>
         <testsuite name="tests">
-            <file>phpunit/tests/TestFormjudge.php</file>
+            <directory>phpunit/tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
