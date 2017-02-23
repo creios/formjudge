@@ -6,7 +6,7 @@ trait FieldSetterTrait
 {
 
     /**
-     * @param integer | string | float $value
+     * @param string | float $value
      * @return $this
      */
     public function setValue($value)

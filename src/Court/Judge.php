@@ -167,6 +167,7 @@ class Judge
             case $field instanceof Date:
             case $field instanceof DateTimeLocal:
             case $field instanceof Email:
+            case $field instanceof Month:
             case $field instanceof Password:
             case $field instanceof Radio:
             case $field instanceof Search:
@@ -175,6 +176,7 @@ class Judge
             case $field instanceof TextArea:
             case $field instanceof Time:
             case $field instanceof Url:
+            case $field instanceof Week:
                 // despite that $value should be already a string we cast $value
                 $castedValue = (string)$value;
                 break;
@@ -188,17 +190,6 @@ class Judge
                 }
                 // cast $value to provide accurate typing
                 $castedValue = (float)$value;
-                break;
-            //integer
-            case $field instanceof Month:
-            case $field instanceof Week:
-                // if $value is not numeric we return $value immediately
-                // the validation will take care to detect violation
-                if (self::valueIsNotNumeric($value)) {
-                    return $value;
-                }
-                // cast $value to provide accurate typing
-                $castedValue = (int)$value;
                 break;
             default:
                 throw new \LogicException();
@@ -255,6 +246,7 @@ class Judge
             case $field instanceof Date:
             case $field instanceof DateTimeLocal:
             case $field instanceof Email:
+            case $field instanceof Month:
             case $field instanceof Password:
             case $field instanceof Radio:
             case $field instanceof Search:
@@ -263,16 +255,12 @@ class Judge
             case $field instanceof TextArea:
             case $field instanceof Time:
             case $field instanceof Url:
+            case $field instanceof Week:
                 return is_string($field->getValue());
             //float
             case $field instanceof Range:
             case $field instanceof Number:
                 return is_float($field->getValue());
-                break;
-            //integer
-            case $field instanceof Month:
-            case $field instanceof Week:
-                return is_int($field->getValue());
                 break;
             default:
                 throw new \LogicException();

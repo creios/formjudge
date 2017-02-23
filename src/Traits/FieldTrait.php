@@ -5,7 +5,7 @@ namespace Creios\FormJudge\Traits;
 trait FieldTrait
 {
 
-    /** @var integer | string | float */
+    /** @var string | float */
     protected $value;
     /** @var boolean */
     protected $requiredConstraint;
