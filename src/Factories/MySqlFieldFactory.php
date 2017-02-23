@@ -3,7 +3,6 @@
 namespace Creios\FormJudge\Factories;
 
 use Creios\FormJudge\Fields\Date;
-use Creios\FormJudge\Fields\Number;
 use Creios\FormJudge\Fields\Text;
 use Creios\FormJudge\Fields\TextArea;
 
@@ -40,120 +39,120 @@ class MySqlFieldFactory
     const DATE_MAX_CONSTRAINT = '9999-12-31';
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
      */
-    public static function createSignedTinyInt($mandatoryConstraint = false)
+    public static function createSignedTinyInt($requiredConstraint = false)
     {
-        return Number::createInstance($mandatoryConstraint)
+        return Factory::createInteger($requiredConstraint)
             ->setMinConstraint(self::TINYINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::TINYINT_SIGNED_MAX_CONSTRAINT);
     }
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
      */
-    public static function createUnsignedTinyInt($mandatoryConstraint = false)
+    public static function createUnsignedTinyInt($requiredConstraint = false)
     {
-        return Number::createInstance($mandatoryConstraint)
+        return Factory::createInteger($requiredConstraint)
             ->setMinConstraint(self::TINYINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::TINYINT_UNSIGNED_MAX_CONSTRAINT);
     }
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
      */
-    public static function createSignedMediumInt($mandatoryConstraint = false)
+    public static function createSignedMediumInt($requiredConstraint = false)
     {
-        return Number::createInstance($mandatoryConstraint)
+        return Factory::createInteger($requiredConstraint)
             ->setMinConstraint(self::MEDIUMINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::MEDIUMINT_SIGNED_MAX_CONSTRAINT);
     }
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
      */
-    public static function createUnsignedMediumInt($mandatoryConstraint = false)
+    public static function createUnsignedMediumInt($requiredConstraint = false)
     {
-        return Number::createInstance($mandatoryConstraint)
+        return Factory::createInteger($requiredConstraint)
             ->setMinConstraint(self::MEDIUMINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::MEDIUMINT_UNSIGNED_MAX_CONSTRAINT);
     }
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
      */
-    public static function createSignedInt($mandatoryConstraint = false)
+    public static function createSignedInt($requiredConstraint = false)
     {
-        return Number::createInstance($mandatoryConstraint)
+        return Factory::createInteger($requiredConstraint)
             ->setMinConstraint(self::INT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::INT_SIGNED_MAX_CONSTRAINT);
     }
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
      */
-    public static function createUnsignedInt($mandatoryConstraint = false)
+    public static function createUnsignedInt($requiredConstraint = false)
     {
-        return Number::createInstance($mandatoryConstraint)
+        return Factory::createInteger($requiredConstraint)
             ->setMinConstraint(self::INT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::INT_UNSIGNED_MAX_CONSTRAINT);
     }
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
      */
-    public static function createSignedBigInt($mandatoryConstraint = false)
+    public static function createSignedBigInt($requiredConstraint = false)
     {
-        return Number::createInstance($mandatoryConstraint)
+        return Factory::createInteger($requiredConstraint)
             ->setMinConstraint(self::BIGINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::BIGINT_SIGNED_MAX_CONSTRAINT);
     }
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
      */
-    public static function createUnsignedBigInt($mandatoryConstraint = false)
+    public static function createUnsignedBigInt($requiredConstraint = false)
     {
-        return Number::createInstance($mandatoryConstraint)
+        return Factory::createInteger($requiredConstraint)
             ->setMinConstraint(self::BIGINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::BIGINT_UNSIGNED_MAX_CONSTRAINT);
     }
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return Text
      */
-    public static function createTextInput($mandatoryConstraint = false)
+    public static function createTextInput($requiredConstraint = false)
     {
-        return Text::createInstance($mandatoryConstraint)
+        return Text::createInstance($requiredConstraint)
             ->setLengthMaxConstraint(self::TEXT_LENGTH_MAX_CONSTRAINT);
     }
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return TextArea
      */
-    public static function createTextTextArea($mandatoryConstraint = false)
+    public static function createTextTextArea($requiredConstraint = false)
     {
-        return TextArea::createInstance($mandatoryConstraint)
+        return TextArea::createInstance($requiredConstraint)
             ->setLengthMaxConstraint(self::TEXT_LENGTH_MAX_CONSTRAINT);
     }
 
     /**
-     * @param bool $mandatoryConstraint
+     * @param bool $requiredConstraint
      * @return Date
      */
-    public static function createDate($mandatoryConstraint = false)
+    public static function createDate($requiredConstraint = false)
     {
-        return Date::createInstance($mandatoryConstraint)
+        return Date::createInstance($requiredConstraint)
             ->setPatternConstraint(self::DATE_PATTERN_CONSTRAINT)
             ->setMinConstraint(self::DATE_MIN_CONSTRAINT)
             ->setMaxConstraint(self::DATE_MAX_CONSTRAINT);
