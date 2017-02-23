@@ -34,7 +34,7 @@ class MySqlFieldFactory
     const BIGINT_UNSIGNED_MIN_CONSTRAINT = 0;
     const BIGINT_UNSIGNED_MAX_CONSTRAINT = 18446744073709551615;
     const TEXT_LENGTH_MAX_CONSTRAINT = 21844;
-    const DATE_PATTERN_CONSTRAINT = '^\d\d\d\d-\d\d-\d\d)$';
+    const DATE_PATTERN_CONSTRAINT = '^\d\d\d\d-\d\d-\d\d$';
     const DATE_MIN_CONSTRAINT = '1000-01-01';
     const DATE_MAX_CONSTRAINT = '9999-12-31';
 
