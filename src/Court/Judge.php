@@ -293,6 +293,38 @@ class Judge
      * @param Field $field
      * @return bool
      */
+    private static function checkEqualTo(Field $field)
+    {
+        if ($field->getEqualToConstraint() instanceof Field):
+            return ($field->getValue() === $field->getEqualToConstraint()->getValue());
+        else:
+            return true;
+        endif;
+    }
+
+    /**
+     * @param $levelName
+     * @param array $formData
+     * @return bool
+     */
+    private static function levelExistsInFormData($levelName, array $formData)
+    {
+        return isset($formData[$levelName]);
+    }
+
+    /**
+     * @param Field $field
+     * @return bool
+     */
+    private static function checkLength(Field $field)
+    {
+        return self::checkBoundaries(mb_strlen($field->getValue()), $field->getLengthMinConstraint(), $field->getLengthMaxConstraint());
+    }
+
+    /**
+     * @param Field $field
+     * @return bool
+     */
     private static function checkRange(Field $field)
     {
         return self::checkBoundaries($field->getValue(), $field->getMinConstraint(), $field->getMaxConstraint());
@@ -311,46 +343,14 @@ class Judge
             return true;
         //lower bound set
         elseif ($lowerBound !== null && $upperBound === null):
-            return ($lowerBound <= mb_strlen($value));
+            return ($lowerBound <= $value);
         //upper bound set
         elseif ($lowerBound === null && $upperBound !== null):
-            return ($upperBound >= mb_strlen($value));
+            return ($upperBound >= $value);
         //both bounds set ($lowerBound !== null && $upperBound !== null)
         else:
-            return ($lowerBound <= mb_strlen($value) && $upperBound >= mb_strlen($value));
+            return ($lowerBound <= $value && $upperBound >= $value);
         endif;
-    }
-
-    /**
-     * @param Field $field
-     * @return bool
-     */
-    private static function checkEqualTo(Field $field)
-    {
-        if ($field->getEqualToConstraint() instanceof Field):
-            return ($field->getValue() === $field->getEqualToConstraint()->getValue());
-        else:
-            return true;
-        endif;
-    }
-
-    /**
-     * @param Field $field
-     * @return bool
-     */
-    private static function checkLength(Field $field)
-    {
-        return self::checkBoundaries($field->getValue(), $field->getLengthMinConstraint(), $field->getLengthMaxConstraint());
-    }
-
-    /**
-     * @param $levelName
-     * @param array $formData
-     * @return bool
-     */
-    private static function levelExistsInFormData($levelName, array $formData)
-    {
-        return isset($formData[$levelName]);
     }
 
 }
