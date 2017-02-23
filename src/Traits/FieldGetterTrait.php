@@ -6,7 +6,7 @@ trait FieldGetterTrait
 {
 
     /**
-     * @return string
+     * @return integer | string | float
      */
     public function getValue()
     {
