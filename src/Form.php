@@ -15,6 +15,7 @@ class Form extends FieldList
     /**
      * @param array $post
      * @return FieldListJudgement
+     * @throws \LogicException
      */
     public function judge(array $post)
     {

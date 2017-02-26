@@ -56,7 +56,9 @@ abstract class FieldList
      */
     public function addLevel($name, Level $level = null)
     {
-        if ($level == null) $level = new Level();
+        if ($level === null) {
+            $level = new Level();
+        }
         $this->levels[$name] = $level;
         $level->setParent($this);
         return $level;

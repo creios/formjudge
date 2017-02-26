@@ -37,10 +37,13 @@ class FieldListJudgement
     /**
      * @param $name
      * @return FieldJudgement
+     * @throws \InvalidArgumentException
      */
     public function getFieldJudgement($name)
     {
-        if (isset($this->fieldJudgements[$name]) == false) throw new \InvalidArgumentException("No value with key '$name' available");
+        if (isset($this->fieldJudgements[$name]) === false) {
+            throw new \InvalidArgumentException("No value with key '$name' available");
+        }
         return $this->fieldJudgements[$name];
     }
 
@@ -55,10 +58,13 @@ class FieldListJudgement
     /**
      * @param $name
      * @return FieldListJudgement
+     * @throws \InvalidArgumentException
      */
     public function getFieldListJudgement($name)
     {
-        if (isset($this->fieldListJudgements[$name]) == false) throw new \InvalidArgumentException("No value with key '$name' available");
+        if (isset($this->fieldListJudgements[$name]) === false) {
+            throw new \InvalidArgumentException("No value with key '$name' available");
+        }
         return $this->fieldListJudgements[$name];
     }
 

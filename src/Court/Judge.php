@@ -31,6 +31,7 @@ class Judge
      * @param Form $form
      * @param array $formData
      * @return FieldListJudgement
+     * @throws \LogicException
      */
     public static function judge(Form $form, array $formData)
     {
@@ -42,6 +43,7 @@ class Judge
      * @param FieldList $fieldList
      * @param array $formData
      * @return FieldListJudgement
+     * @throws \LogicException
      */
     private static function judgeFieldList(FieldList $fieldList, array $formData)
     {
@@ -56,21 +58,20 @@ class Judge
             }
             $fieldJudgement = self::judgeField($field);
             $fieldListJudgementBuilder->addFieldJudgements($fieldName, $fieldJudgement);
-            if ($fieldJudgement->hasPassed() == false) {
+            if ($fieldJudgement->hasPassed() === false) {
                 $fieldListJudgementBuilder->setPassed(false);
             }
         }
 
         foreach ($fieldList->getLevels() as $levelName => $level) {
+            $nextLevelFormData = [];
             /** @var Level $level */
             if (self::levelExistsInFormData($levelName, $formData)) {
                 $nextLevelFormData = $formData[$levelName];
-            } else {
-                $nextLevelFormData = [];
             }
             $fieldListJudgement = self::judgeFieldList($level, $nextLevelFormData);
             $fieldListJudgementBuilder->addFieldListJudgements($levelName, $fieldListJudgement);
-            if ($fieldListJudgement->hasPassed() == false) {
+            if ($fieldListJudgement->hasPassed() === false) {
                 $fieldListJudgementBuilder->setPassed($fieldListJudgement->hasPassed());
             }
         }
@@ -81,6 +82,7 @@ class Judge
     /**
      * @param Field $field
      * @return \Creios\FormJudge\Court\FieldJudgement
+     * @throws \LogicException
      */
     private static function judgeField(Field $field)
     {
@@ -110,10 +112,18 @@ class Judge
 
                 if (self::checkPattern($field)) {
 
-                    if (!self::checkOptions($field)) $fieldJudgementBuilder->setNotInOptions(true)->setPassed(false);
-                    if (!self::checkRange($field)) $fieldJudgementBuilder->setOutOfRange(true)->setPassed(false);
-                    if (!self::checkEqualTo($field)) $fieldJudgementBuilder->setNotEqual(true)->setPassed(false);
-                    if (!self::checkLength($field)) $fieldJudgementBuilder->setNotPassedLength(true)->setPassed(false);
+                    if (!self::checkOptions($field)) {
+                        $fieldJudgementBuilder->setNotInOptions(true)->setPassed(false);
+                    }
+                    if (!self::checkRange($field)) {
+                        $fieldJudgementBuilder->setOutOfRange(true)->setPassed(false);
+                    }
+                    if (!self::checkEqualTo($field)) {
+                        $fieldJudgementBuilder->setNotEqual(true)->setPassed(false);
+                    }
+                    if (!self::checkLength($field)) {
+                        $fieldJudgementBuilder->setNotPassedLength(true)->setPassed(false);
+                    }
 
                 } else {
                     $fieldJudgementBuilder->setPatternError(true)->setPassed(false);
@@ -151,6 +161,7 @@ class Judge
      * @param string $value
      * @param Field $field
      * @return float|int|string|null
+     * @throws \LogicException
      */
     private static function parseValueBasedOnField($value, Field $field)
     {
@@ -236,6 +247,7 @@ class Judge
     /**
      * @param Field $field
      * @return bool
+     * @throws \LogicException
      */
     private static function checkType(Field $field)
     {
@@ -283,7 +295,7 @@ class Judge
     private static function checkOptions(Field $field)
     {
         if (count($field->getOptionsConstraint()) > 0) {
-            return in_array($field->getValue(), $field->getOptionsConstraint());
+            return in_array($field->getValue(), $field->getOptionsConstraint(), true);
         } else {
             return true;
         }
@@ -339,18 +351,20 @@ class Judge
     private static function checkBoundaries($value, $lowerBound = null, $upperBound = null)
     {
         //no bound -> true
-        if ($lowerBound === null && $upperBound === null):
+        if ($lowerBound === null && $upperBound === null) {
             return true;
-        //lower bound set
-        elseif ($lowerBound !== null && $upperBound === null):
-            return ($lowerBound <= $value);
-        //upper bound set
-        elseif ($lowerBound === null && $upperBound !== null):
-            return ($upperBound >= $value);
-        //both bounds set ($lowerBound !== null && $upperBound !== null)
-        else:
-            return ($lowerBound <= $value && $upperBound >= $value);
-        endif;
+        } else {
+            $result = true;
+            //lower bound set
+            if ($lowerBound !== null) {
+                $result = $result && ($lowerBound <= $value);
+            }
+            //upper bound set
+            if ($upperBound !== null) {
+                $result = $result && ($upperBound >= $value);
+            }
+            return $result;
+        }
     }
 
 }

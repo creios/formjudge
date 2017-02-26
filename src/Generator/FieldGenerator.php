@@ -45,7 +45,7 @@ class FieldGenerator
             return "";
         }
         $reflect = new ReflectionClass($this->field);
-        $type = str_replace(['datetimelocal'], ['datetime-local'], strtolower($reflect->getShortName()));
+        $type = str_replace('datetimelocal', 'datetime-local', strtolower($reflect->getShortName()));
         return sprintf('type="%s" ', $type);
     }
 
@@ -112,6 +112,6 @@ class FieldGenerator
         if ($this->field->getRequiredConstraint() === false) {
             return "";
         }
-        return "required ";
+        return 'required ';
     }
 }
