@@ -6,6 +6,20 @@ trait FieldSetterTrait
 {
 
     /**
+     * @param $type
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function setType($type)
+    {
+        if (!in_array($type, ['string', 'int', 'float'], true)) {
+            throw new \InvalidArgumentException("Only 'string', 'int' and 'float' are valid values");
+        }
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
      * @param string | float $value
      * @return $this
      */

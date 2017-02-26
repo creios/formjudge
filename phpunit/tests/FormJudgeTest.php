@@ -52,9 +52,9 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
     public function testContactData()
     {
         $formContact = new Form();
-        $formContact->addField("supportArea", Number::createInstance(True));
-        $formContact->getField("supportArea")->addOptionConstraint("0");
-        $formContact->getField("supportArea")->addOptionConstraint("1");
+        $formContact->addField("supportArea", Factory::createInt(True));
+        $formContact->getField("supportArea")->addOptionConstraint(0);
+        $formContact->getField("supportArea")->addOptionConstraint(1);
         $formContact->addField("message", Text::createInstance(True));
         $formContact->addField("gender", Text::createInstance(True));
         $formContact->getField("gender")->addOptionConstraint("M");
@@ -82,7 +82,7 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($judgement->getFieldJudgement('supportArea')->isNotInPost());
 
         $generator = $formContact->getGenerator();
-        $this->assertEquals('type="number" required', $generator->getField("supportArea")->generate());
+        $this->assertEquals('type="number" min="0" max="2147483648" pattern="-?[0-9]+" required', $generator->getField("supportArea")->generate());
     }
 
     public function testField()

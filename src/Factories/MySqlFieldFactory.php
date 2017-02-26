@@ -41,10 +41,11 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
+     * @throws \InvalidArgumentException
      */
     public static function createSignedTinyInt($requiredConstraint = false)
     {
-        return Factory::createInteger($requiredConstraint)
+        return Factory::createInt($requiredConstraint)
             ->setMinConstraint(self::TINYINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::TINYINT_SIGNED_MAX_CONSTRAINT);
     }
@@ -52,10 +53,11 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
+     * @throws \InvalidArgumentException
      */
     public static function createUnsignedTinyInt($requiredConstraint = false)
     {
-        return Factory::createInteger($requiredConstraint)
+        return Factory::createInt($requiredConstraint)
             ->setMinConstraint(self::TINYINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::TINYINT_UNSIGNED_MAX_CONSTRAINT);
     }
@@ -63,10 +65,11 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
+     * @throws \InvalidArgumentException
      */
     public static function createSignedMediumInt($requiredConstraint = false)
     {
-        return Factory::createInteger($requiredConstraint)
+        return Factory::createInt($requiredConstraint)
             ->setMinConstraint(self::MEDIUMINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::MEDIUMINT_SIGNED_MAX_CONSTRAINT);
     }
@@ -74,10 +77,11 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
+     * @throws \InvalidArgumentException
      */
     public static function createUnsignedMediumInt($requiredConstraint = false)
     {
-        return Factory::createInteger($requiredConstraint)
+        return Factory::createInt($requiredConstraint)
             ->setMinConstraint(self::MEDIUMINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::MEDIUMINT_UNSIGNED_MAX_CONSTRAINT);
     }
@@ -85,10 +89,11 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
+     * @throws \InvalidArgumentException
      */
     public static function createSignedInt($requiredConstraint = false)
     {
-        return Factory::createInteger($requiredConstraint)
+        return Factory::createInt($requiredConstraint)
             ->setMinConstraint(self::INT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::INT_SIGNED_MAX_CONSTRAINT);
     }
@@ -96,10 +101,11 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
+     * @throws \InvalidArgumentException
      */
     public static function createUnsignedInt($requiredConstraint = false)
     {
-        return Factory::createInteger($requiredConstraint)
+        return Factory::createInt($requiredConstraint)
             ->setMinConstraint(self::INT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::INT_UNSIGNED_MAX_CONSTRAINT);
     }
@@ -107,10 +113,11 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
+     * @throws \InvalidArgumentException
      */
     public static function createSignedBigInt($requiredConstraint = false)
     {
-        return Factory::createInteger($requiredConstraint)
+        return Factory::createInt($requiredConstraint)
             ->setMinConstraint(self::BIGINT_SIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::BIGINT_SIGNED_MAX_CONSTRAINT);
     }
@@ -118,10 +125,11 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
+     * @throws \InvalidArgumentException
      */
     public static function createUnsignedBigInt($requiredConstraint = false)
     {
-        return Factory::createInteger($requiredConstraint)
+        return Factory::createInt($requiredConstraint)
             ->setMinConstraint(self::BIGINT_UNSIGNED_MIN_CONSTRAINT)
             ->setMaxConstraint(self::BIGINT_UNSIGNED_MAX_CONSTRAINT);
     }
@@ -129,6 +137,7 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return Text
+     * @throws \InvalidArgumentException
      */
     public static function createTextInput($requiredConstraint = false)
     {
@@ -139,6 +148,7 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return TextArea
+     * @throws \InvalidArgumentException
      */
     public static function createTextTextArea($requiredConstraint = false)
     {
@@ -149,6 +159,7 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return Date
+     * @throws \InvalidArgumentException
      */
     public static function createDate($requiredConstraint = false)
     {

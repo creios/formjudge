@@ -10,4 +10,19 @@ namespace Creios\FormJudge\Fields;
 class Range extends Field
 {
 
+    /**
+     * @var string
+     */
+    const RANGE_TYPE = 'float';
+
+    /**
+     * @param bool $requiredConstraint
+     * @return static
+     * @throws \InvalidArgumentException
+     */
+    public static function createInstance($requiredConstraint = false)
+    {
+        return (new static($requiredConstraint))->setType(self::RANGE_TYPE);
+    }
+
 }

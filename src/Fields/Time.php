@@ -17,10 +17,13 @@ class Time extends Field
     /**
      * @param bool $requiredConstraint
      * @return Time
+     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {
-        return (new self($requiredConstraint))->setPatternConstraint(self::TIME_STRING_PATTERN);
+        return (new self($requiredConstraint))
+            ->setType(Field::FIELD_DEFAULT_TYPE)
+            ->setPatternConstraint(self::TIME_STRING_PATTERN);
     }
 
 }

@@ -9,13 +9,15 @@ class Factory
 {
 
     const BOOLEAN_PATTERN_CONSTRAINT = '^(0|1|TRUE|FALSE|true|false|ON|OFF|on|off)$';
-    const INTEGER_PATTERN_CONSTRAINT = '-?[0-9]+';
-    const PHP_32BIT_INTEGER_MIN_CONSTRAINT = 0;
-    const PHP_32BIT_INTEGER_MAX_CONSTRAINT = 2147483648;
+    const INT_PATTERN_CONSTRAINT = '-?[0-9]+';
+    const PHP_32BIT_INT_MIN_CONSTRAINT = 0;
+    const PHP_32BIT_INT_MAX_CONSTRAINT = 2147483648;
+    const INT_TYPE = 'int';
 
     /**
      * @param bool $requiredConstraint
      * @return Text
+     * @throws \InvalidArgumentException
      */
     public static function createBooleanText($requiredConstraint = false)
     {
@@ -25,13 +27,15 @@ class Factory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
+     * @throws \InvalidArgumentException
      */
-    public static function createInteger($requiredConstraint = false)
+    public static function createInt($requiredConstraint = false)
     {
         return Number::createInstance($requiredConstraint)
-            ->setPatternConstraint(self::INTEGER_PATTERN_CONSTRAINT)
-            ->setMinConstraint(self::PHP_32BIT_INTEGER_MIN_CONSTRAINT)
-            ->setMaxConstraint(self::PHP_32BIT_INTEGER_MAX_CONSTRAINT);
+            ->setType(self::INT_TYPE)
+            ->setPatternConstraint(self::INT_PATTERN_CONSTRAINT)
+            ->setMinConstraint(self::PHP_32BIT_INT_MIN_CONSTRAINT)
+            ->setMaxConstraint(self::PHP_32BIT_INT_MAX_CONSTRAINT);
     }
 
 }

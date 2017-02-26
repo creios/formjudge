@@ -3,24 +3,7 @@
 namespace Creios\FormJudge\Court;
 
 use Creios\FormJudge\FieldList;
-use Creios\FormJudge\Fields\Checkbox;
-use Creios\FormJudge\Fields\Color;
-use Creios\FormJudge\Fields\Date;
-use Creios\FormJudge\Fields\DateTimeLocal;
-use Creios\FormJudge\Fields\Email;
 use Creios\FormJudge\Fields\Field;
-use Creios\FormJudge\Fields\Month;
-use Creios\FormJudge\Fields\Number;
-use Creios\FormJudge\Fields\Password;
-use Creios\FormJudge\Fields\Radio;
-use Creios\FormJudge\Fields\Range;
-use Creios\FormJudge\Fields\Search;
-use Creios\FormJudge\Fields\Tel;
-use Creios\FormJudge\Fields\Text;
-use Creios\FormJudge\Fields\TextArea;
-use Creios\FormJudge\Fields\Time;
-use Creios\FormJudge\Fields\Url;
-use Creios\FormJudge\Fields\Week;
 use Creios\FormJudge\Form;
 use Creios\FormJudge\Level;
 
@@ -171,29 +154,21 @@ class Judge
             return null;
         }
 
-        switch (true) {
-            //string
-            case $field instanceof Checkbox:
-            case $field instanceof Color:
-            case $field instanceof Date:
-            case $field instanceof DateTimeLocal:
-            case $field instanceof Email:
-            case $field instanceof Month:
-            case $field instanceof Password:
-            case $field instanceof Radio:
-            case $field instanceof Search:
-            case $field instanceof Tel:
-            case $field instanceof Text:
-            case $field instanceof TextArea:
-            case $field instanceof Time:
-            case $field instanceof Url:
-            case $field instanceof Week:
+        switch ($field->getType()) {
+            case 'string':
                 // despite that $value should be already a string we cast $value
                 $castedValue = (string)$value;
                 break;
-            //float
-            case $field instanceof Range:
-            case $field instanceof Number:
+            case 'int':
+                // if $value is not numeric we return $value immediately
+                // the validation will take care to detect violation
+                if (self::valueIsNotNumeric($value)) {
+                    return $value;
+                }
+                // cast $value to provide accurate typing
+                $castedValue = (int)$value;
+                break;
+            case 'float':
                 // if $value is not numeric we return $value immediately
                 // the validation will take care to detect violation
                 if (self::valueIsNotNumeric($value)) {
@@ -251,27 +226,14 @@ class Judge
      */
     private static function checkType(Field $field)
     {
-        switch (true) {
-            //string
-            case $field instanceof Checkbox:
-            case $field instanceof Color:
-            case $field instanceof Date:
-            case $field instanceof DateTimeLocal:
-            case $field instanceof Email:
-            case $field instanceof Month:
-            case $field instanceof Password:
-            case $field instanceof Radio:
-            case $field instanceof Search:
-            case $field instanceof Tel:
-            case $field instanceof Text:
-            case $field instanceof TextArea:
-            case $field instanceof Time:
-            case $field instanceof Url:
-            case $field instanceof Week:
+        switch ($field->getType()) {
+            case 'string':
                 return is_string($field->getValue());
-            //float
-            case $field instanceof Range:
-            case $field instanceof Number:
+                break;
+            case 'int':
+                return is_int($field->getValue());
+                break;
+            case 'float':
                 return is_float($field->getValue());
                 break;
             default:

@@ -17,10 +17,13 @@ class Url extends Field
     /**
      * @param bool $requiredConstraint
      * @return Url
+     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {
-        return (new self($requiredConstraint))->setPatternConstraint(self::SIMPLE_URL_STRING_PATTERN);
+        return (new self($requiredConstraint))
+            ->setType(Field::FIELD_DEFAULT_TYPE)
+            ->setPatternConstraint(self::SIMPLE_URL_STRING_PATTERN);
     }
 
 }

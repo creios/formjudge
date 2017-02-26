@@ -6,6 +6,14 @@ trait FieldGetterTrait
 {
 
     /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
      * @return string | float
      */
     public function getValue()

@@ -10,4 +10,19 @@ namespace Creios\FormJudge\Fields;
 class Number extends Field
 {
 
+    /**
+     * @var string
+     */
+    const NUMBER_TYPE = 'float';
+
+    /**
+     * @param bool $requiredConstraint
+     * @return static
+     * @throws \InvalidArgumentException
+     */
+    public static function createInstance($requiredConstraint = false)
+    {
+        return (new static($requiredConstraint))
+            ->setType(self::NUMBER_TYPE);
+    }
 }

@@ -18,9 +18,12 @@ class Month extends Field
     /**
      * @param bool $requiredConstraint
      * @return Month
+     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {
-        return (new self($requiredConstraint))->setPatternConstraint(self::MONTH_STRING_PATTERN);
+        return (new self($requiredConstraint))
+            ->setType(Field::FIELD_DEFAULT_TYPE)
+            ->setPatternConstraint(self::MONTH_STRING_PATTERN);
     }
 }

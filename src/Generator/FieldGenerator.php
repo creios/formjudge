@@ -27,10 +27,10 @@ class FieldGenerator
     public function generate()
     {
         $fieldAttributes = $this->generateType();
-        $fieldAttributes .= $this->generateMaxConstraint();
         $fieldAttributes .= $this->generateMinConstraint();
-        $fieldAttributes .= $this->generateLengthMaxConstraint();
+        $fieldAttributes .= $this->generateMaxConstraint();
         $fieldAttributes .= $this->generateLengthMinConstraint();
+        $fieldAttributes .= $this->generateLengthMaxConstraint();
         $fieldAttributes .= $this->generatePatternConstraint();
         $fieldAttributes .= $this->generateRequiredConstraint();
         return trim($fieldAttributes);

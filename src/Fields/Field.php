@@ -23,6 +23,11 @@ abstract class Field
     protected $equalToConstraint;
 
     /**
+     * @var string
+     */
+    const FIELD_DEFAULT_TYPE = 'string';
+
+    /**
      * @param bool $requiredConstraint
      */
     protected function __construct($requiredConstraint = false)
@@ -33,10 +38,11 @@ abstract class Field
     /**
      * @param bool $requiredConstraint
      * @return static
+     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {
-        return new static($requiredConstraint);
+        return (new static($requiredConstraint))->setType(self::FIELD_DEFAULT_TYPE);
     }
 
     /**
