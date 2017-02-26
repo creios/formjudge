@@ -19,7 +19,6 @@ class Judge
     public static function judge(Form $form, array $formData)
     {
         return self::judgeFieldList($form, $formData);
-
     }
 
     /**
@@ -30,24 +29,35 @@ class Judge
      */
     private static function judgeFieldList(FieldList $fieldList, array $formData)
     {
+        // be optimistic and assume that validation will be passed
         $fieldListJudgementBuilder = (new FieldListJudgementBuilder())->setPassed(true);
 
         foreach ($fieldList->getFields() as $fieldName => $field) {
+
             $fieldJudgement = self::judgeField($field, $fieldName, $formData);
+
             $fieldListJudgementBuilder->addFieldJudgement($fieldName, $fieldJudgement);
+
+            // if one fieldJudgment failed validation the whole fieldListJudgement fails
             if ($fieldJudgement->hasPassed() === false) {
                 $fieldListJudgementBuilder->setPassed(false);
             }
         }
 
         foreach ($fieldList->getLevels() as $levelName => $level) {
+
             $nextLevelFormData = [];
+
             /** @var Level $level */
             if (self::levelExistsInFormData($levelName, $formData)) {
                 $nextLevelFormData = $formData[$levelName];
             }
+
             $fieldListJudgement = self::judgeFieldList($level, $nextLevelFormData);
+
             $fieldListJudgementBuilder->addFieldListJudgement($levelName, $fieldListJudgement);
+
+            // if one child fieldListJudgment failed validation the whole fieldListJudgement fails
             if ($fieldListJudgement->hasPassed() === false) {
                 $fieldListJudgementBuilder->setPassed($fieldListJudgement->hasPassed());
             }
@@ -68,6 +78,7 @@ class Judge
 
         if (self::fieldExistsInFormData($fieldName, $formData)) {
 
+            // get value from formData and cast it to the field type
             $value = self::getValueForFieldFromFormData($fieldName, $formData);
             $castedValue = self::parseValueBasedOnField($value, $field);
 
@@ -75,6 +86,8 @@ class Judge
 
             $fieldJudgementBuilder = self::buildFieldJudgementBuilder($field);
             $fieldJudgementBuilder->setNotInPost(false);
+
+            // be optimistic and assume that the field will pass validation
             $fieldJudgementBuilder->setPassed(true);
 
             $fieldJudgementBuilder = self::judgeFieldValue($fieldJudgementBuilder, $field);
@@ -83,12 +96,77 @@ class Judge
 
             $fieldJudgementBuilder = self::buildFieldJudgementBuilder($field);
 
+            // field is not in post, so the validation fails
             $fieldJudgementBuilder->setNotInPost(true);
             $fieldJudgementBuilder->setPassed(false);
 
         }
 
         return $fieldJudgementBuilder->build();
+    }
+
+    /**
+     * @param FieldJudgementBuilder $fieldJudgementBuilder
+     * @param Field $field
+     * @return FieldJudgementBuilder
+     * @throws \LogicException
+     */
+    private static function judgeFieldValue(FieldJudgementBuilder $fieldJudgementBuilder, Field $field)
+    {
+        if (self::valueEqualsNull($field)) {
+
+            $fieldJudgementBuilder->setEmpty(true);
+
+            if (self::checkRequired($field)) {
+                $fieldJudgementBuilder->setPassed(false);
+            }
+
+        } else {
+
+            if (self::checkType($field)) {
+
+                if (self::checkPattern($field)) {
+
+                    if (!self::checkOptions($field)) {
+                        $fieldJudgementBuilder->setNotInOptions(true)->setPassed(false);
+                    }
+                    if (!self::checkRange($field)) {
+                        $fieldJudgementBuilder->setOutOfRange(true)->setPassed(false);
+                    }
+                    if (!self::checkEqualTo($field)) {
+                        $fieldJudgementBuilder->setNotEqual(true)->setPassed(false);
+                    }
+                    if (!self::checkLength($field)) {
+                        $fieldJudgementBuilder->setNotPassedLength(true)->setPassed(false);
+                    }
+
+                } else {
+                    $fieldJudgementBuilder->setPatternError(true)->setPassed(false);
+                }
+
+            } else {
+                $fieldJudgementBuilder->setTypeError(true)->setPassed(false);
+            }
+        }
+        return $fieldJudgementBuilder;
+    }
+
+    /**
+     * @param Field $field
+     * @return FieldJudgementBuilder
+     */
+    private static function buildFieldJudgementBuilder(Field $field)
+    {
+
+        return (new FieldJudgementBuilder())
+            ->setValue($field->getValue())
+            ->setRequiredConstraint($field->getRequiredConstraint())
+            ->setLengthMaxConstraint($field->getLengthMaxConstraint())
+            ->setLengthMinConstraint($field->getLengthMinConstraint())
+            ->setMaxConstraint($field->getMaxConstraint())
+            ->setMinConstraint($field->getMinConstraint())
+            ->setPatternConstraint($field->getPatternConstraint())
+            ->setOptionsConstraint($field->getOptionsConstraint());
     }
 
     /**
@@ -170,70 +248,6 @@ class Judge
     private static function valueIsNotNumeric($value)
     {
         return is_numeric($value) === false;
-    }
-
-    /**
-     * @param Field $field
-     * @return FieldJudgementBuilder
-     */
-    private static function buildFieldJudgementBuilder(Field $field)
-    {
-
-        return (new FieldJudgementBuilder())
-            ->setValue($field->getValue())
-            ->setRequiredConstraint($field->getRequiredConstraint())
-            ->setLengthMaxConstraint($field->getLengthMaxConstraint())
-            ->setLengthMinConstraint($field->getLengthMinConstraint())
-            ->setMaxConstraint($field->getMaxConstraint())
-            ->setMinConstraint($field->getMinConstraint())
-            ->setPatternConstraint($field->getPatternConstraint())
-            ->setOptionsConstraint($field->getOptionsConstraint());
-    }
-
-    /**
-     * @param FieldJudgementBuilder $fieldJudgementBuilder
-     * @param Field $field
-     * @return FieldJudgementBuilder
-     * @throws \LogicException
-     */
-    private static function judgeFieldValue(FieldJudgementBuilder $fieldJudgementBuilder, Field $field)
-    {
-        if (self::valueEqualsNull($field)) {
-
-            $fieldJudgementBuilder->setEmpty(true);
-
-            if (self::checkRequired($field)) {
-                $fieldJudgementBuilder->setPassed(false);
-            }
-
-        } else {
-
-            if (self::checkType($field)) {
-
-                if (self::checkPattern($field)) {
-
-                    if (!self::checkOptions($field)) {
-                        $fieldJudgementBuilder->setNotInOptions(true)->setPassed(false);
-                    }
-                    if (!self::checkRange($field)) {
-                        $fieldJudgementBuilder->setOutOfRange(true)->setPassed(false);
-                    }
-                    if (!self::checkEqualTo($field)) {
-                        $fieldJudgementBuilder->setNotEqual(true)->setPassed(false);
-                    }
-                    if (!self::checkLength($field)) {
-                        $fieldJudgementBuilder->setNotPassedLength(true)->setPassed(false);
-                    }
-
-                } else {
-                    $fieldJudgementBuilder->setPatternError(true)->setPassed(false);
-                }
-
-            } else {
-                $fieldJudgementBuilder->setTypeError(true)->setPassed(false);
-            }
-        }
-        return $fieldJudgementBuilder;
     }
 
     /**
