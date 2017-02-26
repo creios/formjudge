@@ -18,7 +18,6 @@ class Date extends Field
     /**
      * @param bool $requiredConstraint
      * @return Date
-     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {

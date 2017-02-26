@@ -18,7 +18,6 @@ class Color extends Field
     /**
      * @param bool $requiredConstraint
      * @return Color
-     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {

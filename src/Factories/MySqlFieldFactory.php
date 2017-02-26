@@ -41,7 +41,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
-     * @throws \InvalidArgumentException
      */
     public static function createSignedTinyInt($requiredConstraint = false)
     {
@@ -53,7 +52,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
-     * @throws \InvalidArgumentException
      */
     public static function createUnsignedTinyInt($requiredConstraint = false)
     {
@@ -65,7 +63,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
-     * @throws \InvalidArgumentException
      */
     public static function createSignedMediumInt($requiredConstraint = false)
     {
@@ -77,7 +74,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
-     * @throws \InvalidArgumentException
      */
     public static function createUnsignedMediumInt($requiredConstraint = false)
     {
@@ -89,7 +85,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
-     * @throws \InvalidArgumentException
      */
     public static function createSignedInt($requiredConstraint = false)
     {
@@ -101,7 +96,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
-     * @throws \InvalidArgumentException
      */
     public static function createUnsignedInt($requiredConstraint = false)
     {
@@ -113,7 +107,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
-     * @throws \InvalidArgumentException
      */
     public static function createSignedBigInt($requiredConstraint = false)
     {
@@ -125,7 +118,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
-     * @throws \InvalidArgumentException
      */
     public static function createUnsignedBigInt($requiredConstraint = false)
     {
@@ -137,7 +129,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return Text
-     * @throws \InvalidArgumentException
      */
     public static function createTextInput($requiredConstraint = false)
     {
@@ -148,7 +139,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return TextArea
-     * @throws \InvalidArgumentException
      */
     public static function createTextTextArea($requiredConstraint = false)
     {
@@ -159,7 +149,6 @@ class MySqlFieldFactory
     /**
      * @param bool $requiredConstraint
      * @return Date
-     * @throws \InvalidArgumentException
      */
     public static function createDate($requiredConstraint = false)
     {

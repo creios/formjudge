@@ -17,7 +17,6 @@ class Factory
     /**
      * @param bool $requiredConstraint
      * @return Text
-     * @throws \InvalidArgumentException
      */
     public static function createBooleanText($requiredConstraint = false)
     {
@@ -27,7 +26,6 @@ class Factory
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
-     * @throws \InvalidArgumentException
      */
     public static function createInt($requiredConstraint = false)
     {

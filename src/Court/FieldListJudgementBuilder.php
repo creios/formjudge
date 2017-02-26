@@ -25,7 +25,7 @@ class FieldListJudgementBuilder
      * @param $name
      * @param FieldJudgement $fieldJudgements
      */
-    public function addFieldJudgements($name, FieldJudgement $fieldJudgements)
+    public function addFieldJudgement($name, FieldJudgement $fieldJudgements)
     {
         $this->fieldJudgements[$name] = $fieldJudgements;
     }
@@ -34,7 +34,7 @@ class FieldListJudgementBuilder
      * @param $name
      * @param FieldListJudgement $fieldListJudgements
      */
-    public function addFieldListJudgements($name, FieldListJudgement $fieldListJudgements)
+    public function addFieldListJudgement($name, FieldListJudgement $fieldListJudgements)
     {
         $this->fieldListJudgements[$name] = $fieldListJudgements;
     }

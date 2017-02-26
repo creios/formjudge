@@ -18,7 +18,6 @@ class Range extends Field
     /**
      * @param bool $requiredConstraint
      * @return static
-     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {

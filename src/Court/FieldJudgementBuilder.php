@@ -2,7 +2,6 @@
 
 namespace Creios\FormJudge\Court;
 
-use Creios\FormJudge\Traits\FieldGetterTrait;
 use Creios\FormJudge\Traits\FieldJudgementTrait;
 use Creios\FormJudge\Traits\FieldSetterTrait;
 use Creios\FormJudge\Traits\FieldTrait;
@@ -15,7 +14,6 @@ class FieldJudgementBuilder
 {
 
     use FieldTrait;
-    use FieldGetterTrait;
     use FieldSetterTrait;
     use FieldJudgementTrait;
 
@@ -106,16 +104,6 @@ class FieldJudgementBuilder
     }
 
     /**
-     * @param boolean $syntaxError
-     * @return $this
-     */
-    public function setSyntaxError($syntaxError)
-    {
-        $this->patternError = $syntaxError;
-        return $this;
-    }
-
-    /**
      * @param boolean $passed
      * @return $this
      */
@@ -142,24 +130,6 @@ class FieldJudgementBuilder
     public function setTypeError($typeError)
     {
         $this->typeError = $typeError;
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function passed()
-    {
-        $this->passed = true;
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function failed()
-    {
-        $this->passed = false;
         return $this;
     }
 

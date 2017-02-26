@@ -18,7 +18,6 @@ class DateTimeLocal extends Field
     /**
      * @param bool $requiredConstraint
      * @return DateTimeLocal
-     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {

@@ -3,321 +3,365 @@
 namespace Creios\FormJudge;
 
 use Creios\FormJudge\Factories\Factory;
+use Creios\FormJudge\Fields\Color;
 use Creios\FormJudge\Fields\Date;
 use Creios\FormJudge\Fields\DateTimeLocal;
 use Creios\FormJudge\Fields\Email;
+use Creios\FormJudge\Fields\Month;
 use Creios\FormJudge\Fields\Number;
+use Creios\FormJudge\Fields\Range;
 use Creios\FormJudge\Fields\Tel;
 use Creios\FormJudge\Fields\Text;
 use Creios\FormJudge\Fields\Time;
 use Creios\FormJudge\Fields\Url;
+use Creios\FormJudge\Fields\Week;
 
 class FormJudgeTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testNotValidForm()
-    {
-        $formContact = new Form();
-        $formContact->addField("supportArea", Number::createInstance(True));
-        $this->assertTrue($formContact->getField("supportArea")->getRequiredConstraint());
-        $judgement = $formContact->judge(array());
-        $this->assertFalse($judgement->hasPassed());
+    /** @var Form */
+    private $formContact;
 
+    public function setUp()
+    {
+        // configure FormJudge
+        $this->formContact = new Form();
+        $this->formContact->addField('age', Factory::createInt(True));
+        $this->formContact->addField('admin', Factory::createBooleanText(True));
+        $this->formContact->addField('bornDate', Date::createInstance(True));
+        $this->formContact->addField('bornMonth', Month::createInstance(True));
+        $this->formContact->addField('bornWeek', Week::createInstance(True));
+        $this->formContact->addField('companyId', Number::createInstance(True));
+        $this->formContact->addField('email', Email::createInstance(True));
+        $this->formContact->addField('excelSkill', Range::createInstance(True)->setMinConstraint(0)->setMaxConstraint(1));
+        $this->formContact->addField('favoriteColor', Color::createInstance(True));
+        $this->formContact->addField('fax', Tel::createInstance(True)->setPatternConstraint('^\+?[0-9]+$'));
+        $this->formContact->addField('firstname', Text::createInstance(True)->setLengthMaxConstraint(10));
+        $this->formContact->addField('gender', Text::createInstance(True)->addOptionConstraint('F')->addOptionConstraint('M'));
+        $this->formContact->addField('lastName', Text::createInstance(True)->setLengthMaxConstraint(10));
+        $this->formContact->addField('message', Text::createInstance(True)->setLengthMaxConstraint(500));
+        $this->formContact->addField('mobile', Tel::createInstance(True)->setPatternConstraint('^\+?[0-9]+$'));
+        $this->formContact->addField('now', DateTimeLocal::createInstance(True));
+        $this->formContact->addField('tel', Tel::createInstance()->setPatternConstraint('^\+?[0-9]+$'));
+        $this->formContact->addField('time', Time::createInstance());
+        $this->formContact->addField('url', Url::createInstance(True));
+        $this->formContact->addLevel('password', new Level());
+        // todo validation depends on ordering
+        $this->formContact->getLevel('password')->addField('new', Text::createInstance(True));
+        $this->formContact->getLevel('password')->addField('confirm', Text::createInstance(True));
+        $this->formContact->getLevel('password')->getField('confirm')->setEqualToConstraint($this->formContact->getLevel('password')->getField('new'));
     }
 
-    public function testNotValidForm2()
+    public function testConfiguration()
     {
-        $form = new Form();
-        $form->addLevel("USER", new Level());
-        $form->getLevel("USER")->addField("id", Number::createInstance(True));
-        $form->addLevel("EMPTY", new Level());
-        $form->getLevel("EMPTY")->addField("empty", Text::createInstance(True));
-        $judgement = $form->judge(array("USER" => array("id" => "not a number")));
-        $this->assertFalse($judgement->hasPassed());
+        $this->assertSame(0, $this->formContact->getField('excelSkill')->getMinConstraint());
+        $this->assertSame(1, $this->formContact->getField('excelSkill')->getMaxConstraint());
+        $this->assertSame(['F', 'M'], $this->formContact->getField('gender')->getOptionsConstraint());
+        $this->assertSame(10, $this->formContact->getField('firstname')->getLengthMaxConstraint());
+        $this->assertSame(10, $this->formContact->getField('lastName')->getLengthMaxConstraint());
+        $this->assertSame(500, $this->formContact->getField('message')->getLengthMaxConstraint());
+        // todo complete
     }
 
-    public function testPasswordConfirmation()
+    public function testGenerator()
     {
-        $oFieldsForm1 = new Form();
-        $oFieldsForm1->addLevel('password', new Level());
-        $oFieldsForm1->getLevel('password')->addField('new', Text::createInstance(True));
-        $oFieldsForm1->getLevel('password')->addField('confirm', Text::createInstance(True));
-        $oFieldsForm1->getLevel('password')->getField('confirm')->setEqualToConstraint($oFieldsForm1->getLevel('password')->getField('new'));
-        $post['password']['new'] = "test";
-        $post['password']['confirm'] = "test";
-        $judgement = $oFieldsForm1->judge($post);
-        $this->assertTrue($judgement->hasPassed());
+        $generator = $this->formContact->getGenerator();
+        $this->assertEquals('type="number" min="0" max="2147483648" pattern="-?[0-9]+" required', $generator->getField('age')->generate());
+        $this->assertEquals('type="text" pattern="^(0|1|TRUE|FALSE|true|false|ON|OFF|on|off)$" required', $generator->getField('admin')->generate());
+        $this->assertEquals('type="text" maxlength="10" required', $generator->getField('firstname')->generate());
+        // todo complete
     }
 
-    public function testContactData()
+    public function testValidContactData()
     {
-        $formContact = new Form();
-        $formContact->addField("supportArea", Factory::createInt(True));
-        $formContact->getField("supportArea")->addOptionConstraint(0);
-        $formContact->getField("supportArea")->addOptionConstraint(1);
-        $formContact->addField("message", Text::createInstance(True));
-        $formContact->addField("gender", Text::createInstance(True));
-        $formContact->getField("gender")->addOptionConstraint("M");
-        $formContact->getField("gender")->addOptionConstraint("F");
-        $formContact->addField("firstname", Text::createInstance(True));
-        $formContact->addField("lastName", Text::createInstance(True));
-        $formContact->addField('email', Email::createInstance(True));
-        $formContact->addField('company', Number::createInstance(True));
+        // crate post array
+        $post['age'] = '29';
+        $post['bornDate'] = '1987-01-01';
+        $post['bornMonth'] = '1987-01';
+        $post['bornWeek'] = '1987-W01';
+        $post['companyId'] = '13292355';
+        $post['email'] = 'ben@limper.tld';
+        $post['excelSkill'] = '0.5';
+        $post['favoriteColor'] = '#343521';
+        $post['fax'] = '+4912312123';
+        $post['firstname'] = 'Ben';
+        $post['gender'] = 'M';
+        $post['lastName'] = 'Limper';
+        $post['message'] = 'test';
+        $post['mobile'] = '+499231212';
+        $post['now'] = '2015-10-15T15:15:15';
+        $post['password']['confirm'] = 'test';
+        $post['password']['new'] = 'test';
+        $post['tel'] = '+4992312423344';
+        $post['time'] = '11:45';
+        $post['admin'] = 'true';
+        $post['url'] = 'example.de';
 
-        $this->assertEquals([0, 1], $formContact->getField("supportArea")->getOptionsConstraint());
-        $this->assertEquals(["M", "F"], $formContact->getField("gender")->getOptionsConstraint());
+        // judge post array against configuration
+        $judgement = $this->formContact->judge($post);
 
-        $post['supportArea'] = "1";
-        $post['message'] = "test";
-        $post['gender'] = "M";
-        $post['firstname'] = "Ben";
-        $post['lastName'] = "Limper";
-        $post['email'] = "ben@limper.tld";
-        $post['company'] = "1";
-
-        $judgement = $formContact->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-        $this->assertFalse($judgement->getFieldJudgement('supportArea')->isNotInOptions());
-        $this->assertEquals(["0", "1"], $judgement->getFieldJudgement('supportArea')->getOptionsConstraint());
-        $this->assertFalse($judgement->getFieldJudgement('supportArea')->isNotInPost());
-
-        $generator = $formContact->getGenerator();
-        $this->assertEquals('type="number" min="0" max="2147483648" pattern="-?[0-9]+" required', $generator->getField("supportArea")->generate());
+        // test judgement
+        $this->assertTrue($judgement->getFieldJudgement('age')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('admin')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('bornDate')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('bornMonth')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('bornWeek')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('companyId')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('email')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('excelSkill')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('favoriteColor')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('fax')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('firstname')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('gender')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('lastName')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('message')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('mobile')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('now')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('tel')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('time')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('admin')->hasPassed());
+        $this->assertTrue($judgement->getFieldJudgement('url')->hasPassed());
+        $this->assertTrue($judgement->getFieldListJudgement('password')->hasPassed());
     }
 
-    public function testField()
+    public function testInvalidContactData()
     {
-        $formContact = new Form();
-        //range
-        $formContact->addField("fromTo", Number::createInstance(True));
-        $formContact->getField("fromTo")->setMinConstraint(0);
-        $formContact->getField("fromTo")->setMaxConstraint(10);
-        //length
-        $formContact->addField("length", Number::createInstance(True));
-        $formContact->getField("length")->setLengthMinConstraint(0);
-        $formContact->getField("length")->setLengthMaxConstraint(5);
-
-        $this->assertEquals(0, $formContact->getField('fromTo')->getMinConstraint());
-        $this->assertEquals(10, $formContact->getField('fromTo')->getMaxConstraint());
-        $this->assertEquals(0, $formContact->getField('length')->getLengthMinConstraint());
-        $this->assertEquals(5, $formContact->getField('length')->getLengthMaxConstraint());
-
-        //options
+        // crate post array
+        $post['age'] = 'twentyNine';
+        $post['admin'] = 'yesIamAnAdmin';
+        $post['bornDate'] = '01-01-1987';
+        $post['bornMonth'] = '01-1987';
+        $post['bornWeek'] = '1987-w01';
+        $post['companyId'] = 'c13-292-355';
+        $post['email'] = 'jöhn.doe@example';
+        $post['excelSkill'] = '11';
+        $post['favoriteColor'] = 'black';
+        $post['fax'] = '+49 123 12-123';
+        $post['firstname'] = 'Maximilian Montgomery';
         $post['fromTo'] = 10;
-        $post['length'] = 2;
-        $judgement = $formContact->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-        $this->assertEquals('0', $judgement->getFieldJudgement("fromTo")->getMinConstraint());
-        $this->assertEquals('10', $judgement->getFieldJudgement("fromTo")->getMaxConstraint());
-        $this->assertEquals('0', $judgement->getFieldJudgement("length")->getLengthMinConstraint());
-        $this->assertEquals('5', $judgement->getFieldJudgement("length")->getLengthMaxConstraint());
-        $this->assertFalse($judgement->getFieldJudgement("length")->isNotPassedLength());
+        $post['gender'] = 1;
+        $post['lastName'] = 'Emerson Lake and Palmer';
+        $post['message'] = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea';
+        $post['mobile'] = '';
+        $post['now'] = '2015-10-15 15:15:15';
+        $post['password']['confirm'] = 'password';
+        $post['password']['new'] = 'passwort';
+        $post['tel'] = '+49 923 12423-344';
+        $post['time'] = '25:45';
+        $post['url'] = 'example:com';
+
+        // judge post array against configuration
+        $judgement = $this->formContact->judge($post);
+
+        // test judgement
+        $this->assertFalse($judgement->getFieldJudgement('age')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('admin')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('bornDate')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('bornMonth')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('bornWeek')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('companyId')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('email')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('excelSkill')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('favoriteColor')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('fax')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('firstname')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('gender')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('lastName')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('message')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('mobile')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('now')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('tel')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('time')->hasPassed());
+        $this->assertFalse($judgement->getFieldJudgement('url')->hasPassed());
+        $this->assertFalse($judgement->getFieldListJudgement('password')->hasPassed());
     }
 
-    public function testJson()
+    public function testJudgement()
     {
-        $formContact = new Form();
-        $formContact->addField("supportArea", Number::createInstance(True));
-        $formContact->addLevel("newLevel");
-        $formContact->getLevel("newLevel")->addField("test", Email::createInstance())->setRequiredConstraint(TRUE);
-        $formContact->getLevel("newLevel")->addLevel("secondLevel")->addField("test", Email::createInstance());
-    }
+        $post = [];
 
-    public function testBoolean()
-    {
-        $post['true'] = "true";
-        $post['false'] = "false";
-        $form = new Form();
-        $form->addField('true', Factory::createBooleanText(True));
-        $form->addField('false', Factory::createBooleanText(True));
-        $this->assertTrue($form->judge($post)->hasPassed());
-    }
+        // judge post array against configuration
+        $judgement = $this->formContact->judge($post);
 
-    public function testDate()
-    {
-        $post['date'] = "1987-05-12";
-        $form = new Form();
-        $form->addField('date', Date::createInstance(TRUE));
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-        $post['date'] = "1987-425-544";
-        $judgement = $form->judge($post);
+        $this->assertNull($judgement->getFieldJudgement('admin')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('admin')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('admin')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('admin')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('admin')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('admin')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('admin')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('admin')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('age')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('age')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('age')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('age')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('age')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('age')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('age')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('age')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('bornDate')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('bornDate')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('bornDate')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('bornDate')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('bornDate')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('bornDate')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('bornDate')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('bornDate')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('bornMonth')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('bornMonth')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('bornMonth')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('bornMonth')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('bornMonth')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('bornMonth')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('bornMonth')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('bornMonth')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('bornWeek')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('bornWeek')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('bornWeek')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('bornWeek')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('bornWeek')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('bornWeek')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('bornWeek')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('bornWeek')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('companyId')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('companyId')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('companyId')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('companyId')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('companyId')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('companyId')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('companyId')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('companyId')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('email')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('email')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('email')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('email')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('email')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('email')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('email')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('email')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('excelSkill')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('excelSkill')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('excelSkill')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('excelSkill')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('excelSkill')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('excelSkill')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('excelSkill')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('excelSkill')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('favoriteColor')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('favoriteColor')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('favoriteColor')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('favoriteColor')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('favoriteColor')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('favoriteColor')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('favoriteColor')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('favoriteColor')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('fax')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('fax')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('fax')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('fax')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('fax')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('fax')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('fax')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('fax')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('firstname')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('firstname')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('firstname')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('firstname')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('firstname')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('firstname')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('firstname')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('firstname')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('gender')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('gender')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('gender')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('gender')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('gender')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('gender')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('gender')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('gender')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('lastName')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('lastName')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('lastName')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('lastName')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('lastName')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('lastName')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('lastName')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('lastName')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('message')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('message')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('message')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('message')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('message')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('message')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('message')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('message')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('mobile')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('mobile')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('mobile')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('mobile')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('mobile')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('mobile')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('mobile')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('mobile')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('now')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('now')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('now')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('now')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('now')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('now')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('now')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('now')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('tel')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('tel')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('tel')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('tel')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('tel')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('tel')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('tel')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('tel')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('time')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('time')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('time')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('time')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('time')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('time')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('time')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('time')->isTypeError());
+        $this->assertNull($judgement->getFieldJudgement('url')->getValue());
+        $this->assertNull($judgement->getFieldJudgement('url')->isEmpty());
+        $this->assertNull($judgement->getFieldJudgement('url')->isNotEqual());
+        $this->assertNull($judgement->getFieldJudgement('url')->isNotInOptions());
+        $this->assertNull($judgement->getFieldJudgement('url')->isNotPassedLength());
+        $this->assertNull($judgement->getFieldJudgement('url')->isOutOfRange());
+        $this->assertNull($judgement->getFieldJudgement('url')->isPatternError());
+        $this->assertNull($judgement->getFieldJudgement('url')->isTypeError());
+        $this->assertTrue($judgement->getFieldJudgement('admin')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('age')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('bornDate')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('bornMonth')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('bornWeek')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('companyId')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('email')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('excelSkill')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('favoriteColor')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('fax')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('firstname')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('gender')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('lastName')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('message')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('mobile')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('now')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('tel')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('time')->isNotInPost());
+        $this->assertTrue($judgement->getFieldJudgement('url')->isNotInPost());
+        $this->assertSame(0, $judgement->getFieldJudgement('excelSkill')->getMinConstraint());
+        $this->assertSame(1, $judgement->getFieldJudgement('excelSkill')->getMaxConstraint());
+        $this->assertSame(10, $judgement->getFieldJudgement('firstname')->getLengthMaxConstraint());
+        $this->assertSame(10, $judgement->getFieldJudgement('lastName')->getLengthMaxConstraint());
+        $this->assertSame(500, $judgement->getFieldJudgement('message')->getLengthMaxConstraint());
+        // todo complete
+
         $this->assertFalse($judgement->hasPassed());
-    }
 
-    public function testDatetimeLocal()
-    {
-        $form = new Form();
-        $form->addField('date', DateTimeLocal::createInstance(TRUE));
-
-        $post['date'] = "2015-10-15T15:15:15";
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-
-        $post['date'] = "2015-10-15Tb5:15:15";
-        $judgement = $form->judge($post);
-        $this->assertFalse($judgement->hasPassed());
-
-        $post['date'] = "2015-10-63T15:15:15";
-        $judgement = $form->judge($post);
-        $this->assertFalse($judgement->hasPassed());
-    }
-
-    public function testEmail()
-    {
-        $post = ['user'];
-        $post['user']['email'] = "tegeler@creios.net";
-        $form = new Form();
-        $form->addLevel('user', new Level());
-        $form->getLevel('user')->addField('email', Email::createInstance(True));
-
-        $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $form->getLevel('user')->getField('email')->getPatternConstraint());
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-        $this->assertEquals('^[A-Za-z0-9]+([-_\.]?[A-Za-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$', $judgement->getFieldListJudgement('user')->getFieldJudgement('email')->getPatternConstraint());
-    }
-
-    public function testFax()
-    {
-        $post['fax'] = "+49 123 12-123";
-        $form = new Form();
-        $form->addField('fax', Tel::createInstance(True));
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-    }
-
-    public function testMobile()
-    {
-        $post['mobile'] = "+49 923 1212";
-        $form = new Form();
-        $form->addField('mobile', Tel::createInstance(True));
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-    }
-
-    public function testTel()
-    {
-        $post['tel'] = "+49 923 12423-344";
-        $form = new Form();
-        $form->addField('tel', Tel::createInstance());
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-    }
-
-    public function testTelFailed()
-    {
-        $post['tel'] = "+49 12 3456 221";
-        $form = new Form();
-        $form->addField('tel', Tel::createInstance(true));
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-        $this->assertFalse($judgement->getFieldJudgement("tel")->isPatternError());
-        $this->assertTrue($judgement->getFieldJudgement("tel")->getRequiredConstraint());
-        $this->assertEquals("+49 12 3456 221", $judgement->getFieldJudgement("tel")->getValue());
-        $this->assertFalse($judgement->getFieldJudgement("tel")->isEmpty());
-    }
-
-    public function testText()
-    {
-        $post['text'] = "text";
-        $form = new Form();
-        $form->addField('text', Text::createInstance());
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-    }
-
-    public function testTextEmptyString()
-    {
-        $post['text'] = "";
-        $form = new Form();
-        $form->addField('text', Text::createInstance());
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-
-        $post['text'] = "";
-        $form = new Form();
-        $form->addField('text', Text::createInstance(true));
-        $judgement = $form->judge($post);
-        $this->assertFalse($judgement->hasPassed());
-    }
-
-    public function testTime()
-    {
-        $post['time'] = "11:45";
-        $form = new Form();
-        $form->addField('time', Time::createInstance());
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-    }
-
-    public function testUrl()
-    {
-        $post['url'] = "example.de";
-        $form = new Form();
-        $form->addField('url', Url::createInstance(True));
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-    }
-
-    public function testNumber()
-    {
-        $form = new Form();
-        $form->addField('numeric', Number::createInstance(True));
-
-        $post['numeric'] = "2";
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-
-        $post['numeric'] = "-2";
-        $judgement = $form->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-
-        $post['numeric'] = "notANumber";
-        $judgement = $form->judge($post);
-        $this->assertFalse($judgement->hasPassed());
-    }
-
-    public function testField2()
-    {
-        $formContact = new Form();
-        $formContact->addField("length", Number::createInstance(True));
-        $formContact->getField("length")->setLengthMinConstraint(0);
-        $formContact->getField("length")->setLengthMaxConstraint(5);
-    }
-
-    public function testMinMaxField()
-    {
-        $formContact = new Form();
-        //range
-        $formContact->addField("lowerBound", Number::createInstance(True));
-        $formContact->getField("lowerBound")->setMinConstraint(0);
-        $post['lowerBound'] = 0;
-        $formContact->addField("upperBound", Number::createInstance(True));
-        $formContact->getField("upperBound")->setMaxConstraint(2);
-        $post['upperBound'] = 1;
-        $formContact->addField("lowerUpperBound", Number::createInstance(True));
-        $formContact->getField("lowerUpperBound")->setMinConstraint(0);
-        $formContact->getField("lowerUpperBound")->setMaxConstraint(2);
-        $post['lowerUpperBound'] = 1;
-        $judgement = $formContact->judge($post);
-        $this->assertTrue($judgement->hasPassed());
-        $this->assertFalse($judgement->getFieldJudgement("lowerBound")->isOutOfRange());
-    }
-
-    public function testLengthMinLengthMaxField()
-    {
-        $formContact = new Form();
-        //range
-        $formContact->addField("lowerBound", Text::createInstance(True));
-        $formContact->getField("lowerBound")->setLengthMinConstraint(0);
-        $post['lowerBound'] = "Max";
-        $formContact->addField("upperBound", Text::createInstance(True));
-        $formContact->getField("upperBound")->setLengthMaxConstraint(3);
-        $post['upperBound'] = "Max";
-        $formContact->addField("lowerUpperBound", Text::createInstance(True));
-        $formContact->getField("lowerUpperBound")->setLengthMinConstraint(0);
-        $formContact->getField("lowerUpperBound")->setLengthMaxConstraint(3);
-        $post['lowerUpperBound'] = "Max";
-        $this->assertTrue($formContact->judge($post)->hasPassed());
     }
 }

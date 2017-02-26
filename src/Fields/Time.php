@@ -17,7 +17,6 @@ class Time extends Field
     /**
      * @param bool $requiredConstraint
      * @return Time
-     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {

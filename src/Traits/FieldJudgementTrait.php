@@ -10,21 +10,21 @@ trait FieldJudgementTrait
 {
 
     /** @var boolean */
-    protected $outOfRange = false;
+    protected $outOfRange;
     /** @var boolean */
-    protected $notEqual = false;
+    protected $notEqual;
     /** @var boolean */
-    protected $notPassedLength = false;
+    protected $notPassedLength;
     /** @var boolean */
-    protected $notInOptions = false;
+    protected $notInOptions;
     /** @var boolean */
-    protected $notInPost = false;
+    protected $notInPost;
     /** @var boolean */
-    protected $empty = false;
+    protected $empty;
     /** @var boolean */
-    protected $patternError = false;
+    protected $patternError;
     /** @var boolean */
-    protected $typeError = false;
+    protected $typeError;
     /** @var boolean */
     protected $passed;
 

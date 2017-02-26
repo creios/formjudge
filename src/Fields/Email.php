@@ -17,7 +17,6 @@ class Email extends Field
     /**
      * @param bool $requiredConstraint
      * @return Email
-     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {

@@ -18,7 +18,6 @@ class Week extends Field
     /**
      * @param bool $requiredConstraint
      * @return Week
-     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {

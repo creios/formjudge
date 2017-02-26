@@ -8,7 +8,7 @@ class FormGenerator
     /**
      * @var FormGenerator[] $levels
      */
-    public $levelGenerators = array();
+    protected $levelGenerators = array();
     /**
      * @var FieldGenerator[] $fields
      */

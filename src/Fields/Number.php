@@ -18,7 +18,6 @@ class Number extends Field
     /**
      * @param bool $requiredConstraint
      * @return static
-     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {

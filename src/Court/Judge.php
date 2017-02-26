@@ -38,9 +38,16 @@ class Judge
                 $value = self::getValueForFieldFromFormData($fieldName, $formData);
                 $castedValue = self::parseValueBasedOnField($value, $field);
                 $field->setValue($castedValue);
+                $notInPost = false;
+            } else {
+                $notInPost = true;
             }
-            $fieldJudgement = self::judgeField($field);
-            $fieldListJudgementBuilder->addFieldJudgements($fieldName, $fieldJudgement);
+
+            $fieldJudgementBuilder = self::judgeField($field, $notInPost);
+
+            $fieldJudgement = $fieldJudgementBuilder->build();
+            $fieldListJudgementBuilder->addFieldJudgement($fieldName, $fieldJudgement);
+
             if ($fieldJudgement->hasPassed() === false) {
                 $fieldListJudgementBuilder->setPassed(false);
             }
@@ -53,71 +60,13 @@ class Judge
                 $nextLevelFormData = $formData[$levelName];
             }
             $fieldListJudgement = self::judgeFieldList($level, $nextLevelFormData);
-            $fieldListJudgementBuilder->addFieldListJudgements($levelName, $fieldListJudgement);
+            $fieldListJudgementBuilder->addFieldListJudgement($levelName, $fieldListJudgement);
             if ($fieldListJudgement->hasPassed() === false) {
                 $fieldListJudgementBuilder->setPassed($fieldListJudgement->hasPassed());
             }
         }
 
         return $fieldListJudgementBuilder->build();
-    }
-
-    /**
-     * @param Field $field
-     * @return \Creios\FormJudge\Court\FieldJudgement
-     * @throws \LogicException
-     */
-    private static function judgeField(Field $field)
-    {
-
-        $fieldJudgementBuilder = (new FieldJudgementBuilder())
-            ->setValue($field->getValue())
-            ->setRequiredConstraint($field->getRequiredConstraint())
-            ->setLengthMaxConstraint($field->getLengthMaxConstraint())
-            ->setLengthMinConstraint($field->getLengthMinConstraint())
-            ->setMaxConstraint($field->getMaxConstraint())
-            ->setMinConstraint($field->getMinConstraint())
-            ->setPatternConstraint($field->getPatternConstraint())
-            ->setOptionsConstraint($field->getOptionsConstraint())
-            ->setPassed(true);
-
-        if (self::valueEqualsNull($field)) {
-
-            $fieldJudgementBuilder->setEmpty(true);
-
-            if (self::checkRequired($field)) {
-                $fieldJudgementBuilder->setPassed(false);
-            }
-
-        } else {
-
-            if (self::checkType($field)) {
-
-                if (self::checkPattern($field)) {
-
-                    if (!self::checkOptions($field)) {
-                        $fieldJudgementBuilder->setNotInOptions(true)->setPassed(false);
-                    }
-                    if (!self::checkRange($field)) {
-                        $fieldJudgementBuilder->setOutOfRange(true)->setPassed(false);
-                    }
-                    if (!self::checkEqualTo($field)) {
-                        $fieldJudgementBuilder->setNotEqual(true)->setPassed(false);
-                    }
-                    if (!self::checkLength($field)) {
-                        $fieldJudgementBuilder->setNotPassedLength(true)->setPassed(false);
-                    }
-
-                } else {
-                    $fieldJudgementBuilder->setPatternError(true)->setPassed(false);
-                }
-
-            } else {
-                $fieldJudgementBuilder->setTypeError(true)->setPassed(false);
-            }
-        }
-
-        return $fieldJudgementBuilder->build();
     }
 
     /**
@@ -178,7 +127,7 @@ class Judge
                 $castedValue = (float)$value;
                 break;
             default:
-                throw new \LogicException();
+                throw new \LogicException("Only 'string', 'int' and 'float' are valid values");
         }
         return $castedValue;
     }
@@ -199,6 +148,74 @@ class Judge
     private static function valueIsNotNumeric($value)
     {
         return is_numeric($value) === false;
+    }
+
+    /**
+     * @param Field $field
+     * @param bool $notInPost
+     * @return FieldJudgementBuilder
+     * @throws \LogicException
+     */
+    private static function judgeField(Field $field, $notInPost)
+    {
+
+        $fieldJudgementBuilder = (new FieldJudgementBuilder())
+            ->setValue($field->getValue())
+            ->setRequiredConstraint($field->getRequiredConstraint())
+            ->setLengthMaxConstraint($field->getLengthMaxConstraint())
+            ->setLengthMinConstraint($field->getLengthMinConstraint())
+            ->setMaxConstraint($field->getMaxConstraint())
+            ->setMinConstraint($field->getMinConstraint())
+            ->setPatternConstraint($field->getPatternConstraint())
+            ->setOptionsConstraint($field->getOptionsConstraint())
+            ->setNotInPost($notInPost);
+
+        if ($notInPost) {
+
+            $fieldJudgementBuilder->setPassed(false);
+
+        } else {
+
+            $fieldJudgementBuilder->setPassed(true);
+
+            if (self::valueEqualsNull($field)) {
+
+                $fieldJudgementBuilder->setEmpty(true);
+
+                if (self::checkRequired($field)) {
+                    $fieldJudgementBuilder->setPassed(false);
+                }
+
+            } else {
+
+                if (self::checkType($field)) {
+
+                    if (self::checkPattern($field)) {
+
+                        if (!self::checkOptions($field)) {
+                            $fieldJudgementBuilder->setNotInOptions(true)->setPassed(false);
+                        }
+                        if (!self::checkRange($field)) {
+                            $fieldJudgementBuilder->setOutOfRange(true)->setPassed(false);
+                        }
+                        if (!self::checkEqualTo($field)) {
+                            $fieldJudgementBuilder->setNotEqual(true)->setPassed(false);
+                        }
+                        if (!self::checkLength($field)) {
+                            $fieldJudgementBuilder->setNotPassedLength(true)->setPassed(false);
+                        }
+
+                    } else {
+                        $fieldJudgementBuilder->setPatternError(true)->setPassed(false);
+                    }
+
+                } else {
+                    $fieldJudgementBuilder->setTypeError(true)->setPassed(false);
+                }
+            }
+        }
+
+        return $fieldJudgementBuilder;
     }
 
     /**
@@ -237,7 +254,7 @@ class Judge
                 return is_float($field->getValue());
                 break;
             default:
-                throw new \LogicException();
+                throw new \LogicException("Only 'string', 'int' and 'float' are valid values");
         }
     }
 
@@ -258,41 +275,8 @@ class Judge
     {
         if (count($field->getOptionsConstraint()) > 0) {
             return in_array($field->getValue(), $field->getOptionsConstraint(), true);
-        } else {
-            return true;
         }
-    }
-
-    /**
-     * @param Field $field
-     * @return bool
-     */
-    private static function checkEqualTo(Field $field)
-    {
-        if ($field->getEqualToConstraint() instanceof Field):
-            return ($field->getValue() === $field->getEqualToConstraint()->getValue());
-        else:
-            return true;
-        endif;
-    }
-
-    /**
-     * @param $levelName
-     * @param array $formData
-     * @return bool
-     */
-    private static function levelExistsInFormData($levelName, array $formData)
-    {
-        return isset($formData[$levelName]);
-    }
-
-    /**
-     * @param Field $field
-     * @return bool
-     */
-    private static function checkLength(Field $field)
-    {
-        return self::checkBoundaries(mb_strlen($field->getValue()), $field->getLengthMinConstraint(), $field->getLengthMaxConstraint());
+        return true;
     }
 
     /**
@@ -327,6 +311,37 @@ class Judge
             }
             return $result;
         }
+    }
+
+    /**
+     * @param Field $field
+     * @return bool
+     */
+    private static function checkEqualTo(Field $field)
+    {
+        if ($field->getEqualToConstraint() instanceof Field) {
+            return ($field->getValue() === $field->getEqualToConstraint()->getValue());
+        }
+        return true;
+    }
+
+    /**
+     * @param Field $field
+     * @return bool
+     */
+    private static function checkLength(Field $field)
+    {
+        return self::checkBoundaries(mb_strlen($field->getValue()), $field->getLengthMinConstraint(), $field->getLengthMaxConstraint());
+    }
+
+    /**
+     * @param $levelName
+     * @param array $formData
+     * @return bool
+     */
+    private static function levelExistsInFormData($levelName, array $formData)
+    {
+        return isset($formData[$levelName]);
     }
 
 }

@@ -52,17 +52,6 @@ class FieldGenerator
     /**
      * @return string
      */
-    private function generateMaxConstraint()
-    {
-        if ($this->field->getMaxConstraint() === null) {
-            return "";
-        }
-        return sprintf('max="%s" ', $this->field->getMaxConstraint());
-    }
-
-    /**
-     * @return string
-     */
     private function generateMinConstraint()
     {
         if ($this->field->getMinConstraint() === null) {
@@ -74,12 +63,12 @@ class FieldGenerator
     /**
      * @return string
      */
-    private function generateLengthMaxConstraint()
+    private function generateMaxConstraint()
     {
-        if ($this->field->getLengthMaxConstraint() === null) {
+        if ($this->field->getMaxConstraint() === null) {
             return "";
         }
-        return sprintf('maxlength="%s" ', $this->field->getLengthMaxConstraint());
+        return sprintf('max="%s" ', $this->field->getMaxConstraint());
     }
 
     /**
@@ -91,6 +80,17 @@ class FieldGenerator
             return "";
         }
         return sprintf('minlength="%s" ', $this->field->getLengthMaxConstraint());
+    }
+
+    /**
+     * @return string
+     */
+    private function generateLengthMaxConstraint()
+    {
+        if ($this->field->getLengthMaxConstraint() === null) {
+            return "";
+        }
+        return sprintf('maxlength="%s" ', $this->field->getLengthMaxConstraint());
     }
 
     /**

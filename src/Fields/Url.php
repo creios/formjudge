@@ -17,7 +17,6 @@ class Url extends Field
     /**
      * @param bool $requiredConstraint
      * @return Url
-     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {

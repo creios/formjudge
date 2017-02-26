@@ -17,15 +17,14 @@ abstract class Field
     use FieldSetterTrait;
     use FieldGetterTrait;
 
-    /** @var FieldList */
-    protected $parent;
-    /** @var Field */
-    protected $equalToConstraint;
-
     /**
      * @var string
      */
     const FIELD_DEFAULT_TYPE = 'string';
+    /** @var FieldList */
+    protected $parent;
+    /** @var Field */
+    protected $equalToConstraint;
 
     /**
      * @param bool $requiredConstraint
@@ -38,7 +37,6 @@ abstract class Field
     /**
      * @param bool $requiredConstraint
      * @return static
-     * @throws \InvalidArgumentException
      */
     public static function createInstance($requiredConstraint = false)
     {
