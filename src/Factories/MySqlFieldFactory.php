@@ -64,6 +64,28 @@ class MySqlFieldFactory
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
      */
+    public static function createSignedSmallInt($requiredConstraint = false)
+    {
+        return Factory::createInt($requiredConstraint)
+            ->setMinConstraint(self::SMALLINT_SIGNED_MIN_CONSTRAINT)
+            ->setMaxConstraint(self::SMALLINT_SIGNED_MAX_CONSTRAINT);
+    }
+
+    /**
+     * @param bool $requiredConstraint
+     * @return \Creios\FormJudge\Fields\Number
+     */
+    public static function createUnsignedSmallInt($requiredConstraint = false)
+    {
+        return Factory::createInt($requiredConstraint)
+            ->setMinConstraint(self::SMALLINT_UNSIGNED_MIN_CONSTRAINT)
+            ->setMaxConstraint(self::SMALLINT_UNSIGNED_MAX_CONSTRAINT);
+    }
+
+    /**
+     * @param bool $requiredConstraint
+     * @return \Creios\FormJudge\Fields\Number
+     */
     public static function createSignedMediumInt($requiredConstraint = false)
     {
         return Factory::createInt($requiredConstraint)
