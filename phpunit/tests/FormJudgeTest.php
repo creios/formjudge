@@ -12,6 +12,7 @@ use Creios\FormJudge\Fields\Number;
 use Creios\FormJudge\Fields\Range;
 use Creios\FormJudge\Fields\Tel;
 use Creios\FormJudge\Fields\Text;
+use Creios\FormJudge\Fields\TextArea;
 use Creios\FormJudge\Fields\Time;
 use Creios\FormJudge\Fields\Url;
 use Creios\FormJudge\Fields\Week;
@@ -35,17 +36,17 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
         $this->formContact->addField('email', Email::createInstance(True));
         $this->formContact->addField('excelSkill', Range::createInstance(True)->setMinConstraint(0)->setMaxConstraint(1));
         $this->formContact->addField('favoriteColor', Color::createInstance(True));
-        $this->formContact->addField('fax', Tel::createInstance(True)->setPatternConstraint('^\+?[0-9]+$'));
-        $this->formContact->addField('firstname', Text::createInstance(True)->setLengthMaxConstraint(10));
+        $this->formContact->addField('fax', Tel::createInstance()->setPatternConstraint('^\+?[0-9]+$'));
+        $this->formContact->addField('firstname', Text::createInstance(True)->setLengthMinConstraint(3)->setLengthMaxConstraint(10));
         $this->formContact->addField('gender', Text::createInstance(True)->addOptionConstraint('F')->addOptionConstraint('M'));
-        $this->formContact->addField('lastName', Text::createInstance(True)->setLengthMaxConstraint(10));
-        $this->formContact->addField('message', Text::createInstance(True)->setLengthMaxConstraint(500));
+        $this->formContact->addField('lastName', Text::createInstance(True)->setLengthMinConstraint(3)->setLengthMaxConstraint(10));
+        $this->formContact->addField('message', TextArea::createInstance(True)->setLengthMaxConstraint(500));
         $this->formContact->addField('mobile', Tel::createInstance(True)->setPatternConstraint('^\+?[0-9]+$'));
         $this->formContact->addField('now', DateTimeLocal::createInstance(True));
         $this->formContact->addField('tel', Tel::createInstance()->setPatternConstraint('^\+?[0-9]+$'));
         $this->formContact->addField('time', Time::createInstance());
         $this->formContact->addField('url', Url::createInstance(True));
-        $this->formContact->addLevel('password', new Level());
+        $this->formContact->addLevel('password');
         // todo validation depends on ordering
         $this->formContact->getLevel('password')->addField('new', Text::createInstance(True));
         $this->formContact->getLevel('password')->addField('confirm', Text::createInstance(True));
@@ -68,7 +69,10 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
         $generator = $this->formContact->getGenerator();
         $this->assertEquals('type="number" min="0" max="2147483648" pattern="-?[0-9]+" required', $generator->getField('age')->generate());
         $this->assertEquals('type="text" pattern="^(0|1|TRUE|FALSE|true|false|ON|OFF|on|off)$" required', $generator->getField('admin')->generate());
-        $this->assertEquals('type="text" maxlength="10" required', $generator->getField('firstname')->generate());
+        $this->assertEquals('type="text" minlength="3" maxlength="10" required', $generator->getField('firstname')->generate());
+        $this->assertEquals('type="text" minlength="3" maxlength="10" required', $generator->getField('lastName')->generate());
+        $this->assertEquals('type="tel" pattern="^\+?[0-9]+$"', $generator->getField('fax')->generate());
+        $this->assertEquals('maxlength="500" required', $generator->getField('message')->generate());
         // todo complete
     }
 

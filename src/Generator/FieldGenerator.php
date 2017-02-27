@@ -79,7 +79,7 @@ class FieldGenerator
         if ($this->field->getLengthMinConstraint() === null) {
             return "";
         }
-        return sprintf('minlength="%s" ', $this->field->getLengthMaxConstraint());
+        return sprintf('minlength="%s" ', $this->field->getLengthMinConstraint());
     }
 
     /**
