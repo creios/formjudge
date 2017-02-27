@@ -184,10 +184,11 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
 
     public function testJudgement()
     {
-        $post = [];
-
         // judge post array against configuration
-        $judgement = $this->formContact->judge($post);
+        $judgement = $this->formContact->judge([]);
+
+        $this->assertCount(19, $judgement->getFieldJudgements());
+        $this->assertCount(1, $judgement->getFieldListJudgements());
 
         $this->assertNull($judgement->getFieldJudgement('admin')->getValue());
         $this->assertNull($judgement->getFieldJudgement('admin')->isEmpty());
@@ -370,4 +371,33 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($judgement->hasPassed());
 
     }
+
+    public function testJudgeTypeLogicException()
+    {
+        $this->formContact->getField('age')->setType('array');
+
+        $post['age'] = 18;
+
+        $this->expectException(\LogicException::class);
+
+        // judge post array against configuration
+        $this->formContact->judge($post);
+    }
+
+    public function testJudgementGetFieldJudgementInvalidArgumentException()
+    {
+        // judge post array against configuration
+        $judgement = $this->formContact->judge([]);
+        $this->expectException(\InvalidArgumentException::class);
+        $judgement->getFieldJudgement('invalidKey');
+    }
+
+    public function testJudgementGetFieldListJudgementInvalidArgumentException()
+    {
+        // judge post array against configuration
+        $judgement = $this->formContact->judge([]);
+        $this->expectException(\InvalidArgumentException::class);
+        $judgement->getFieldListJudgement('invalidKey');
+    }
+
 }

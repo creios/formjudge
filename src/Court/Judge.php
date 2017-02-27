@@ -271,23 +271,22 @@ class Judge
     /**
      * @param Field $field
      * @return bool
-     * @throws \LogicException
      */
     private static function checkType(Field $field)
     {
         switch ($field->getType()) {
-            case 'string':
-                return is_string($field->getValue());
-                break;
             case 'int':
-                return is_int($field->getValue());
+                $result = is_int($field->getValue());
                 break;
             case 'float':
-                return is_float($field->getValue());
+                $result = is_float($field->getValue());
                 break;
             default:
-                throw new \LogicException("Only 'string', 'int' and 'float' are valid values");
+            case 'string':
+                $result = is_string($field->getValue());
+                break;
         }
+        return $result;
     }
 
     /**
