@@ -9,6 +9,7 @@ use Creios\FormJudge\Fields\DateTimeLocal;
 use Creios\FormJudge\Fields\Email;
 use Creios\FormJudge\Fields\Month;
 use Creios\FormJudge\Fields\Number;
+use Creios\FormJudge\Fields\Password;
 use Creios\FormJudge\Fields\Range;
 use Creios\FormJudge\Fields\Tel;
 use Creios\FormJudge\Fields\Text;
@@ -48,8 +49,8 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
         $this->formContact->addField('url', Url::createInstance(True));
         $this->formContact->addLevel('password');
         // todo validation depends on ordering
-        $this->formContact->getLevel('password')->addField('new', Text::createInstance(True));
-        $this->formContact->getLevel('password')->addField('confirm', Text::createInstance(True));
+        $this->formContact->getLevel('password')->addField('new', Password::createInstance(True));
+        $this->formContact->getLevel('password')->addField('confirm', Password::createInstance(True));
         $this->formContact->getLevel('password')->getField('confirm')->setEqualToConstraint($this->formContact->getLevel('password')->getField('new'));
     }
 
@@ -73,6 +74,7 @@ class FormJudgeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('type="text" minlength="3" maxlength="10" required', $generator->getField('lastName')->generate());
         $this->assertEquals('type="tel" pattern="^\+?[0-9]+$"', $generator->getField('fax')->generate());
         $this->assertEquals('maxlength="500" required', $generator->getField('message')->generate());
+        $this->assertEquals('type="password" required', $generator->getLevel('password')->getField('new')->generate());
         // todo complete
     }
 
