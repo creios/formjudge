@@ -16,13 +16,13 @@ use Creios\FormJudge\Fields\Email;
 
 $formContact = new Form();
 //establish your constraints
-$formContact->addField("message", new Text(true));
-$formContact->addField("gender", new Text(true));
-$formContact->getField("gender")->addOptionConstraint("M");
-$formContact->getField("gender")->addOptionConstraint("F");
+$formContact->addField('message', new Text(true));
+$formContact->addField('gender', new Text(true));
+$formContact->getField('gender')->addOptionConstraint('M');
+$formContact->getField('gender')->addOptionConstraint('F');
 $formContact->addField('userId', new Numeric(true));
-$formContact->addField("firstname", new Text(true));
-$formContact->addField("lastname", new Text(true));
+$formContact->addField('firstname', new Text(true));
+$formContact->addField('lastname', new Text(true));
 $formContact->addField('email', new Email(true));
 
 var_dump($_POST);
@@ -42,9 +42,9 @@ $judgement = $formContact->judge($_POST);
 
 //evaluate the judgement
 if($judgement->hasPassed()){
-    echo "Form has passed validation.";
+    echo 'Form has passed validation.';
 }else{
-    echo "Form didn't pass validation.";
+    echo 'Form didn\'t pass validation.';
 }
 ```
 
