@@ -1,28 +1,29 @@
 <?php
+
 namespace Creios\FormJudge\Fields;
 
 /**
- * Class Url
- * @package FormJudge\Fields
- * @see http://w3c.github.io/html-reference/input.url.html
+ * Class Color
+ * @package Creios\FormJudge\Fields
+ * @see http://w3c.github.io/html-reference/input.color.html
  */
-class Url extends Field
+class Color extends Field
 {
 
     /**
      * @var string
      */
-    const SIMPLE_URL_STRING_PATTERN = '^[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$';
+    const SIMPLE_COLOR_STRING_PATTERN = '^#[0-9abcdefABCDEF]{1,6}$';
 
     /**
      * @param bool $requiredConstraint
-     * @return Url
+     * @return Color
      */
     public static function createInstance($requiredConstraint = false)
     {
         return (new self($requiredConstraint))
             ->setType(Field::FIELD_DEFAULT_TYPE)
-            ->setPatternConstraint(self::SIMPLE_URL_STRING_PATTERN);
+            ->setPatternConstraint(self::SIMPLE_COLOR_STRING_PATTERN);
     }
 
 }

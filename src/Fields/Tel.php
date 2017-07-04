@@ -4,13 +4,9 @@ namespace Creios\FormJudge\Fields;
 /**
  * Class Tel
  * @package FormJudge\Fields
+ * @see http://w3c.github.io/html-reference/input.tel.html
  */
 class Tel extends Field
 {
-
-    /**
-     * @var string
-     */
-    protected $patternConstraint = '^[+](\d{1,}) ([1-9]{1})(\d{1,}) (\d{1,})-?(\d{1,})$';
 
 }

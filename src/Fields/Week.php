@@ -1,28 +1,28 @@
 <?php
+
 namespace Creios\FormJudge\Fields;
 
 /**
- * Class Url
- * @package FormJudge\Fields
- * @see http://w3c.github.io/html-reference/input.url.html
+ * Class Week
+ * @package Creios\FormJudge\Fields
+ * @see http://w3c.github.io/html-reference/input.week.html
  */
-class Url extends Field
+class Week extends Field
 {
 
     /**
      * @var string
      */
-    const SIMPLE_URL_STRING_PATTERN = '^[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$';
+    const WEEK_STRING_PATTERN = '^\d\d\d\d-W((0[1-9])|([1-4][0-9])|(5[0-3]))$';
 
     /**
      * @param bool $requiredConstraint
-     * @return Url
+     * @return Week
      */
     public static function createInstance($requiredConstraint = false)
     {
         return (new self($requiredConstraint))
             ->setType(Field::FIELD_DEFAULT_TYPE)
-            ->setPatternConstraint(self::SIMPLE_URL_STRING_PATTERN);
+            ->setPatternConstraint(self::WEEK_STRING_PATTERN);
     }
-
 }

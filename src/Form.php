@@ -2,7 +2,8 @@
 
 namespace Creios\FormJudge;
 
-use Creios\FormJudge\Fields\Field;
+use Creios\FormJudge\Court\FieldListJudgement;
+use Creios\FormJudge\Court\Judge;
 
 /**
  * Class Form
@@ -12,21 +13,14 @@ class Form extends FieldList
 {
 
     /**
-     * @param Field $field
-     * @return mixed
+     * @param array $post
+     * @return FieldListJudgement
+     * @throws \LogicException
      */
-    public function generateFieldName(Field $field)
+    public function judge(array $post)
     {
-        return array_search($field, $this->fields, TRUE);
-    }
 
-    /**
-     * @param Level $level
-     * @return mixed
-     */
-    public function generateLevelName(Level $level)
-    {
-        return array_search($level, $this->levels, TRUE);
+        return Judge::judge($this, $post);
     }
 
 }

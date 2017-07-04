@@ -1,14 +1,16 @@
 <?php
 
-namespace Creios\FormJudge\Fields;
+namespace Creios\FormJudge\Traits;
 
 trait FieldTrait
 {
 
     /** @var string */
+    protected $type;
+    /** @var string | float */
     protected $value;
     /** @var boolean */
-    protected $mandatoryConstraint;
+    protected $requiredConstraint;
     /** @var string */
     protected $patternConstraint;
     /** @var array */
@@ -17,9 +19,9 @@ trait FieldTrait
     protected $minConstraint;
     /** @var string */
     protected $maxConstraint;
-    /** @var integer */
+    /** @var int */
     protected $lengthMinConstraint;
-    /** @var integer */
+    /** @var int */
     protected $lengthMaxConstraint;
 
 }

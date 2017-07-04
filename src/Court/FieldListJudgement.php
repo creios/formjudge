@@ -1,10 +1,12 @@
 <?php
 
-namespace Creios\FormJudge\Judgement;
+namespace Creios\FormJudge\Court;
+
+use Creios\FormJudge\Traits\FieldListJudgementTrait;
 
 /**
  * Class FieldListJudgement
- * @package Creios\FormJudge\Judgement
+ * @package Creios\FormJudge\Court
  */
 class FieldListJudgement
 {
@@ -35,10 +37,13 @@ class FieldListJudgement
     /**
      * @param $name
      * @return FieldJudgement
+     * @throws \InvalidArgumentException
      */
     public function getFieldJudgement($name)
     {
-        if (isset($this->fieldJudgements[$name]) == false) throw new \InvalidArgumentException("No value with key '$name' available");
+        if (isset($this->fieldJudgements[$name]) === false) {
+            throw new \InvalidArgumentException("No value with key '$name' available");
+        }
         return $this->fieldJudgements[$name];
     }
 
@@ -53,10 +58,13 @@ class FieldListJudgement
     /**
      * @param $name
      * @return FieldListJudgement
+     * @throws \InvalidArgumentException
      */
     public function getFieldListJudgement($name)
     {
-        if (isset($this->fieldListJudgements[$name]) == false) throw new \InvalidArgumentException("No value with key '$name' available");
+        if (isset($this->fieldListJudgements[$name]) === false) {
+            throw new \InvalidArgumentException("No value with key '$name' available");
+        }
         return $this->fieldListJudgements[$name];
     }
 

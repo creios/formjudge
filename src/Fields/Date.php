@@ -1,9 +1,11 @@
 <?php
+
 namespace Creios\FormJudge\Fields;
 
 /**
  * Class Date
  * @package FormJudge\Fields
+ * @see http://w3c.github.io/html-reference/input.date.html
  */
 class Date extends Field
 {
@@ -11,18 +13,17 @@ class Date extends Field
     /**
      * @var string
      */
-    protected $patternConstraint = '^(\d\d).(\d\d).(\d\d\d\d)$';
+    const DATE_STRING_PATTERN = '^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$';
 
     /**
-     * @return bool
+     * @param bool $requiredConstraint
+     * @return Date
      */
-    public function checkSyntax()
+    public static function createInstance($requiredConstraint = false)
     {
-        if (!preg_match('/' . $this->patternConstraint . '/', $this->value)):
-            return false;
-        endif;
-        $date = explode('.', $this->value);
-        return checkdate($date[1], $date[0], $date[2]);
+        return (new self($requiredConstraint))
+            ->setType(Field::FIELD_DEFAULT_TYPE)
+            ->setPatternConstraint(self::DATE_STRING_PATTERN);
     }
 
 }
