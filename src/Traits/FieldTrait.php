@@ -10,6 +10,8 @@ trait FieldTrait
     /** @var string | float */
     protected $value;
     /** @var boolean */
+    protected $optionalField;
+    /** @var boolean */
     protected $requiredConstraint;
     /** @var string */
     protected $patternConstraint;

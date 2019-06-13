@@ -19,9 +19,9 @@ class Range extends Field
      * @param bool $requiredConstraint
      * @return static
      */
-    public static function createInstance($requiredConstraint = false)
+    public static function createInstance($requiredConstraint = false, $optionalField = false)
     {
-        return (new static($requiredConstraint))->setType(self::RANGE_TYPE);
+        return (new static($requiredConstraint, $optionalField))->setType(self::RANGE_TYPE);
     }
 
 }

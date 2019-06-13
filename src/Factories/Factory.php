@@ -18,18 +18,18 @@ class Factory
      * @param bool $requiredConstraint
      * @return Text
      */
-    public static function createBooleanText($requiredConstraint = false)
+    public static function createBooleanText($requiredConstraint = false, $optionalField = false)
     {
-        return Text::createInstance($requiredConstraint)->setPatternConstraint(self::BOOLEAN_PATTERN_CONSTRAINT);
+        return Text::createInstance($requiredConstraint, $optionalField)->setPatternConstraint(self::BOOLEAN_PATTERN_CONSTRAINT);
     }
 
     /**
      * @param bool $requiredConstraint
      * @return \Creios\FormJudge\Fields\Number
      */
-    public static function createInt($requiredConstraint = false)
+    public static function createInt($requiredConstraint = false, $optionalField = false)
     {
-        return Number::createInstance($requiredConstraint)
+        return Number::createInstance($requiredConstraint, $optionalField)
             ->setType(self::INT_TYPE)
             ->setPatternConstraint(self::INT_PATTERN_CONSTRAINT)
             ->setMinConstraint(self::PHP_32BIT_INT_MIN_CONSTRAINT)

@@ -18,9 +18,9 @@ class Url extends Field
      * @param bool $requiredConstraint
      * @return Url
      */
-    public static function createInstance($requiredConstraint = false)
+    public static function createInstance($requiredConstraint = false, $optionalField = false)
     {
-        return (new self($requiredConstraint))
+        return (new self($requiredConstraint, $optionalField))
             ->setType(Field::FIELD_DEFAULT_TYPE)
             ->setPatternConstraint(self::SIMPLE_URL_STRING_PATTERN);
     }

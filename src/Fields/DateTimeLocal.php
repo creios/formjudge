@@ -19,9 +19,9 @@ class DateTimeLocal extends Field
      * @param bool $requiredConstraint
      * @return DateTimeLocal
      */
-    public static function createInstance($requiredConstraint = false)
+    public static function createInstance($requiredConstraint = false, $optionalField = false)
     {
-        return (new self($requiredConstraint))
+        return (new self($requiredConstraint, $optionalField))
             ->setType(Field::FIELD_DEFAULT_TYPE)
             ->setPatternConstraint(self::DATETIMELOCAL_STRING_PATTERN);
     }

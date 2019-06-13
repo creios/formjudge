@@ -56,6 +56,16 @@ trait FieldSetterTrait
     }
 
     /**
+     * @param bool $optionalField
+     * @return $this
+     */
+    public function setOptionalField($optionalField)
+    {
+        $this->optionalField = $optionalField;
+        return $this;
+    }
+
+    /**
      * @param mixed $minConstraint
      * @return $this
      */

@@ -29,18 +29,19 @@ abstract class Field
     /**
      * @param bool $requiredConstraint
      */
-    protected function __construct($requiredConstraint = false)
+    protected function __construct($requiredConstraint = false, $optionalField = false)
     {
         $this->requiredConstraint = $requiredConstraint;
+        $this->optionalField = $optionalField;
     }
 
     /**
      * @param bool $requiredConstraint
      * @return static
      */
-    public static function createInstance($requiredConstraint = false)
+    public static function createInstance($requiredConstraint = false, $optionalField = false)
     {
-        return (new static($requiredConstraint))->setType(self::FIELD_DEFAULT_TYPE);
+        return (new static($requiredConstraint, $optionalField))->setType(self::FIELD_DEFAULT_TYPE);
     }
 
     /**
@@ -49,7 +50,27 @@ abstract class Field
      */
     public function addOptionConstraint($optionConstraint)
     {
-        $this->optionsConstraint[] = $optionConstraint;
+        $castedOptionConstraint = null;
+        switch ($this->getType()) {
+            case 'string':
+                $castedOptionConstraint = (string) $optionConstraint;
+                break;
+            case 'float':
+                $castedOptionConstraint = (float) $optionConstraint;
+                if(!is_numeric($optionConstraint) || $optionConstraint != $castedOptionConstraint) {
+                    throw new \InvalidArgumentException("Given option constraint has to match field type");
+                }
+                break;
+            case 'int':
+                $castedOptionConstraint = (int) $optionConstraint;
+                if(!is_numeric($optionConstraint) || $optionConstraint != $castedOptionConstraint) {
+                    throw new \InvalidArgumentException("Given option constraint has to match field type");
+                }
+                break;
+            default:
+                throw new \LogicException("Only 'string', 'int' and 'float' are valid values");
+        }
+        $this->optionsConstraint[] = $castedOptionConstraint;
         return $this;
     }
 

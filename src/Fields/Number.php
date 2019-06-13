@@ -19,9 +19,9 @@ class Number extends Field
      * @param bool $requiredConstraint
      * @return static
      */
-    public static function createInstance($requiredConstraint = false)
+    public static function createInstance($requiredConstraint = false, $optionalField = false)
     {
-        return (new static($requiredConstraint))
+        return (new static($requiredConstraint, $optionalField))
             ->setType(self::NUMBER_TYPE);
     }
 }

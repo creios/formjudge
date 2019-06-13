@@ -77,4 +77,11 @@ trait FieldGetterTrait
         return $this->requiredConstraint;
     }
 
+    /**
+     * @return bool
+     */
+    public function getOptionalField()
+    {
+        return $this->optionalField;
+    }
 }

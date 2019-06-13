@@ -9,7 +9,6 @@ use Creios\FormJudge\Level;
 
 class Judge
 {
-
     /**
      * @param Form $form
      * @param array $formData
@@ -96,10 +95,9 @@ class Judge
 
             $fieldJudgementBuilder = self::buildFieldJudgementBuilder($field);
 
-            // field is not in post, so the validation fails
+            // field is not in post. if the field is not optional, the validation fails
             $fieldJudgementBuilder->setNotInPost(true);
-            $fieldJudgementBuilder->setPassed(false);
-
+            $fieldJudgementBuilder->setPassed($field->getOptionalField());
         }
 
         return $fieldJudgementBuilder->build();

@@ -18,9 +18,9 @@ class Time extends Field
      * @param bool $requiredConstraint
      * @return Time
      */
-    public static function createInstance($requiredConstraint = false)
+    public static function createInstance($requiredConstraint = false, $optionalField = false)
     {
-        return (new self($requiredConstraint))
+        return (new self($requiredConstraint, $optionalField))
             ->setType(Field::FIELD_DEFAULT_TYPE)
             ->setPatternConstraint(self::TIME_STRING_PATTERN);
     }

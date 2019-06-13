@@ -19,9 +19,9 @@ class Color extends Field
      * @param bool $requiredConstraint
      * @return Color
      */
-    public static function createInstance($requiredConstraint = false)
+    public static function createInstance($requiredConstraint = false, $optionalField = false)
     {
-        return (new self($requiredConstraint))
+        return (new self($requiredConstraint, $optionalField))
             ->setType(Field::FIELD_DEFAULT_TYPE)
             ->setPatternConstraint(self::SIMPLE_COLOR_STRING_PATTERN);
     }
