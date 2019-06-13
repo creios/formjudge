@@ -164,7 +164,7 @@ class MySqlFieldFactory
      */
     public static function createTextTextArea($requiredConstraint = false, $optionalField = false)
     {
-        return TextArea::createInstance($requiredConstrain, $optionalFieldt)
+        return TextArea::createInstance($requiredConstraint, $optionalField)
             ->setLengthMaxConstraint(self::TEXT_LENGTH_MAX_CONSTRAINT);
     }
 
