@@ -154,7 +154,7 @@ class MySqlFieldFactory
      */
     public static function createTextInput($requiredConstraint = false, $optionalField = false)
     {
-        return Text::createInstance($requiredConstrain, $optionalFieldt)
+        return Text::createInstance($requiredConstraint, $optionalField)
             ->setLengthMaxConstraint(self::TEXT_LENGTH_MAX_CONSTRAINT);
     }
 
